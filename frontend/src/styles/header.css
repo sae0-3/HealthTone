@@ -1,46 +1,75 @@
 .header-container {
-    margin: 0 auto;
-    padding: 10px;
-    justify-content: space-between;
-    background-color: #1D2D44;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap; /* Para que los elementos puedan ocupar varias líneas si es necesario */
-  }
-  
-  .header-logo {
-    margin-left: 30px;
-    width: 75px;
-    height: 75px;
-    flex-shrink: 0; /* No permite que el logo se reduzca más allá de su tamaño */
-  }
-  
-  .search-form {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1; /* Permite que el formulario crezca y ocupe más espacio */
-    margin-left: 20px;
-  }
-  
-  .search-input {
-    max-width: 600px; 
-    width: 100%;
-    height: 45px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Para asegurarse de que el padding no desborde el contenedor */
-  }
-  
-  .search-button {
-    padding: 10px 20px;
-    height: 45px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    flex-shrink: 0; /* El botón no se reduce más allá de su tamaño mínimo */
-  }
-  
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--blue);
+  padding: 1.5rem 7%;
+  font-size: 1.7rem;
+}
+
+
+.header-logo{
+  width: 6rem;
+  height: 6rem;
+  cursor: pointer;
+}
+
+.search-form{
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  width: 50rem;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1.5rem 4rem;
+  height: 3.5rem; /* Altura del input */
+  border: 0.1rem solid #ccc; /* Borde */
+  border-radius: 2.5rem; /* Ajusta este valor para redondear más o menos */
+  position: relative;  
+}
+
+
+.search-button{
+  max-width: 5rem;
+  background-color: #ffffff; /* Color de fondo del botón */
+  border: none; /* Sin borde */
+  border-radius: 50%;
+  width: 3rem; /* Ajusta el ancho */
+  height: 3rem; /* Ajusta la altura */
+  display: flex; /* Usar flexbox para centrar el icono */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  transition: background-color 0.3s;
+  margin-left: -4rem;
+  z-index: 1;
+}
+
+.search-icon{
+  width: 2rem; /* Ajusta el tamaño del ícono */
+  height: 2rem;
+}
+
+
+.advancedSearch-button{
+  max-width: 5rem;
+  background-color: #ffffff; /* Color de fondo del botón */
+  border: none; /* Sin borde */
+  border-radius: 50%;
+  width: 3rem; /* Ajusta el ancho */
+  height: 3rem; /* Ajusta la altura */
+  display: flex; /* Usar flexbox para centrar el icono */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center;
+  position:absolute;
+  z-index: 1;
+  margin-left: 1rem;
+}
+.advancedSearch-icon{
+  width: 2rem; /* Ajusta el tamaño del ícono */
+  height: 2rem;
+}
+
