@@ -5,7 +5,7 @@ import { CardBook } from './CardBook'
 export const ContentBook = () => {
     return (
         <>
-            <div>
+            <div className='content-container'>
                 <CardBook></CardBook>
             </div>
             <p></p>

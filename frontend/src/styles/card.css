@@ -1,0 +1,8 @@
+.card-container{
+    max-width: 126rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20rem;
+    position: relative;
+    background-color: aqua;
+}
