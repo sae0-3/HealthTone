@@ -32,6 +32,10 @@
   position: relative;  
 }
 
+input:focus{
+  outline: none;
+}
+
 
 .search-button{
   max-width: 5rem;

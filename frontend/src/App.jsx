@@ -1,10 +1,11 @@
 import { ContentBook } from "./components/ContentBook"
 import { Header } from "./components/Header"
+import MainPage from "./components/MainPage"
 function App() {
   return (
     <>
       <Header></Header>
-      <ContentBook></ContentBook>
+      <MainPage></MainPage>
     </>
   )
 }

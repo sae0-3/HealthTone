@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/ContentBook.css'
+import '../styles/contentBook.css'
 import { CardBook } from './CardBook'
 
 export const ContentBook = () => {
