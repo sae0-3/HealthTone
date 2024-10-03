@@ -1,8 +1,13 @@
 .card-container{
-    max-width: 126rem;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20rem;
-    position: relative;
-    background-color: aqua;
+    margin: 2rem 3rem;
+}
+
+img{
+    border-radius: 1rem;
+}
+h2{
+    font-size: 3rem;
+}
+p{
+    font-size: 2rem;
 }

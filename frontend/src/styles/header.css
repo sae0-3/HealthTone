@@ -26,50 +26,50 @@
 .search-input {
   width: 100%;
   padding: 1.5rem 4rem;
-  height: 3.5rem; /* Altura del input */
-  border: 0.1rem solid #ccc; /* Borde */
-  border-radius: 2.5rem; /* Ajusta este valor para redondear más o menos */
+  height: 3.5rem; 
+  border: 0.1rem solid #ccc; 
+  border-radius: 2.5rem; 
   position: relative;  
 }
 
 
 .search-button{
   max-width: 5rem;
-  background-color: #ffffff; /* Color de fondo del botón */
-  border: none; /* Sin borde */
+  background-color: #ffffff; 
+  border: none; 
   border-radius: 50%;
-  width: 3rem; /* Ajusta el ancho */
-  height: 3rem; /* Ajusta la altura */
-  display: flex; /* Usar flexbox para centrar el icono */
-  align-items: center; /* Centrar verticalmente */
-  justify-content: center; /* Centrar horizontalmente */
+  width: 3rem; 
+  height: 3rem; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
   transition: background-color 0.3s;
   margin-left: -4rem;
   z-index: 1;
 }
 
 .search-icon{
-  width: 2rem; /* Ajusta el tamaño del ícono */
+  width: 2rem; 
   height: 2rem;
 }
 
 
 .advancedSearch-button{
   max-width: 5rem;
-  background-color: #ffffff; /* Color de fondo del botón */
-  border: none; /* Sin borde */
+  background-color: #ffffff; 
+  border: none; 
   border-radius: 50%;
-  width: 3rem; /* Ajusta el ancho */
-  height: 3rem; /* Ajusta la altura */
-  display: flex; /* Usar flexbox para centrar el icono */
-  align-items: center; /* Centrar verticalmente */
+  width: 3rem; 
+  height: 3rem; 
+  display: flex; 
+  align-items: center; 
   justify-content: center;
   position:absolute;
   z-index: 1;
   margin-left: 1rem;
 }
 .advancedSearch-icon{
-  width: 2rem; /* Ajusta el tamaño del ícono */
+  width: 2rem; 
   height: 2rem;
 }
 
