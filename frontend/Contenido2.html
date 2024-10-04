@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contenido2</title>
+    <title>Pagina Principal</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <style>
         .clickeable{
@@ -92,5 +92,22 @@
             </div>
         </div>
     </div>
+
+    <div class="audio-player">
+        <div class="controls-container"></div>
+            <button id="rewind" style="margin: 10px;">⏪</button>
+            <audio id="audio" controls>
+                <source src="audio.mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+            <button id="forward" style="margin: 10px;">⏩</button>
+        </div>
+        <div class="progress-bar-container" style="position: relative; height: 10px; background-color: lightgray;">
+            <div id="progress-bar" style="position: absolute; top: 0; left: 0; height: 100%; background-color: blue; width: 0;"></div>
+        </div>
+    </div>
+    
+           
+<script src="script.js"></script>
 </body>
 </html>
