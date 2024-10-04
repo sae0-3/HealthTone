@@ -12,7 +12,7 @@ body {
 /* Barra superior */
 .navbar {
     display: flex;
-    background-color: #6fc565;
+    background-color: #212545;
     padding: 10px;
     align-items: center;
 }
@@ -37,7 +37,7 @@ body {
 }
 
 .navbar a:hover {
-    background-color: #497e45;
+    background-color: #425578;
 }
 
 /* Secciones de contenido */

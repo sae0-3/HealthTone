@@ -41,16 +41,13 @@
         <p>Contenido relacionado con los próximos lanzamientos.</p>
     </div>
 
-    <script>
-        // Función para mostrar la sección seleccionada
+    <script> //Script JS para mostrar las secciones
         function showSection(sectionId) {
-            // Ocultar todas las secciones
             const sections = document.querySelectorAll('.section-content');
             sections.forEach(section => {
                 section.classList.remove('active-section');
             });
 
-            // Mostrar la sección seleccionada
             const activeSection = document.getElementById(sectionId);
             activeSection.classList.add('active-section');
         }
