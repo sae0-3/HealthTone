@@ -1,7 +1,8 @@
-import { ContentBook } from "./components/ContentBook"
-import { Header } from "./components/Header"
-import MainPage from "./components/MainPage"
-function App() {
+import { Header } from './components/Header'
+import MainPage from './components/MainPage'
+
+
+const App = () => {
   return (
     <>
       <Header></Header>
