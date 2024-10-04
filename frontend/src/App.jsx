@@ -1,6 +1,13 @@
-function App() {
+import { Header } from './components/Header'
+import MainPage from './components/MainPage'
+
+
+const App = () => {
   return (
-    <h1>Hello World</h1>
+    <>
+      <Header></Header>
+      <MainPage></MainPage>
+    </>
   )
 }
 

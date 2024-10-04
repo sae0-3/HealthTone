@@ -1,0 +1,39 @@
+import { useState } from 'react'
+import '../styles/header.css'
+
+
+export const Header = () => {
+  const [search, setSearch] = useState('')
+
+  const handleChange = (input) => {
+    setSearch(input.target.value)
+  }
+
+  const onSubmit = (event) => {
+    event.preventDefault()
+  }
+
+  return (
+    <div>
+      <header className='header-container'>
+        <img className='header-logo' src='/healthTone.svg' alt='logo' />
+
+        <form onSubmit={onSubmit} className='search-form'>
+          <button className='advancedSearch-button' type='button'>
+            <i className='bi bi-list fs-1'></i>
+          </button>
+          <input
+            className='search-input'
+            type='text'
+            placeholder='Buscar'
+            value={search}
+            onChange={handleChange}
+          />
+          <button className='search-button' type='button'>
+            <i className='bi bi-search'></i>
+          </button>
+        </form>
+      </header>
+    </div>
+  )
+}
