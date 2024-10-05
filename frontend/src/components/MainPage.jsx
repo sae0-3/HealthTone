@@ -1,62 +1,52 @@
-import img from '../assets/med.jpg'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/mainPage.css'
 
 
 const MainPage = () => {
+  const [content, setContent] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/book')
+        if (!response.ok) {
+          throw new Error('Error en la red')
+        }
+        const data = await response.json()
+        setContent(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchContent()
+  }, [])
+
   return (
     <div className='container'>
-      <div className='book-list-container'>
-        {obj.map(({ id, poster_path, title, author }) => {
-          return (
-            <div key={id} className='book-card'>
-              <img src={poster_path} alt={title} />
-              <h2>{title}</h2>
-              <p>{author}</p>
-            </div>
-          )
-        })}
-      </div>
+      {loading
+        ? <h3 className='text-primary'>Cargando...</h3>
+        : error
+          ? <h3 className='text-danger'>Surgio un Problema</h3>
+          : <div className='book-list-container'>
+            {content.map(({ id, url_portada, nombre, autor }) => {
+              return (
+                <Link key={id} className='book-card' to={`/book/${id}`}>
+                  <img src={url_portada} alt={nombre} />
+                  <h2>{nombre}</h2>
+                  <p>{autor}</p>
+                </Link>
+              )
+            })}
+          </div>
+      }
     </div>
   )
 }
-
-const obj = [
-  {
-    id: 0,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-  {
-    id: 1,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-  {
-    id: 2,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-  {
-    id: 3,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-  {
-    id: 4,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-  {
-    id: 5,
-    poster_path: img,
-    title: 'Title',
-    author: 'Autor'
-  },
-]
 
 export default MainPage

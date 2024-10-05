@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/header.css'
 
 
@@ -16,7 +17,9 @@ export const Header = () => {
   return (
     <div>
       <header className='header-container'>
-        <img className='header-logo' src='/healthTone.svg' alt='logo' />
+        <Link to='/'>
+          <img className='header-logo' src='/healthTone.svg' alt='logo' />
+        </Link>
 
         <form onSubmit={onSubmit} className='search-form'>
           <button className='advancedSearch-button' type='button'>
