@@ -1,0 +1,7 @@
+.btn-primary {
+  background-color: var(--blue);
+  border-color: var(--blue);
+  font-size: 1.6rem;
+  color: var(--white);
+  padding: .8rem;
+}

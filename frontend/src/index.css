@@ -5,11 +5,13 @@
   --lightblue: #748CAB;
   --white: #E8E9EB;
 }
+
 html {
   font-size: 62.5%;
 }
-body {
-  font-family: Arial, sans-serif;
+
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
