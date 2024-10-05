@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { NavbarSections } from './NavbarSections'
 import { Link } from 'react-router-dom'
 import '../styles/mainPage.css'
 
@@ -33,17 +34,21 @@ const MainPage = () => {
         ? <h3 className='text-primary'>Cargando...</h3>
         : error
           ? <h3 className='text-danger'>Surgio un Problema</h3>
-          : <div className='book-list-container'>
-            {content.map(({ id, url_portada, nombre, autor }) => {
-              return (
-                <Link key={id} className='book-card' to={`/book/${id}`}>
-                  <img src={url_portada} alt={nombre} />
-                  <h2>{nombre}</h2>
-                  <p>{autor}</p>
-                </Link>
-              )
-            })}
-          </div>
+          : <>
+            <NavbarSections />
+
+            <div className='book-list-container'>
+              {content.map(({ id, url_portada, nombre, autor }) => {
+                return (
+                  <Link key={id} className='book-card' to={`/book/${id}`}>
+                    <img src={url_portada} alt={nombre} />
+                    <h2>{nombre}</h2>
+                    <p>{autor}</p>
+                  </Link>
+                )
+              })}
+            </div>
+          </>
       }
     </div>
   )
