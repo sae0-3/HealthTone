@@ -27,7 +27,7 @@ export const getBookById = async (id) => {
 
   try {
     const result = await pool.query(query, [id])
-    return result.rows
+    return result.rows[0]
   } catch (error) {
     console.error('Error al obtener contenido:', error)
     throw new Error('Error en la base de datos al obtener contenido')
