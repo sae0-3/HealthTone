@@ -2,7 +2,7 @@ import cors from 'cors'
 import exprees from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import bookRouter from './routes/book.route.js'
+import bookRouter from './routes.js'
 
 
 const app = exprees()

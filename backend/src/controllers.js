@@ -1,7 +1,7 @@
 import {
   getBookById as getById,
   getBookAll as getAll
-} from '../models/book.model.js'
+} from './models.js'
 
 
 export const getBookById = async (req, res) => {
