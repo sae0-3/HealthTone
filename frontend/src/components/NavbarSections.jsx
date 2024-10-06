@@ -1,41 +1,17 @@
-import { useState } from 'react'
-import '../styles/navbarSections.css'
+import '@styles/navbarSections.css'
 
 
-export const NavbarSections = () => {
-  const [currentSection, setCurrentSection] = useState('btn-section-sugerencias')
-
+export const NavbarSections = ({ currentSection, toggleSection, sections }) => {
   return (
-    <div className="container d-flex justify-content-between">
-      {sections.map(({ id, label }) => (
+    <div className='navbar-sections d-flex justify-content-between flex-wrap gap-3'>
+      {sections.map(({ id, label }, idx) => (
         <button
           key={id}
           id={id}
-          className={`btn btn-lg btn-primary ${currentSection === id ? 'active' : ''}`}
-          onClick={() => setCurrentSection(id)}
-        >
-          {label}
-        </button>
+          className={`btn btn-lg btn-primary ${currentSection === idx ? 'active' : ''}`}
+          onClick={() => { toggleSection(idx) }}
+        >{label}</button>
       ))}
     </div>
   )
 }
-
-const sections = [
-  {
-    id: 'btn-section-sugerencias',
-    label: 'Sugerencias'
-  },
-  {
-    id: 'btn-section-nuevos_lanzamientos',
-    label: 'Nuevos Lanzamientos'
-  },
-  {
-    id: 'btn-section-populares',
-    label: 'Populares'
-  },
-  {
-    id: 'btn-section-proximos_lanzamientos',
-    label: 'Próximos Lanzamientos'
-  },
-]

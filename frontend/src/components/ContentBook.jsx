@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { EpubViewer } from './EpubViewer'
-import '../styles/contentBook.css'
 
 
 export const ContentBook = () => {

@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom' 
-import { Header } from './components/Header'
-import MainPage from './components/MainPage'
-import { ContentBook } from './components/ContentBook'
+import { ContentBook } from '@components/ContentBook'
+import { Header } from '@components/Header'
+import Home from '@pages/Home'
+import NotFound from '@pages/NotFound'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 
 const App = () => {
@@ -10,8 +11,10 @@ const App = () => {
       <Header />
 
       <Routes>
-        <Route path='/' element={<MainPage />} />
+        <Route path='/' element={<Home />} />
         <Route path='/book/:id' element={<ContentBook />} />
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   )
