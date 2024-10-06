@@ -78,6 +78,9 @@ INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, fecha_publicacion)
     ('Medicina y tecnología', 'Dr. Tomás Herrera', 'http://ejemplo.com/medicina-tecnologia', 'http://ejemplo.com/portada-tecnologia.jpg', '2022-04-20'),
     ('Cuidado infantil', 'Dra. Beatriz García', 'http://ejemplo.com/cuidado-infantil', 'http://ejemplo.com/portada-cuidado.jpg', '2023-06-01');
 
+INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada) VALUES
+    ('Mujeres', 'Charles Bukowski', 'http://localhost:4000/uploads/MUJERES.epub', 'https://firebasestorage.googleapis.com/v0/b/is--healthtone.appspot.com/o/mujeres_portada.jpeg?alt=media&token=4fa1e9ea-e9f8-415d-a7be-9fa845700969');
+
 INSERT INTO R_CONTENIDO_CATEGORIA (id_contenido, id_categoria) VALUES
     (1, 9),  -- La salud de los ancianos (Geriatría)
     (1, 4),

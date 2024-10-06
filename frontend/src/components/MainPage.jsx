@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { NavbarSections } from './NavbarSections'
 import { Link } from 'react-router-dom'
+import { NavbarSections } from './NavbarSections'
 import '../styles/mainPage.css'
 
 
@@ -36,11 +36,10 @@ const MainPage = () => {
           ? <h3 className='text-danger'>Surgio un Problema</h3>
           : <>
             <NavbarSections />
-
             <div className='book-list-container'>
               {content.map(({ id, url_portada, nombre, autor }) => {
                 return (
-                  <Link key={id} className='book-card' to={`/book/${id}`}>
+                  <Link to={`/book/${id}`} key={id} className='book-card'>
                     <img src={url_portada} alt={nombre} />
                     <h2>{nombre}</h2>
                     <p>{autor}</p>
