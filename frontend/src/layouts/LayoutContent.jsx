@@ -5,7 +5,7 @@ import '@styles/layout.css'
 
 
 export const LayoutContent = ({ title, path }) => {
-  const [content, error] = useGet('http://localhost:4000/book')
+  const [content, error] = useGet(`http://localhost:4000/api/book?section=${path}`)
 
   if (error)
     return <h3 className='text-danger'>Surgio un Problema</h3>

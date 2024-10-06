@@ -12,7 +12,7 @@ export const ContentBook = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/book/${id}`)
+        const response = await fetch(`http://localhost:4000/api/book/${id}`)
         if (!response.ok) {
           throw new Error('Error en la red')
         }
