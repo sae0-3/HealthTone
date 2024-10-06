@@ -9,9 +9,9 @@ CREATE TABLE CONTENIDO (
     autor VARCHAR(100),
     url_texto VARCHAR(255) NOT NULL,
     url_portada VARCHAR(255),
+    url_audio VARCHAR(255),
     fecha_subida DATE DEFAULT NOW(),
-    fecha_publicacion DATE,
-    type_mime VARCHAR(50) DEFAULT 'application/epub+zip'
+    fecha_publicacion DATE
 );
 
 CREATE TABLE CATEGORIA (
@@ -26,6 +26,28 @@ CREATE TABLE R_CONTENIDO_CATEGORIA (
     PRIMARY KEY (id_contenido, id_categoria),
     FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id),
     FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id)
+);
+
+CREATE TABLE ESTRENO (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    autor VARCHAR(100),
+    url_portada VARCHAR(255),
+    publicado BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE R_ESTRENO_CATEGORIA (
+    id_estreno INT NOT NULL,
+    id_categoria INT NOT NULL,
+    PRIMARY KEY (id_estreno, id_categoria),
+    FOREIGN KEY (id_estreno) REFERENCES ESTRENO(id),
+    FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id)
+);
+
+CREATE TABLE VISUALIZACION (
+    id_contenido INT NOT NULL,
+    fecha DATE DEFAULT NOW(),
+    FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
 );
 
 
@@ -44,61 +66,131 @@ $$ LANGUAGE plpgsql;
 
 
 -- DATA
+INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio, fecha_publicacion) VALUES
+    ('Importancia de la vacunación', 'Ministerio de Salud', 'http://ejemplo.com/vacunacion', 'http://ejemplo.com/portada_vacunacion.jpg', NULL, '2023-01-15'),
+    ('Hábitos saludables para prevenir enfermedades crónicas', 'Dr. Juan Pérez', 'http://ejemplo.com/habitos_saludables', 'http://ejemplo.com/portada_habitos.jpg', NULL, '2023-02-10'),
+    ('Detección temprana de cáncer', 'Fundación Cáncer', 'http://ejemplo.com/deteccion_temprana', 'http://ejemplo.com/portada_deteccion.jpg', NULL, '2023-03-05'),
+    ('Alimentación balanceada', 'Nutricionista Ana Gómez', 'http://ejemplo.com/alimentacion_balanceada', 'http://ejemplo.com/portada_alimentacion.jpg', NULL, '2023-04-20'),
+    ('La salud mental y su prevención', 'Psicóloga María López', 'http://ejemplo.com/salud_mental', 'http://ejemplo.com/portada_salud_mental.jpg', NULL, '2023-05-25'),
+    ('Prevención del VIH/SIDA', 'ONG Salud', 'http://ejemplo.com/prevencion_vih', 'http://ejemplo.com/portada_vih.jpg', NULL, '2023-06-15'),
+    ('La importancia del ejercicio físico', 'Entrenador Carlos Ruiz', 'http://ejemplo.com/ejercicio', 'http://ejemplo.com/portada_ejercicio.jpg', NULL, '2023-07-30'),
+    ('Control del estrés', 'Terapeuta Laura Martínez', 'http://ejemplo.com/control_estres', 'http://ejemplo.com/portada_estres.jpg', NULL, '2023-08-12'),
+    ('Prevención de enfermedades respiratorias', 'Dr. Miguel Torres', 'http://ejemplo.com/enfermedades_respiratorias', 'http://ejemplo.com/portada_respiratorias.jpg', NULL, '2023-09-22'),
+    ('Vacunas recomendadas para adultos', 'Ministerio de Salud', 'http://ejemplo.com/vacunas_adultos', 'http://ejemplo.com/portada_vacunas_adultos.jpg', NULL, '2023-10-10'),
+    ('Impacto de la higiene en la salud', 'Instituto de Salud', 'http://ejemplo.com/higiene_salud', 'http://ejemplo.com/portada_higiene.jpg', NULL, '2023-11-05'),
+    ('Prevención del cáncer de mama', 'Asociación de Mujeres', 'http://ejemplo.com/cancer_mama', 'http://ejemplo.com/portada_cancer_mama.jpg', NULL, '2023-12-01'),
+    ('Alimentos que ayudan a prevenir enfermedades', 'Nutricionista Ana Gómez', 'http://ejemplo.com/alimentos_preventivos', 'http://ejemplo.com/portada_alimentos.jpg', NULL, '2023-12-15'),
+    ('Importancia del chequeo médico regular', 'Clínica Salud', 'http://ejemplo.com/chequeo_medico', 'http://ejemplo.com/portada_chequeo.jpg', NULL, '2024-01-10'),
+    ('Consejos para dejar de fumar', 'Fundación de Salud', 'http://ejemplo.com/dejar_fumar', 'http://ejemplo.com/portada_dejar_fumar.jpg', NULL, '2024-01-20'),
+    ('Educación sobre la hipertensión', 'Dr. Pedro Ruiz', 'http://ejemplo.com/hipertension', 'http://ejemplo.com/portada_hipertension.jpg', NULL, '2024-02-02'),
+    ('Consecuencias del sedentarismo', 'Dr. Laura Martínez', 'http://ejemplo.com/sedentarismo', 'http://ejemplo.com/portada_sedentarismo.jpg', NULL, '2024-02-15'),
+    ('Técnicas de relajación para la salud mental', 'Psicóloga Beatriz Torres', 'http://ejemplo.com/tecnicas_relajacion', 'http://ejemplo.com/portada_relajacion.jpg', NULL, '2024-03-01'),
+    ('Mitos y realidades sobre la diabetes', 'Diabetes A.C.', 'http://ejemplo.com/mitos_diabetes', 'http://ejemplo.com/portada_mitos_diabetes.jpg', NULL, '2024-03-10'),
+    ('Ejercicios para la salud del corazón', 'Entrenador Jorge Pérez', 'http://ejemplo.com/ejercicios_corazon', 'http://ejemplo.com/portada_corazon.jpg', NULL, '2024-03-20');
+
+INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
+    ('Mujeres', 'Charles Bukowski', 'http://localhost:4000/uploads/mujeres.epub', 'https://firebasestorage.googleapis.com/v0/b/is--healthtone.appspot.com/o/mujeres_portada.jpeg?alt=media&token=4fa1e9ea-e9f8-415d-a7be-9fa845700969', 'http://localhost:4000/uploads/song.mp3');
+
 INSERT INTO CATEGORIA (nombre, descripcion) VALUES
-    ('Medicina General', 'Información sobre diversas áreas de la medicina general'),
-    ('Neurología', 'Estudio de los trastornos del sistema nervioso'),
-    ('Cardiología', 'Estudio del corazón y del sistema circulatorio'),
-    ('Pediatría', 'Atención médica para niños y adolescentes'),
-    ('Medicina Preventiva', 'Prácticas para prevenir enfermedades'),
-    ('Oncología', 'Estudio y tratamiento del cáncer'),
-    ('Psiquiatría', 'Salud mental y tratamientos relacionados'),
-    ('Geriatría', 'Medicina para personas mayores'),
-    ('Fisioterapia', 'Rehabilitación y tratamiento físico'),
-    ('Nutrición', 'Alimentación y su impacto en la salud');
-
-INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, fecha_publicacion) VALUES
-    ('La salud de los ancianos', 'Dr. Juan Pérez', 'http://ejemplo.com/salud-ancianos', 'http://ejemplo.com/portada-ancianos.jpg', '2022-03-01'),
-    ('Neurología moderna', 'Dra. Ana López', 'http://ejemplo.com/neurologia-moderna', 'http://ejemplo.com/portada-neurologia.jpg', '2021-07-15'),
-    ('Enfermedades cardíacas', 'Dr. Luis Gómez', 'http://ejemplo.com/enfermedades-cardiacas', 'http://ejemplo.com/portada-cardiacas.jpg', '2020-11-20'),
-    ('La pediatría en el siglo XXI', 'Dra. María Torres', 'http://ejemplo.com/pediatria-siglo-21', 'http://ejemplo.com/portada-pediatria.jpg', '2022-01-10'),
-    ('Prevención de enfermedades', 'Dr. Carlos Ruiz', 'http://ejemplo.com/prevencion-enfermedades', 'http://ejemplo.com/portada-prevencion.jpg', '2023-05-05'),
-    ('Tratamientos oncológicos', 'Dra. Rosa Martínez', 'http://ejemplo.com/tratamientos-oncologicos', 'http://ejemplo.com/portada-oncologicos.jpg', '2021-09-30'),
-    ('Salud mental y bienestar', 'Dr. Pedro Fernández', 'http://ejemplo.com/salud-mental', 'http://ejemplo.com/portada-mental.jpg', '2023-04-12'),
-    ('Medicina geriátrica', 'Dra. Laura Sánchez', 'http://ejemplo.com/medicina-geriatica', 'http://ejemplo.com/portada-geriatra.jpg', '2022-06-20'),
-    ('Fisioterapia y rehabilitación', 'Dr. Javier Martínez', 'http://ejemplo.com/fisioterapia', 'http://ejemplo.com/portada-fisioterapia.jpg', '2023-02-14'),
-    ('Nutrición y salud', 'Dra. Elena Gómez', 'http://ejemplo.com/nutricion-salud', 'http://ejemplo.com/portada-nutricion.jpg', '2023-03-09'),
-    ('Tratamiento del Alzheimer', 'Dr. Alberto López', 'http://ejemplo.com/alzheimer', 'http://ejemplo.com/portada-alzheimer.jpg', '2021-12-05'),
-    ('Cardiopatías y su tratamiento', 'Dr. Enrique Salas', 'http://ejemplo.com/cardiopatias', 'http://ejemplo.com/portada-cardiopatias.jpg', '2020-10-16'),
-    ('Cuidados paliativos', 'Dra. Teresa Bravo', 'http://ejemplo.com/cuidados-paliativos', 'http://ejemplo.com/portada-paliativos.jpg', '2021-08-18'),
-    ('Ejercicio y salud', 'Dr. Manuel Castro', 'http://ejemplo.com/ejercicio-salud', 'http://ejemplo.com/portada-ejercicio.jpg', '2022-02-28'),
-    ('Trastornos alimenticios', 'Dra. Sara Martín', 'http://ejemplo.com/trastornos-alimenticios', 'http://ejemplo.com/portada-alimenticios.jpg', '2020-09-10'),
-    ('Diabetes y su manejo', 'Dr. Vicente Ramírez', 'http://ejemplo.com/diabetes', 'http://ejemplo.com/portada-diabetes.jpg', '2023-01-15'),
-    ('Enfermedades respiratorias', 'Dr. Joaquín Torres', 'http://ejemplo.com/enfermedades-respiratorias', 'http://ejemplo.com/portada-respiratorias.jpg', '2021-05-25'),
-    ('Nuevos avances en medicina', 'Dra. Patricia Morales', 'http://ejemplo.com/avances-medicina', 'http://ejemplo.com/portada-avances.jpg', '2023-07-07'),
-    ('Medicina y tecnología', 'Dr. Tomás Herrera', 'http://ejemplo.com/medicina-tecnologia', 'http://ejemplo.com/portada-tecnologia.jpg', '2022-04-20'),
-    ('Cuidado infantil', 'Dra. Beatriz García', 'http://ejemplo.com/cuidado-infantil', 'http://ejemplo.com/portada-cuidado.jpg', '2023-06-01');
-
-INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada) VALUES
-    ('Mujeres', 'Charles Bukowski', 'http://localhost:4000/uploads/MUJERES.epub', 'https://firebasestorage.googleapis.com/v0/b/is--healthtone.appspot.com/o/mujeres_portada.jpeg?alt=media&token=4fa1e9ea-e9f8-415d-a7be-9fa845700969');
+    ('Prevención de Enfermedades', 'Información y recursos sobre cómo prevenir enfermedades.'),
+    ('Salud Mental', 'Recursos sobre salud mental y bienestar emocional.'),
+    ('Nutrición', 'Consejos y guías sobre alimentación saludable.'),
+    ('Ejercicio y Actividad Física', 'Importancia del ejercicio y cómo mantenerse activo.'),
+    ('Vacunas', 'Información sobre vacunas y su importancia en la salud.'),
+    ('Higiene', 'Consejos sobre higiene personal y prevención de enfermedades.');
 
 INSERT INTO R_CONTENIDO_CATEGORIA (id_contenido, id_categoria) VALUES
-    (1, 9),  -- La salud de los ancianos (Geriatría)
-    (1, 4),
-    (2, 2),  -- Neurología moderna (Neurología)
-    (3, 3),  -- Enfermedades cardíacas (Cardiología)
-    (4, 4),  -- La pediatría en el siglo XXI (Pediatría)
-    (5, 5),  -- Prevención de enfermedades (Medicina Preventiva)
-    (6, 6),  -- Tratamientos oncológicos (Oncología)
-    (7, 7),  -- Salud mental y bienestar (Psiquiatría)
-    (8, 8),  -- Medicina geriátrica (Geriatría)
-    (9, 9),  -- Fisioterapia y rehabilitación (Fisioterapia)
-    (10, 10), -- Nutrición y salud (Nutrición)
-    (11, 2),  -- Tratamiento del Alzheimer (Neurología)
-    (12, 3),  -- Cardiopatías y su tratamiento (Cardiología)
-    (13, 5),  -- Cuidados paliativos (Medicina Preventiva)
-    (14, 9),  -- Ejercicio y salud (Fisioterapia)
-    (15, 10), -- Trastornos alimenticios (Nutrición)
-    (16, 5),  -- Diabetes y su manejo (Medicina Preventiva)
-    (17, 3),  -- Enfermedades respiratorias (Cardiología)
-    (18, 1),  -- Nuevos avances en medicina (Medicina General)
-    (19, 2);  -- Medicina y tecnología (Neurología)
+    (1, 5),
+    (2, 1),
+    (3, 1),
+    (4, 3),
+    (5, 2),
+    (6, 1),
+    (7, 4),
+    (8, 2),
+    (9, 1),
+    (10, 5),
+    (11, 6),
+    (12, 1),
+    (13, 1),
+    (14, 3),
+    (15, 2),
+    (16, 1),
+    (17, 2),
+    (18, 4),
+    (19, 1),
+    (20, 4),
+    (20, 1);
+
+INSERT INTO ESTRENO (nombre, autor, url_portada, publicado) VALUES
+    ('Documental sobre la diabetes', 'Fundación Diabetes', 'http://ejemplo.com/documental_diabetes.jpg', FALSE),
+    ('Serie sobre hábitos saludables', 'Ministerio de Salud', 'http://ejemplo.com/serie_habitos.jpg', FALSE),
+    ('Programa de ejercicios para el corazón', 'Entrenador Carlos Ruiz', 'http://ejemplo.com/programa_corazon.jpg', FALSE),
+    ('Charla sobre salud mental', 'Psicóloga María López', 'http://ejemplo.com/charla_salud_mental.jpg', FALSE),
+    ('Taller de alimentación saludable', 'Nutricionista Ana Gómez', 'http://ejemplo.com/taller_alimentacion.jpg', FALSE),
+    ('Seminario sobre vacunas', 'Ministerio de Salud', 'http://ejemplo.com/seminario_vacunas.jpg', TRUE),
+    ('Documental sobre la hipertensión', 'Dr. Pedro Ruiz', 'http://ejemplo.com/documental_hipertension.jpg', TRUE),
+    ('Programa de prevención de VIH', 'ONG Salud', 'http://ejemplo.com/programa_vih.jpg', FALSE),
+    ('Charla sobre enfermedades respiratorias', 'Dr. Miguel Torres', 'http://ejemplo.com/charla_respiratorias.jpg', FALSE),
+    ('Taller de técnicas de relajación', 'Psicóloga Beatriz Torres', 'http://ejemplo.com/taller_relajacion.jpg', FALSE);
+
+INSERT INTO R_ESTRENO_CATEGORIA (id_estreno, id_categoria) VALUES
+    (1, 1),
+    (2, 1),
+    (3, 4),
+    (4, 2),
+    (5, 3),
+    (6, 5),
+    (7, 1),
+    (8, 2),
+    (9, 1),
+    (10, 2);
+
+INSERT INTO VISUALIZACION (id_contenido, fecha) VALUES
+    (1, '2023-01-20'),
+    (1, '2023-01-22'),
+    (1, '2023-01-25'),
+    (2, '2023-02-15'),
+    (2, '2023-02-18'),
+    (3, '2023-03-01'),
+    (3, '2023-03-10'),
+    (4, '2023-04-05'),
+    (4, '2023-04-10'),
+    (4, '2023-04-15'),
+    (5, '2023-05-01'),
+    (6, '2023-06-01'),
+    (6, '2023-06-15'),
+    (7, '2023-07-01'),
+    (8, '2023-08-10'),
+    (9, '2023-09-15'),
+    (10, '2023-10-01'),
+    (11, '2023-11-01'),
+    (12, '2023-11-15'),
+    (13, '2023-12-01'),
+    (14, '2023-12-10'),
+    (15, '2024-01-10'),
+    (16, '2024-01-15'),
+    (17, '2024-01-20'),
+    (18, '2024-02-01'),
+    (19, '2024-02-15'),
+    (20, '2024-03-01'),
+    (1, '2023-01-28'),
+    (2, '2023-02-22'),
+    (3, '2023-03-15'),
+    (4, '2023-04-20'),
+    (5, '2023-05-25'),
+    (6, '2023-06-10'),
+    (7, '2023-07-05'),
+    (8, '2023-08-12'),
+    (9, '2023-09-22'),
+    (10, '2023-10-20'),
+    (11, '2023-11-10'),
+    (12, '2023-11-22'),
+    (13, '2023-12-15'),
+    (14, '2023-12-30'),
+    (15, '2024-01-25'),
+    (16, '2024-02-05'),
+    (17, '2024-02-20'),
+    (18, '2024-03-10'),
+    (19, '2024-03-15'),
+    (20, '2024-03-20');

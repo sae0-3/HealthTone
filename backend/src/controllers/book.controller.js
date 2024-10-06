@@ -9,7 +9,7 @@ export const getBookById = async (req, res) => {
 
   try {
     const result = await getById(id)
-    res.status(200).json(result)
+    res.status(200).send(result)
   } catch (err) {
     console.error(err)
     res.status(500).send({ error: 'Error al obetner los datos' })
@@ -19,7 +19,7 @@ export const getBookById = async (req, res) => {
 export const getBookAll = async (_, res) => {
   try {
     const result = await getAll()
-    res.status(200).json(result)
+    res.status(200).send(result)
   } catch (err) {
     console.error(err)
     res.status(500).send({ error: 'Error al obetner los datos' })
