@@ -1,29 +1,22 @@
-import { useRef, useEffect } from 'react'
-import Epub from 'epubjs'
+import React, { useState } from 'react'
+import { ReactReader } from 'react-reader'
 
 
 export const EpubViewer = ({ url }) => {
-  const viewerRef = useRef(null)
-  const bookRef = useRef(null)
-  console.log(url);
+  const [location, setLocation] = useState(null)
   
-
-  useEffect(() => {
-    if (url) {
-      bookRef.current = Epub(url)
-      bookRef.current.renderTo(viewerRef.current)
-    }
-
-    return () => {
-      if (bookRef.current) {
-        bookRef.current.destroy()
-      }
-    }
-  }, [url])
+  const handleLocationChanged = (newLocation) => {
+    setLocation(newLocation)
+    console.log('Location changed to:', newLocation)
+  }
 
   return (
-    <div>
-      <div ref={viewerRef} style={{ height: '600px', overflow: 'auto' }}></div>
+    <div style={{ height: '70vh', width: '50%' }}>
+      <ReactReader
+        url={url}
+        location={location}
+        locationChanged={handleLocationChanged}
+      />
     </div>
   )
 }
