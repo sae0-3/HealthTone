@@ -22,7 +22,7 @@ export const Header = () => {
         </Link>
 
         <form onSubmit={onSubmit} className='search-form'>
-          <button className='advancedSearch-button' type='button'>
+          <button className='advancedSearch-button' type='button' disabled style={{ opacity: .2 }}>
             <i className='bi bi-list fs-1 text-dark'></i>
           </button>
           <input
