@@ -48,7 +48,7 @@ export const EpubViewer = ({ url }) => {
   }
 
   return (
-    <div style={{ height: '100vh', width: '100%' }}>
+    <>
       <ReactReader
         url={url}
         location={location}
@@ -57,7 +57,8 @@ export const EpubViewer = ({ url }) => {
           renditionRef.current = rendition
         }}
       />
-      <div className='btn-group'>
+
+      {/* <div className='btn-group'>
         <button onClick={narrateCurrentPage}>Narrar Página</button>
         <button onClick={() => { window.speechSynthesis.cancel() }}>Detener</button>
         <button onClick={() => { window.speechSynthesis.pause() }}>Pausar</button>
@@ -80,7 +81,7 @@ export const EpubViewer = ({ url }) => {
             ))}
           </select>
         </label>
-      </div>
-    </div>
+      </div> */}
+    </>
   )
 }

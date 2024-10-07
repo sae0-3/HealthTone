@@ -1,9 +1,9 @@
-import { ContentBook } from '@components/ContentBook'
+import { Footer } from '@components/Footer'
 import { Header } from '@components/Header'
+import { ContentBook } from '@pages/ContentBook'
 import Home from '@pages/Home'
 import NotFound from '@pages/NotFound'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
-import { Footer } from './components/Footer'
 
 
 const App = () => {
