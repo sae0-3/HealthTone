@@ -23,7 +23,7 @@ export const Header = () => {
 
         <form onSubmit={onSubmit} className='search-form'>
           <button className='advancedSearch-button' type='button'>
-            <i className='bi bi-list fs-1'></i>
+            <i className='bi bi-list fs-1 text-dark'></i>
           </button>
           <input
             className='search-input'
@@ -33,7 +33,7 @@ export const Header = () => {
             onChange={handleChange}
           />
           <button className='search-button' type='button'>
-            <i className='bi bi-search'></i>
+            <i className='bi bi-search text-dark'></i>
           </button>
         </form>
       </header>
