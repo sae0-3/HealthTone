@@ -1,14 +1,14 @@
 FROM node:20.18 AS dev-deps
 WORKDIR /app
 COPY package*.json ./
-RUN yarn install
+RUN npm install --production
 
 
 FROM node:20.18 AS builder
 WORKDIR /app
 COPY --from=dev-deps /app/node_modules ./node_modules
 COPY . .
-RUN yarn build
+RUN npm build
 
 
 FROM nginx:1.25.5 AS prod
