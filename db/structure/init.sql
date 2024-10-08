@@ -53,13 +53,39 @@ CREATE TABLE VISUALIZACION (
 
 
 -- FUNCTIONS
-CREATE OR REPLACE FUNCTION buscar_contenido_por_nombre_o_autor(pattern TEXT)
-RETURNS TABLE(id INT, nombre VARCHAR) AS $$
+CREATE OR REPLACE FUNCTION buscar(pattern TEXT)
+RETURNS TABLE(
+  id INT,
+  nombre VARCHAR,
+  autor VARCHAR,
+  url_texto VARCHAR,
+  url_portada VARCHAR,
+  url_audio VARCHAR,
+  categorias JSON
+) AS $$
 BEGIN
     RETURN QUERY
-    SELECT c.id, c.nombre
-    FROM CONTENIDO c
-    WHERE c.nombre ~* pattern OR c.autor ~* pattern;
+    SELECT
+      co.id,
+      co.nombre,
+      co.autor,
+      co.url_texto,
+      co.url_portada,
+      co.url_audio,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'id', ca.id,
+            'name', ca.nombre
+          )
+        ) FILTER (WHERE ca.id IS NOT NULL),
+        '[]'
+      ) AS categorias
+    FROM CONTENIDO co
+      LEFT JOIN R_CONTENIDO_CATEGORIA r ON id_contenido = co.id
+      LEFT JOIN CATEGORIA ca ON ca.id = id_categoria
+    WHERE co.nombre ~* pattern OR co.autor ~* pattern
+    GROUP BY co.id, co.nombre, co.autor, co.url_texto, co.url_portada, co.url_audio;
 END;
 $$ LANGUAGE plpgsql;
 

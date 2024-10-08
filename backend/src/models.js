@@ -9,6 +9,7 @@ export const getBookById = async (id) => {
     autor,
     url_texto,
     url_portada,
+    url_audio,
     COALESCE(
       json_agg(
         json_build_object(
@@ -22,7 +23,7 @@ export const getBookById = async (id) => {
     LEFT JOIN R_CONTENIDO_CATEGORIA r on id_contenido = co.id
     LEFT JOIN CATEGORIA ca on ca.id = id_categoria
   WHERE co.id = $1
-  GROUP BY co.id,co.nombre,autor,url_texto,url_portada
+  GROUP BY co.id,co.nombre,autor,url_texto,url_portada,url_audio
   `
 
   try {
@@ -34,32 +35,40 @@ export const getBookById = async (id) => {
   }
 }
 
+export const getBookAll = async (search) => {
+  let query
+  let params = []
 
-export const getBookAll = async () => {
-  const query = `
-  SELECT
-    co.id,
-    co.nombre,
-    autor,
-    url_texto,
-    url_portada,
-    COALESCE(
-      json_agg(
-        json_build_object(
-          'id',ca.id,
-          'name',ca.nombre
-        )
-      ) FILTER (WHERE ca.id IS NOT NULL),
-      '[]'
-    ) AS categorias
-  FROM CONTENIDO co
-    LEFT JOIN R_CONTENIDO_CATEGORIA r on id_contenido = co.id
-    LEFT JOIN CATEGORIA ca on ca.id = id_categoria
-  GROUP BY co.id,co.nombre,autor,url_texto,url_portada
-  `
+  if (search) {
+    query = `SELECT * FROM buscar($1)`
+    params = [search]
+  } else {
+    query = `
+    SELECT
+      co.id,
+      co.nombre,
+      autor,
+      url_texto,
+      url_portada,
+      url_audio,
+      COALESCE(
+        json_agg(
+          json_build_object(
+            'id',ca.id,
+            'name',ca.nombre
+          )
+        ) FILTER (WHERE ca.id IS NOT NULL),
+        '[]'
+      ) AS categorias
+    FROM CONTENIDO co
+      LEFT JOIN R_CONTENIDO_CATEGORIA r on id_contenido = co.id
+      LEFT JOIN CATEGORIA ca on ca.id = id_categoria
+    GROUP BY co.id,co.nombre,autor,url_texto,url_portada,url_audio
+    `
+  }
 
   try {
-    const result = await pool.query(query)
+    const result = await pool.query(query, params)
     return result.rows
   } catch (err) {
     console.error('Error al obtener contenido:', err)
