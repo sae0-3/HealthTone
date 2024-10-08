@@ -1,6 +1,6 @@
 services:
   database:
-    container_name: db
+    container_name: database
     image: postgres:12.7
     restart: always
     environment:
@@ -9,4 +9,22 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db/structure:/docker-entrypoint-initdb.d
+
+
+  backend:
+    container_name: backend
+    depends_on:
+      - database
+    build: ./backend
+    ports:
+      - 4000:4000
+
+
+  frontend:
+    container_name: frontend
+    depends_on:
+      - backend
+    build: ./frontend
+    ports:
+      - 80:80
