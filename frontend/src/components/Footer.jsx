@@ -119,7 +119,7 @@ export const Footer = () => {
   }
 
   return (
-    <footer className='text-white text-center align-items-center'>
+    <footer className='text-white text-center align-items-center fixed-bottom'>
       <div className='content-footer d-flex justify-content-between align-items-center'>
         <div className='d-flex justify-content-start align-items-center ms-3'>
           <img src='foto' alt='poster-img' style={{ width: '100%', height: '6rem', maxWidth: '6rem', background: 'blue' }} />

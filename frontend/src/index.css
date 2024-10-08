@@ -20,3 +20,8 @@ body {
   font-size: 1.6rem;
   background-color: var(--white);
 }
+
+.container {
+  padding-top: 11rem;
+  padding-bottom: 8rem;
+}
