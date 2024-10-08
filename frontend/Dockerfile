@@ -8,7 +8,7 @@ FROM node:20.18 AS builder
 WORKDIR /app
 COPY --from=dev-deps /app/node_modules ./node_modules
 COPY . .
-RUN npm build
+RUN npm run build
 
 
 FROM nginx:1.25.5 AS prod
