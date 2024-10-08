@@ -1,7 +1,7 @@
 FROM node:20.18 AS dev-deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
 
 FROM node:20.18 AS builder
