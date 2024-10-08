@@ -11,7 +11,7 @@ const sections = [
   { id: 'btn-section-proximos_lanzamientos', label: 'Próximos Lanzamientos' },
 ]
 
-const MainPage = () => {
+const Home = () => {
   const [currentSection, setCurrentSection] = useState(0)
   const [onSearch, setOnSearch] = useState(false)
   const [question, setQuestion] = useState('')
@@ -65,4 +65,4 @@ const MainPage = () => {
   )
 }
 
-export default MainPage
+export default Home
