@@ -23,6 +23,6 @@ docker compose down
 ```
 
 ### Recursos
-https://learn.microsoft.com/es-es/windows/wsl/install
-https://nickjanetakis.com/blog/install-docker-in-wsl-2-without-docker-desktop
+* https://learn.microsoft.com/es-es/windows/wsl/install
+* https://nickjanetakis.com/blog/install-docker-in-wsl-2-without-docker-desktop
 
