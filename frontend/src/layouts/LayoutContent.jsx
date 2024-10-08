@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 import '@styles/layout.css'
 
 
-export const LayoutContent = ({ section, search }) => {
-  const [content, error] = useGet(`http://localhost:4000/api/book?section=${section}&search=${search}`)
+export const LayoutContent = ({ section, search = null }) => {
+  const params = !!search ? `search=${search}` : ''
+  const [content, error] = useGet(`http://localhost:4000/api/book/?${params}`)
 
   if (error)
     return <h3 className='text-danger'>Surgio un Problema</h3>
