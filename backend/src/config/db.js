@@ -6,7 +6,7 @@ const { Pool } = pg
 export const pool = new Pool({
   user: 'healthtone',
   password: '1234',
-  host: 'database',
+  host: 'localhost',
   database: 'db_healthtone',
   port: 5432
 })

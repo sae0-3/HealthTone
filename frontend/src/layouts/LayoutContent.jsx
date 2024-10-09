@@ -19,8 +19,13 @@ export const LayoutContent = ({ section, search = null }) => {
         </h2>
       ) : (!!content && content.map(({ id, url_portada, nombre, autor }) => {
         return (
-          <Link to={`/book/${id}`} key={id} className='col-12 col-md-6 col-lg-3'>
-            <CardBook url_image={url_portada} title={nombre} author={autor} />
+          <Link
+            to={`/book/${id}`}
+            key={id}
+            className='col-12 col-md-6 col-lg-3'
+            style={{ textDecoration: 'none' }}
+          >
+            <CardBook url_image={url_portada} title={nombre} author={autor} type={id % 2} />
           </Link>
         )
       })

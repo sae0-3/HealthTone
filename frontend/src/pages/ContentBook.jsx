@@ -17,8 +17,8 @@ export const ContentBook = () => {
         <div className='content-container row g-5'>
           <div className='content-container_left col-3 d-flex flex-column justify-content-center align-items-center'>
             <img className='content-portada_image' src={data.url_portada} alt={data.nombre} />
-            <h2 className='mt-4'>{data.nombre}</h2>
-            <p>{data.autor}</p>
+            <h2 className='mt-4 text-center'>{data.nombre}</h2>
+            <p className='text-center'>{data.autor}</p>
           </div>
 
           <div className='content-container_right col-9'>

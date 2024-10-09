@@ -1,14 +1,19 @@
-export const CardBook = ({ url_image, title, author }) => {
+export const CardBook = ({ url_image, title, author, type }) => {
   return (
-    <div className='card text-center'>
+    <div className='card text-center' style={type ? styles : {}}>
       <img src={url_image} className='card-img-top' alt={title} />
 
       <div className='card-body'>
-        <blockquote className='blockquote mb-0'>
-          <p>{title}</p>
-          <footer className='blockquote-footer'>{author}</footer>
-        </blockquote>
+        <p className='card-text'>{title}</p>
+        <p className='card-text'>
+          <small style={{ opacity: .7 }}>{author}</small>
+        </p>
       </div>
     </div>
   )
+}
+
+const styles = {
+  background: 'var(--lightblue)',
+  color: 'var(--white)'
 }
