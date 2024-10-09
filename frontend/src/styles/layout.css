@@ -1,8 +1,4 @@
-.layoutContent-container blockquote {
-  font-size: 1.6rem;
-}
-
 .layoutContent-container .card-img-top {
   object-fit: cover;
-  height: 20rem;
+  height: 16rem;
 }
