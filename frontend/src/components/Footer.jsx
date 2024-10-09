@@ -14,17 +14,34 @@ const listMusic = [{
 
 export const Footer = () => {
   const [currentIndex, setCurrentIndex] = useState(1)
-  const audioSrc = useRef(listMusic[currentIndex].mp3_music)
   const [isPlay, setIsPlay] = useState(false)
   const [barVisible, setBarVisible] = useState(false)
   const [trackProgress, setTrackProgress] = useState(0)
   const audioRef = useRef(new Audio(listMusic[currentIndex].mp3_music))
   const { duration } = audioRef.current
-  const isReady = useRef(false)
   const intervalRef = useRef()
-  const firstTime = [trackProgress / 60, trackProgress % 60]
+  const [volume,setVolume] = useState(1);
 
-  const currentPercentage = duration ? (trackProgress / duration) * 100 : 0
+  const currentPercentageProgress = duration ? (trackProgress / duration) * 100 : 0
+
+  const handleVolumeBar = (e) => {
+    const {clientY} = e
+    const {width,top, bottom} = e.currentTarget.getBoundingClientRect()
+    const currentVolume = (window.innerHeight - clientY) - (window.innerHeight - bottom)
+    const actual = currentVolume>0?currentVolume:0 / width * 100
+    audioRef.current.volume = actual / 100
+    setVolume(actual)
+  }
+  
+  
+  const handleClickBar = (e) => {
+    const {clientX} = e
+    const {left, width} = e.currentTarget.getBoundingClientRect()
+    const actualCurrentTime = (clientX - left) / width * duration
+    console.log(actualCurrentTime)
+    audioRef.current.currentTime = actualCurrentTime
+    setTrackProgress(audioRef.current.currentTime)
+  }
 
 
   const handleDecrease = () => {
@@ -90,7 +107,7 @@ export const Footer = () => {
       }
     } else {
       if (isPlay) {
-        audioRef.current = new Audio(audioSrc)
+        audioRef.current = new Audio(listMusic[currentIndex].mp3_music)
         audioRef.current.play().catch(error => {
           console.error('Error al reproducir el audio:', error)
         })
@@ -124,8 +141,8 @@ export const Footer = () => {
         <div className='d-flex justify-content-start align-items-center ms-3'>
           <img src='foto' alt='poster-img' style={{ width: '100%', height: '6rem', maxWidth: '6rem', background: 'blue' }} />
           <div className='d-flex flex-column justify-content-center ms-3'>
-            <h3>{ }</h3>
-            <p>{ }</p>
+            <h3>{listMusic[currentIndex].Title}</h3>
+            <p>{listMusic[currentIndex].Autor}</p>
           </div>
         </div>
 
@@ -173,7 +190,10 @@ export const Footer = () => {
                                 :
                                 ${isNaN(duration) ? '00' : addZero(Math.round(trackProgress % 60))}
                                 `}</p>
-            <ProgressBar now={currentPercentage} style={{ width: '100%', maxWidth: '60rem' }} />
+            <ProgressBar
+                now={currentPercentageProgress}
+                style={{ width: '100%', maxWidth: '60rem' }}
+                onClick={handleClickBar}/>
             <p className='ms-2' style={{ margin: '0' }}>{`
                                 ${isNaN(duration) ? '00' : addZero(Math.round(duration / 60))}
                                 :
@@ -196,7 +216,10 @@ export const Footer = () => {
             </button>
             {barVisible &&
               <div className='volume-bar'>
-                <ProgressBar now={60} style={{ height: '1.5rem' }} />
+                <ProgressBar 
+                    now={volume} 
+                    style={{ height: '1.5rem' }} 
+                    onClick={handleVolumeBar}/>
               </div>}
           </div>
           <button
