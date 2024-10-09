@@ -1,48 +1,50 @@
-import { useState, useRef, useEffect } from 'react'
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import { AudioContext } from '@contexts/AudioContext'
 import '@styles/footer.css'
+import { useContext, useEffect, useRef, useState } from 'react'
+import ProgressBar from 'react-bootstrap/ProgressBar'
 
-const listMusic = [{
-  mp3_music: 'http://localhost:4000/uploads/song.mp3',
-  Autor: 'Nine Inch Nails',
-  Title: 'The Fragile',
-}, {
-  mp3_music: '/Audio/The_Fragile.mp3',
-  Autor: 'Nine Inch Nails',
-  Title: 'Closer',
-}]
 
 export const Footer = () => {
-  const [currentIndex, setCurrentIndex] = useState(1)
+  const { currentTrack } = useContext(AudioContext)
   const [isPlay, setIsPlay] = useState(false)
   const [barVisible, setBarVisible] = useState(false)
   const [trackProgress, setTrackProgress] = useState(0)
-  const audioRef = useRef(new Audio(listMusic[currentIndex].mp3_music))
-  const { duration } = audioRef.current
+  const [volume, setVolume] = useState(100)
+  const audioRef = useRef(new Audio(currentTrack.url))
   const intervalRef = useRef()
-  const [volume,setVolume] = useState(1);
 
+  const { duration } = audioRef.current
   const currentPercentageProgress = duration ? (trackProgress / duration) * 100 : 0
 
-  const handleVolumeBar = (e) => {
-    const {clientY} = e
-    const {width,top, bottom} = e.currentTarget.getBoundingClientRect()
-    const currentVolume = (window.innerHeight - clientY) - (window.innerHeight - bottom)
-    const actual = currentVolume>0?currentVolume:0 / width * 100
-    audioRef.current.volume = actual / 100
-    setVolume(actual)
+  useEffect(() => {
+    audioRef.current.pause()
+    audioRef.current = new Audio(currentTrack.url)
+    setTrackProgress(0)
+    setIsPlay(false)
+  }, [currentTrack])
+
+  useEffect(() => {
+    if (isPlay) {
+      audioRef.current.play()
+        .catch(error => console.error('Error al reproducir el audio:', error))
+      startTimer()
+    } else {
+      clearInterval(intervalRef.current)
+      audioRef.current.pause()
+    }
+  }, [isPlay])
+
+  const handleVolumeClick = () => {
+    setBarVisible(!barVisible)
   }
-  
-  
+
   const handleClickBar = (e) => {
-    const {clientX} = e
-    const {left, width} = e.currentTarget.getBoundingClientRect()
+    const { clientX } = e
+    const { left, width } = e.currentTarget.getBoundingClientRect()
     const actualCurrentTime = (clientX - left) / width * duration
-    console.log(actualCurrentTime)
     audioRef.current.currentTime = actualCurrentTime
     setTrackProgress(audioRef.current.currentTime)
   }
-
 
   const handleDecrease = () => {
     audioRef.current.currentTime = Math.max(audioRef.current.currentTime - 10, 0)
@@ -50,185 +52,127 @@ export const Footer = () => {
   }
 
   const handleIncrease = () => {
-    audioRef.current.currentTime = (audioRef.current.currentTime + 10 < audioRef.current.duration) ? audioRef.current.currentTime + 10 : audioRef.current.duration
+    audioRef.current.currentTime = (audioRef.current.currentTime + 10 < audioRef.current.duration)
+      ? audioRef.current.currentTime + 10
+      : audioRef.current.duration
     setTrackProgress(audioRef.current.currentTime)
   }
 
-
   const handleReplay = () => {
     audioRef.current.currentTime = 0
-    setIsPlay(isPlay => true)
+    setIsPlay(true)
   }
 
-  const handlePrev = () => {
-    const prevIndex = (currentIndex - 1 + listMusic.length) % listMusic.length
-    setCurrentIndex(prevIndex)
-    setIsPlay(isPlay => true)
+  const handleVolumeBar = (e) => {
+    const { clientY } = e
+    const { width, bottom } = e.currentTarget.getBoundingClientRect()
+    const currentVolume = (window.innerHeight - clientY) - (window.innerHeight - bottom)
+    const actual = currentVolume > 0 ? currentVolume : 0 / width * 100
+    audioRef.current.volume = actual / 100
+    setVolume(actual)
   }
-
-  const handleNext = () => {
-    const nextIndex = (currentIndex + 1) % listMusic.length
-    setCurrentIndex(nextIndex)
-    setIsPlay(isPlay => true)
-  }
-
-  useEffect(() => {
-    audioRef.current.pause()
-    audioRef.current = new Audio(listMusic[currentIndex].mp3_music)
-    if (isPlay) {
-      audioRef.current.play()
-    }
-    return () => {
-      audioRef.current.pause()
-    }
-  }, [currentIndex])
 
   const startTimer = () => {
     clearInterval(intervalRef.current)
     intervalRef.current = setInterval(() => {
-      if (audioRef.current.ended) {
-        handleNext()
-      } else {
+      if (!audioRef.current.ended) {
         setTrackProgress(audioRef.current.currentTime)
       }
     }, [1000])
   }
 
-  useEffect(() => {
-    if (audioRef.current.src) {
-      if (isPlay) {
-        audioRef.current.play().catch(error => {
-          console.error('Error al reproducir el audio:', error)
-        })
-        startTimer()
-      } else {
-        clearInterval(intervalRef.current)
-        audioRef.current.pause()
-      }
-    } else {
-      if (isPlay) {
-        audioRef.current = new Audio(listMusic[currentIndex].mp3_music)
-        audioRef.current.play().catch(error => {
-          console.error('Error al reproducir el audio:', error)
-        })
-        startTimer()
-      } else {
-        clearInterval(intervalRef.current)
-        audioRef.current.pause()
-      }
-    }
-  }, [isPlay])
-
   const addZero = (n) => {
     return n > 9 ? '' + n : '0' + n
   }
 
-  useEffect(() => {
-    return () => {
-      audioRef.current.pause()
-      clearInterval(intervalRef.current)
-    }
-  }, [])
-
-
-  const handleVolumeClick = () => {
-    setBarVisible(barVisible ? false : true)
-  }
-
   return (
-    <footer className='text-white text-center align-items-center fixed-bottom'>
-      <div className='content-footer d-flex justify-content-between align-items-center'>
-        <div className='d-flex justify-content-start align-items-center ms-3'>
-          <img src='foto' alt='poster-img' style={{ width: '100%', height: '6rem', maxWidth: '6rem', background: 'blue' }} />
-          <div className='d-flex flex-column justify-content-center ms-3'>
-            <h3>{listMusic[currentIndex].Title}</h3>
-            <p>{listMusic[currentIndex].Autor}</p>
+    <footer className='fixed-bottom footer-container-reproductor w-100 pt-3 pb-3'>
+      <div className='row footer-subcontainer-reproductor d-flex justify-content-between'>
+        <section className='col-2 d-flex align-items-center justify-content-start reproductor-section_left gap-4'>
+          <img src={currentTrack.cover} alt={currentTrack.title} />
+          <div className='d-flex flex-column align-items-center justify-content-center'>
+            {/* <p className='text-center'>{currentTrack.title}</p> */}
+            <p className='text-center'>{currentTrack.author}</p>
           </div>
-        </div>
+        </section>
 
-        <div className='d-flex flex-column align-items-center' style={{ width: '100%', maxWidth: '75rem' }}>
-          <div className='d-flex justify-content-center'>
-            <button className='large-icon mx-2'>
-              <i
-                className='bi bi-skip-backward'
-                style={{ fontSize: '3rem' }}
-                onClick={handleDecrease}
-              ></i>
+        <section className='col-8 d-flex flex-column align-items-center justify-content-center gap-2'>
+          <div className='d-flex justify-content-center gap-4'>
+            <button className='btn' onClick={handleDecrease}>
+              <i className='bi bi-skip-backward fs-2'></i>
             </button>
-            <button className='large-icon mx-2'>
-              <i
-                className='bi bi-skip-start-fill'
-                style={{ fontSize: '3rem' }}
-                onClick={handlePrev}></i>
+            <button className='btn' disabled>
+              <i className='bi bi-skip-start-fill fs-1'></i>
             </button>
-            <button
-              className='large-icon mx-2'
-              onClick={() => { setIsPlay(!isPlay) }}>
-              <i
-                className={isPlay ? 'bi bi-pause-fill' : 'bi bi-play-fill'}
-                style={{ fontSize: '3rem' }}
-              >
-              </i>
+            <button className='btn' onClick={() => { setIsPlay(!isPlay) }}>
+              <i className={`${isPlay ? 'bi bi-pause-fill' : 'bi bi-play-fill'} fs-1`}></i>
             </button>
-            <button className='large-icon mx-2'>
-              <i
-                className='bi bi-skip-end-fill'
-                style={{ fontSize: '3rem' }}
-                onClick={handleNext}></i>
+            <button className='btn' disabled>
+              <i className='bi bi-skip-end-fill fs-1'></i>
             </button>
-            <button className='large-icon mx-2'>
-              <i
-                className='bi bi-skip-forward'
-                style={{ fontSize: '3rem' }}
-                onClick={handleIncrease}
-              ></i>
+            <button className='btn' onClick={handleIncrease}>
+              <i className='bi bi-skip-forward fs-2'></i>
             </button>
           </div>
-          <div className='d-flex justify-content-center align-items-center flex-row mt-2' style={{ width: '100%', maxWidth: '75rem' }}>
-            <p className='me-2' style={{ margin: '0' }}>{`
-                                ${isNaN(duration) ? '00' : addZero(Math.round(trackProgress / 60))}
-                                :
-                                ${isNaN(duration) ? '00' : addZero(Math.round(trackProgress % 60))}
-                                `}</p>
-            <ProgressBar
-                now={currentPercentageProgress}
-                style={{ width: '100%', maxWidth: '60rem' }}
-                onClick={handleClickBar}/>
-            <p className='ms-2' style={{ margin: '0' }}>{`
-                                ${isNaN(duration) ? '00' : addZero(Math.round(duration / 60))}
-                                :
-                                ${isNaN(duration) ? '00' : addZero(Math.round(duration % 60) - 1)}
-                                `}</p>
-          </div>
-        </div>
 
-        <div className='d-flex align-items-center'>
-          <button className='large-icon mx-2'>
-            <i
-              className='bi bi-arrow-counterclockwise'
-              style={{ fontSize: '3rem' }}
-              onClick={handleReplay}></i>
-          </button>
-
-          <div className='volume-settings d-flex align-items-center mx-2' style={{ position: 'relative' }}>
-            <button className='large-icon ms-2' onClick={handleVolumeClick}>
-              <i className='bi bi-volume-up' style={{ fontSize: '3rem' }}></i>
-            </button>
-            {barVisible &&
-              <div className='volume-bar'>
-                <ProgressBar 
-                    now={volume} 
-                    style={{ height: '1.5rem' }} 
-                    onClick={handleVolumeBar}/>
-              </div>}
-          </div>
-          <button
-            className='large-icon mx-2'
-            style={{ border: 'none', borderRadius: '.7rem', fontSize: '2.5rem', margin: '0', padding: '0', lineHeight: '1' }}
+          <div
+            className='d-flex justify-content-center align-items-center flex-row gap-3'
+            style={{ width: '100%', maxWidth: '60rem' }}
           >
-            <i className='bi bi-chevron-up me-3' style={{ fontSize: '3rem', display: 'block', margin: '0' }}></i>
+            <span>{`${isNaN(duration)
+              ? '00'
+              : addZero(Math.round(trackProgress / 60))}:${isNaN(duration)
+                ? '00'
+                : addZero(Math.round(trackProgress % 60))}
+            `}
+            </span>
+            <ProgressBar
+              now={currentPercentageProgress}
+              style={{ width: '100%', maxWidth: '60rem' }}
+              onClick={handleClickBar}
+            />
+            <span>{`${isNaN(duration)
+              ? '00'
+              : addZero(Math.round(duration / 60))}:${isNaN(duration)
+                ? '00'
+                : addZero(Math.round(duration % 60) - 1)}
+            `}
+            </span>
+          </div>
+        </section>
+
+        <section className='col-2 d-flex align-items-center justify-content-end gap-3'>
+          <button
+            className='btn'
+            onClick={handleReplay}
+            style={{ height: '5rem' }}>
+            <i className='bi bi-arrow-counterclockwise fs-1'></i>
           </button>
-        </div>
+
+          <div
+            className='volume-settings d-flex align-items-center'
+            style={{ position: 'relative' }}>
+            <button
+              className='btn'
+              onClick={handleVolumeClick}>
+              <i className='bi bi-volume-up fs-1'></i>
+            </button>
+            {barVisible && (
+              <div className='volume-bar'>
+                <ProgressBar
+                  now={volume}
+                  style={{ height: '1.5rem' }}
+                  onClick={handleVolumeBar} />
+              </div>
+            )}
+          </div>
+
+          <button
+            className='btn'
+            style={{ height: '5rem' }}>
+            <i className='bi bi-caret-up-fill fs-1'></i>
+          </button>
+        </section>
       </div>
     </footer>
   )
