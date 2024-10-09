@@ -13,13 +13,18 @@ export const LayoutContent = ({ section, search = null }) => {
 
   return (
     <section className='row g-5 layoutContent-container'>
-      {!!content && content.map(({ id, url_portada, nombre, autor }) => {
+      {!!content && content.length == 0 ? (
+        <h2 className='text-center fs-2 pt-4'>
+          <span>No se encontraron resultados</span>
+        </h2>
+      ) : (!!content && content.map(({ id, url_portada, nombre, autor }) => {
         return (
           <Link to={`/book/${id}`} key={id} className='col-12 col-md-6 col-lg-3'>
             <CardBook url_image={url_portada} title={nombre} author={autor} />
           </Link>
         )
-      })}
+      })
+      )}
     </section>
   )
 }
