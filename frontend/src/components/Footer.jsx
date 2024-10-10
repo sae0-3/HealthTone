@@ -5,8 +5,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar'
 
 
 export const Footer = () => {
-  const { currentTrack } = useContext(AudioContext)
-  const [isPlay, setIsPlay] = useState(false)
+  const { currentTrack, isPlay, setIsPlay } = useContext(AudioContext)
   const [barVisible, setBarVisible] = useState(false)
   const [trackProgress, setTrackProgress] = useState(0)
   const [volume, setVolume] = useState(100)
@@ -20,7 +19,7 @@ export const Footer = () => {
     audioRef.current.pause()
     audioRef.current = new Audio(currentTrack.url)
     setTrackProgress(0)
-    setIsPlay(false)
+    // setIsPlay(false)
   }, [currentTrack])
 
   useEffect(() => {

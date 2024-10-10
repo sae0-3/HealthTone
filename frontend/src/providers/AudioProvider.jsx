@@ -12,11 +12,12 @@ const defaultTrack = {
 
 export const AudioProvider = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState(defaultTrack)
+  const [isPlay, setIsPlay] = useState(false)
 
   const playTrack = (track = defaultTrack) => setCurrentTrack(track)
 
   return (
-    <AudioContext.Provider value={{ currentTrack, playTrack }}>
+    <AudioContext.Provider value={{ currentTrack, playTrack, isPlay, setIsPlay }}>
       {children}
     </AudioContext.Provider>
   )

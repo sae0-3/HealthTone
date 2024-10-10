@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 export const LayoutContent = ({ section, search = null }) => {
   const params = !!search ? `search=${search}` : ''
   const [content, error] = useGet(`http://localhost:4000/api/book/?${params}`)
-  const { playTrack } = useContext(AudioContext)
+  const { playTrack, setIsPlay } = useContext(AudioContext)
 
   const handlePlay = (idx) => {
     playTrack({
@@ -18,6 +18,8 @@ export const LayoutContent = ({ section, search = null }) => {
       cover: content[idx].url_portada,
       url: content[idx].url_audio,
     })
+
+    setIsPlay(true)
   }
 
   if (error)
