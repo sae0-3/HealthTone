@@ -17,10 +17,10 @@ export const getBookById = async (req, res) => {
 }
 
 export const getBookAll = async (req, res) => {
-  const { search } = req.query
+  const { search, section } = req.query
 
   try {
-    const result = await getAll(search)
+    const result = await getAll(search, section)
     res.status(200).send(result)
   } catch (err) {
     console.error(err)
