@@ -2,6 +2,8 @@ import { AudioContext } from '@contexts/AudioContext'
 import '@styles/footer.css'
 import { useContext, useEffect, useRef, useState } from 'react'
 import ProgressBar from 'react-bootstrap/ProgressBar'
+import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 
 export const Footer = () => {
@@ -11,7 +13,9 @@ export const Footer = () => {
   const [volume, setVolume] = useState(100)
   const audioRef = useRef(new Audio(currentTrack.url))
   const intervalRef = useRef()
-
+  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
   const { duration } = audioRef.current
   const currentPercentageProgress = duration ? (trackProgress / duration) * 100 : 0
 
@@ -104,6 +108,15 @@ export const Footer = () => {
     return n > 9 ? '' + n : '0' + n
   }
 
+  useEffect(() => {
+    isOpen?navigate(`/book/${currentTrack.id}`):navigate(`/`)
+  }, [isOpen])
+
+  useEffect(() => {
+    if(location.pathname === '/') setIsOpen(false)
+  }, [location.pathname])
+
+
   return (
     <footer className='fixed-bottom footer-container-reproductor w-100 pt-3 pb-3'>
       <div className='row footer-subcontainer-reproductor d-flex justify-content-between'>
@@ -189,7 +202,13 @@ export const Footer = () => {
           <button
             className='btn'
             style={{ height: '5rem' }}>
-            <i className='bi bi-caret-up-fill fs-1'></i>
+            <i
+              className={isOpen && location.pathname !== '/' ?
+                'bi bi-caret-up-fill fs-1' :
+                'bi bi-caret-down-fill fs-1'
+              }
+              onClick={() => setIsOpen(isOpen => !isOpen)}
+            ></i>
           </button>
         </section>
       </div>

@@ -20,7 +20,6 @@ export const ContentBook = () => {
             <h2 className='mt-4 text-center'>{data.nombre}</h2>
             <p className='text-center'>{data.autor}</p>
           </div>
-
           <div className='content-container_right col-9'>
             <EpubViewer url={data.url_texto} />
           </div>

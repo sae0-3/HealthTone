@@ -12,6 +12,7 @@ export const LayoutContent = ({ section = 'sugerencias', search = null }) => {
 
   const handlePlay = (idx) => {
     playTrack({
+      id: content[idx].id,
       title: content[idx].nombre,
       author: content[idx].autor,
       cover: content[idx].url_portada,
