@@ -153,9 +153,9 @@ export const Footer = () => {
           >
             <span>{`${isNaN(duration)
               ? '00'
-              : addZero(Math.round(trackProgress / 60))}:${isNaN(duration)
+              : addZero(Math.floor(trackProgress / 60))}:${isNaN(duration)
                 ? '00'
-                : addZero(Math.round(trackProgress % 60))}
+                : addZero(Math.floor(trackProgress % 60))}
             `}
             </span>
             <ProgressBar
@@ -165,9 +165,9 @@ export const Footer = () => {
             />
             <span>{`${isNaN(duration)
               ? '00'
-              : addZero(Math.round(duration / 60))}:${isNaN(duration)
+              : addZero(Math.floor(duration / 60))}:${isNaN(duration)
                 ? '00'
-                : addZero(Math.round(duration % 60) - 1)}
+                : addZero(Math.floor(duration % 60) - 1)}
             `}
             </span>
           </div>
