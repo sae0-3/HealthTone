@@ -1,6 +1,6 @@
 import portada from '@assets/med.jpg'
 import { AudioContext } from '@contexts/AudioContext'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 
 const defaultTrack = {
