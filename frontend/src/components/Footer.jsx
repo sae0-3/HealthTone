@@ -167,7 +167,7 @@ export const Footer = () => {
               ? '00'
               : addZero(Math.floor(duration / 60))}:${isNaN(duration)
                 ? '00'
-                : addZero(Math.floor(duration % 60) - 1)}
+                : addZero(Math.floor(duration % 60))}
             `}
             </span>
           </div>
