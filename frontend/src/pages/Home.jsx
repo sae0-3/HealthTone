@@ -56,7 +56,7 @@ const Home = () => {
             <h2 className='h1 fw-bold pt-2 pb-5'>{sections[currentSection].label}</h2>
 
             <LayoutContent
-              section={sections[currentSection].label.split('-').pop()}
+              section={sections[currentSection].id.split('-').pop()}
             />
           </section>
         </div>

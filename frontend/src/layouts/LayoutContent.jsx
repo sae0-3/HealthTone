@@ -3,12 +3,11 @@ import { AudioContext } from '@contexts/AudioContext'
 import { useGet } from '@hooks/useGet'
 import '@styles/layout.css'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
 
 
-export const LayoutContent = ({ section, search = null }) => {
-  const params = !!search ? `search=${search}` : ''
-  const [content, error] = useGet(`http://localhost:4000/api/book/?${params}`)
+export const LayoutContent = ({ section = 'sugerencias', search = null }) => {
+  search = !!search ? search : ''
+  const [content, error] = useGet(`http://localhost:4000/api/book/?section=${section}&search=${search}`)
   const { playTrack, setIsPlay } = useContext(AudioContext)
 
   const handlePlay = (idx) => {
@@ -33,15 +32,16 @@ export const LayoutContent = ({ section, search = null }) => {
         </h2>
       ) : (!!content && content.map(({ id, url_portada, nombre, autor }, idx) => {
         return (
-          <Link
+          <button
             to={`/book/${id}`}
             key={id}
-            className='col-12 col-md-6 col-lg-3'
+            className='btn fs-4 col-12 col-md-6 col-lg-3'
             style={{ textDecoration: 'none' }}
             onClick={() => { handlePlay(idx) }}
+            disabled={section == 'proximos_lanzamientos'}
           >
-            <CardBook url_image={url_portada} title={nombre} author={autor} type={id % 2} />
-          </Link>
+            <CardBook url_image={url_portada} title={nombre} author={autor} />
+          </button>
         )
       })
       )}

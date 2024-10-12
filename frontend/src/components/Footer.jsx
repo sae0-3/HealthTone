@@ -20,24 +20,38 @@ export const Footer = () => {
     audioRef.current = new Audio(currentTrack.url)
     setTrackProgress(0)
     // setIsPlay(false)
-  }, [currentTrack])
-
-  useEffect(() => {
-    audioRef.current.pause()
-    audioRef.current = new Audio(currentTrack.url)
-    setTrackProgress(0)
-
     audioRef.current.addEventListener('canplaythrough', () => {
       if (isPlay) {
         audioRef.current.play().catch(error => console.error('Error al reproducir el audio:', error))
         startTimer()
       }
     })
+  }, [currentTrack])
 
-    return () => {
-      audioRef.current.removeEventListener('canplaythrough', () => {})
+  useEffect(() => {
+    if (audioRef.current.src) {
+      if (isPlay) {
+        audioRef.current.play().catch(error => {
+          console.error("Error al reproducir el audio:", error)
+        })
+        startTimer()
+      } else {
+        clearInterval(intervalRef.current)
+        audioRef.current.pause()
+      }
+    } else {
+      if (isPlay) {
+        audioRef.current = new Audio(audioSrc)
+        audioRef.current.play().catch(error => {
+          console.error("Error al reproducir el audio:", error)
+        })
+        startTimer()
+      } else {
+        clearInterval(intervalRef.current)
+        audioRef.current.pause()
+      }
     }
-  }, [currentTrack, isPlay])
+  }, [isPlay])
 
   const handleVolumeClick = () => {
     setBarVisible(!barVisible)

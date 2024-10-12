@@ -1,6 +1,6 @@
 export const CardBook = ({ url_image, title, author, type }) => {
   return (
-    <div className='card text-center' style={type ? styles : {}}>
+    <div className='card text-center' style={styles}>
       <img src={url_image} className='card-img-top' alt={title} />
 
       <div className='card-body'>
