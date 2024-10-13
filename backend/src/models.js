@@ -140,6 +140,7 @@ export const getBookAll = async (search, section) => {
       LEFT JOIN R_CONTENIDO_CATEGORIA r on id_contenido = co.id
       LEFT JOIN CATEGORIA ca on ca.id = id_categoria
     GROUP BY co.id,co.nombre,autor,url_texto,url_portada,url_audio
+    ORDER BY co.id
     `
     }
   }
