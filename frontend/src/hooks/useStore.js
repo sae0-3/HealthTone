@@ -54,6 +54,7 @@ export const useStore = create((set) => ({
 
   startAudio: () => set((state) => {
     state.howl?.play()
+    state.howl?.mute(state.muted)
     return { isPlaying: true, playbackPosition: 0 }
   }),
 }))
