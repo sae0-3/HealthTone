@@ -3,6 +3,7 @@
 ### Prerequisitos
 
 * Tener instalado `docker`
+* Descargar la carpeta [uploads](https://drive.google.com/drive/folders/1ATxyYgxbZkAWAEjE_sM52wTXW-FJEpIo?usp=sharing) y reemplazar en /backend/src/uploads
 
 ### Hacer Correr
 ```hs
