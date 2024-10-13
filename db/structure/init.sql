@@ -94,7 +94,7 @@ $$ LANGUAGE plpgsql;
 
 -- DATA
 INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
-    ('Dime qué comes y te diré qué bacterias tienes', 'Blanca García-Orea Haro', 'http://localhost:4000/uploads/epub/Dime_qué_comes_y_te_diré_qué_bacterias_tienes_Audiolibro_de_Blanca.epub', 'http://localhost:4000/uploads/imgs/Dime_qué_comes_y_te_diré_qué_bacterias_tienes_Audiolibro_de_Blanca.jpg', 'http://localhost:4000/uploads/tracks/Dime_qué_comes_y_te_diré_qué_bacterias_tienes_Audiolibro_de_Blanca.mp3'),
+    ('Dime qué comes y te diré qué bacterias tienes', 'Blanca García-Orea Haro', 'http://localhost:4000/uploads/epub/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.epub', 'http://localhost:4000/uploads/imgs/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.jpg', 'http://localhost:4000/uploads/tracks/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.mp3'),
     ('Diferencias entre virus, bacterias y hongos', 'Dr. Elena R. Martínez', 'http://localhost:4000/uploads/epub/bacteriasVirus.epub', 'http://localhost:4000/uploads/imgs/bacteriasVirus.jpg', 'http://localhost:4000/uploads/tracks/bacteriasVirus.mp3'),
     ('El cancer no es una enfermedad', 'Dr. Andreas Morizt', 'http://localhost:4000/uploads/epub/cancer.epub', 'http://localhost:4000/uploads/imgs/cancer.jpg', 'http://localhost:4000/uploads/tracks/cancer.mp3'),
     ('¿La marihuana es mala para el cerebro?', 'Mikel Alonso', 'http://localhost:4000/uploads/epub/marihuana.epub', 'http://localhost:4000/uploads/imgs/marihuana.jpg', 'http://localhost:4000/uploads/tracks/marihuana.mp3'),
