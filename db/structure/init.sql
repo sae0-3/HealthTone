@@ -102,7 +102,7 @@ INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
 
 INSERT INTO ESTRENO (nombre, autor, url_portada) VALUES
     ('Vacunas Verdades mentiras y controversia', 'Peter C Gotzsche', 'http://localhost:4000/uploads/imgs/vacunas-verdades-mentiras-y-controversia-int.jpg'),
-    ('¡Es la microbiota, idiota!', 'Sari Arponen', 'http://localhost:4000/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpeg');
+    ('¡Es la microbiota, idiota!', 'Sari Arponen', 'http://localhost:4000/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpg');
 
 INSERT INTO VISUALIZACION (id_contenido, fecha)
 SELECT
