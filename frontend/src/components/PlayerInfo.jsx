@@ -1,23 +1,28 @@
-import { useStore } from '@hooks/useStore'
-import imgAux from '@assets/med.jpg'
+import imgAux from '@/assets/med.jpg'
+import { useStore } from '@/hooks/useStore'
+import { Link } from 'react-router-dom'
 
 
-export const PlayerInfo = ({ className }) => {
+export const PlayerInfo = () => {
   const { currentAudio } = useStore()
 
-  if (!currentAudio) {
-    return null
-  }
-
   return (
-    <section className={`${className} d-flex align-items-center justify-content-start`}>
-      <img src={currentAudio.cover || imgAux} alt={currentAudio.title}
-        style={{ width: '6rem', height: '6rem', objectFit: 'contain' }}
-      />
-      <div className='d-flex flex-column align-items-center justify-content-center'>
-        <p className='text-center p-0 m-0'>{currentAudio.title}</p>
-        <p className='text-center p-0 m-0'>{currentAudio.author}</p>
+    <Link to={`/book/${currentAudio.id}`}>
+      <div className='flex items-center justify-start gap-2 lg:w-10/12'>
+        <img src={currentAudio.cover || imgAux}
+          alt={`portada_${currentAudio.title}`}
+          className='h-16'
+        />
+
+        <div className='overflow-hidden'>
+          <p className='text-white font-bold text-base truncate'>
+            {currentAudio.title}
+          </p>
+          <p className='text-gray-200 text-xs truncate'>
+            {currentAudio.author}
+          </p>
+        </div>
       </div>
-    </section>
+    </Link>
   )
 }

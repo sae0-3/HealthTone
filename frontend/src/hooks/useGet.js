@@ -17,7 +17,6 @@ export const useGet = (url) => {
         const data = await response.json()
         setResult(data)
       } catch (err) {
-        console.error("problema al obtener los datos", err)
         setError('Surgio un problema al hacer fetch de los datos')
       } finally {
         setIsLoading(false)
