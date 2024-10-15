@@ -1,27 +1,3 @@
-:root {
-  --black: #0D1321;
-  /* --blue: #1D2D44; */
-  --blue: #3E5C76;
-  --lightblue: #748CAB;
-  --white: #E8E9EB;
-}
-
-html {
-  font-size: 62.5%;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-size: 1.6rem;
-  background-color: var(--white);
-}
-
-.container {
-  padding-top: 10rem;
-  padding-bottom: 9rem;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

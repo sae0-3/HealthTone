@@ -1,45 +1,49 @@
-import '@styles/header.css'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 
-export const Header = () => {
-  const [search, setSearch] = useState('')
+export const Header = ({ toggleSidebar }) => {
+  const [inputValue, setInputValue] = useState('')
   const navigate = useNavigate()
 
-  const handleChange = (input) => {
-    setSearch(input.target.value)
-  }
-
-  const onSubmit = (event) => {
-    event.preventDefault()
-    navigate(`/?search=${search}`)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (inputValue !== '') {
+      navigate(`/search?input=${inputValue}`)
+    }
   }
 
   return (
-    <header className='header-container fixed-top'>
-      <Link to='/'>
-        <img className='header-logo' src='/healthTone.svg' alt='logo' />
+    <div className='h-20 bg-white border-b border-gray-200 flex items-center justify-between px-3 lg:justify-end lg:pl-0 lg:pr-20 gap-2'>
+      <Link to='/' className='lg:hidden'>
+        <img src='/healthtone_black.svg'
+          className='w-16'
+          alt='logo-healthtone'
+        />
       </Link>
 
-      <form onSubmit={onSubmit} className='search-form'>
-        <button className='advancedSearch-button' type='button' disabled style={{ opacity: .2 }}>
-          <i className='bi bi-list fs-1 text-dark'></i>
-        </button>
-
+      <form onSubmit={handleSubmit}
+        className='flex items-center gap-2 border border-htc-black rounded-lg px-3'
+      >
         <input
-          className='search-input'
           type='text'
           placeholder='Buscar'
-          value={search}
-          onChange={handleChange}
+          className='focus:outline-none min-w-20 max-w-28 sm:max-w-48 lg:w-96'
           maxLength={100}
+          value={inputValue}
+          onChange={({ target: { value } }) => { setInputValue(value) }}
         />
 
-        <button className='search-button' type='submit'>
-          <i className='bi bi-search text-dark'></i>
+        <div className='h-10 w-px bg-gray-300' />
+
+        <button type='submit'>
+          <i className='bi bi-search'></i>
         </button>
       </form>
-    </header>
+
+      <button className='lg:hidden' onClick={() => { toggleSidebar(false) }}>
+        <i className='bi bi-list text-4xl'></i>
+      </button>
+    </div>
   )
 }

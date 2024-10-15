@@ -1,57 +1,44 @@
-import { CardBook } from '@components/CardBook'
-import { useGet } from '@hooks/useGet'
-import { useStore } from '@hooks/useStore'
-import { Link } from 'react-router-dom'
+import { Card } from '@/components/Card'
+import { useGet } from '@/hooks/useGet'
 
 
-export const LayoutContent = ({ section = 'sugerencias', search = null }) => {
-  search = !!search ? search : ''
+export const LayoutContent = ({ title, section = '', search = '' }) => {
   const [content, error] = useGet(`http://localhost:4000/api/book/?section=${section}&search=${search}`)
-  const { setCurrentAudio, startAudio } = useStore()
-
-  const handlePlay = (idx) => {
-    setCurrentAudio({
-      id: content[idx].id,
-      title: content[idx].nombre,
-      author: content[idx].autor,
-      cover: content[idx].url_portada,
-      url: content[idx].url_audio,
-    })
-    startAudio()
-  }
-
-  if (error)
-    return <h3 className='text-danger'>Surgio un Problema</h3>
 
   return (
-    <section className='row g-5'>
-      {!!content && content.length == 0 ? (
-        <h2 className='text-center fs-2 pt-4'>
-          <span>No se encontraron resultados</span>
-        </h2>
-      ) : (!!content && content.map(({ id, url_portada, nombre, autor }, idx) => {
-        return section === 'proximos_lanzamientos' ? (
-          <div
-            key={id}
-            className='fs-4 col-12 col-md-6 col-lg-3'
-            style={{ textDecoration: 'none', opacity: '.8' }}
-          >
-            <CardBook url_image={url_portada} title={nombre} author={autor} />
-          </div>
-        ) : (
-          <Link
-            to={`/book/${id}`}
-            key={id}
-            className='fs-4 col-12 col-md-6 col-lg-3'
-            style={{ textDecoration: 'none' }}
-            onClick={() => { handlePlay(idx) }}
-            disabled={section == 'proximos_lanzamientos'}
-          >
-            <CardBook url_image={url_portada} title={nombre} author={autor} />
-          </Link>
-        )
-      })
+    <div className='flex flex-col'>
+      <section className='py-4'>
+        <h2 className='text-2xl font-bold'>{title}</h2>
+      </section>
+
+      {!!error ? (
+        <p className='font-semibold text-red-600'>
+          No se logro recupear la información
+        </p>
+      ) : !!content && content.length === 0 ? (
+        <p className='font-semibold'>
+          No se encontraron resultados
+        </p>
+      ) : (
+        <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:5 gap-8'>
+          {!!content && content.map((book) => {
+            return (
+              <div key={book.id}
+                className='border shadow-sm rounded-xl hover:shadow-lg transition'
+              >
+                <Card id={book.id}
+                  title={book.nombre}
+                  author={book.autor}
+                  url_cover={book.url_portada}
+                  url_audio={book.url_audio}
+                  categories={book.categorias}
+                  disabled={section == 'proximos_lanzamientos'}
+                />
+              </div>
+            )
+          })}
+        </section>
       )}
-    </section>
+    </div>
   )
 }

@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import { Howl } from 'howler'
+import { create } from 'zustand'
 
 
 export const useStore = create((set) => ({
@@ -26,6 +26,8 @@ export const useStore = create((set) => ({
 
     return { currentAudio: audio, howl: newHowl, playbackPosition: 0 }
   }),
+
+  setPlaying: (value) => set({ isPlaying: value }),
 
   togglePlay: () => set((state) => {
     if (state.isPlaying) {

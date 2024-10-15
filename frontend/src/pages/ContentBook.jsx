@@ -1,29 +1,77 @@
-import { useGet } from '@hooks/useGet'
+import { Card } from '@/components/Card'
+import { EpubViewer } from '@/components/EpubViewer'
+import { useGet } from '@/hooks/useGet'
+import { useStore } from '@/hooks/useStore'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { EpubViewer } from '@components/EpubViewer'
-import '@styles/contentBook.css'
 
 
 export const ContentBook = () => {
   const { id } = useParams()
-  const [data, error] = useGet(`http://localhost:4000/api/book/${id}`)
+  const [isReading, setIsReading] = useState(false)
+  const { setCurrentAudio, isPlaying, startAudio, setPosition } = useStore()
+  const [book, error] = useGet(`http://localhost:4000/api/book/${id}`)
 
-  if (error)
-    return <h3 className='text-danger'>Surgio un Problema</h3>
+  useEffect(() => {
+    if (!!book) {
+      setPosition(0)
+      setCurrentAudio({
+        id: book.id,
+        title: book.nombre,
+        author: book.autor,
+        cover: book.url_portada,
+        url: book.url_audio
+      })
+    }
+
+    if (isPlaying) {
+      startAudio()
+    }
+  }, [book])
+
+  const toggleReading = () => {
+    setIsReading(!isReading)
+  }
+
+  if (error) {
+    return (
+      <p className='font-semibold text-red-600 text-center pt-5'>
+        No se logro recupear la información
+      </p>
+    )
+  }
 
   return (
-    <div className='container'>
-      {!!data && (
-        <div className='content-container row g-5'>
-          <div className='content-container_left col-3 d-flex flex-column justify-content-center align-items-center'>
-            <img className='content-portada_image' src={data.url_portada} alt={data.nombre} />
-            <h2 className='mt-4 text-center'>{data.nombre}</h2>
-            <p className='text-center'>{data.autor}</p>
-          </div>
-          <div className='content-container_right col-9'>
-            <EpubViewer url={data.url_texto} />
-          </div>
-        </div>
+    <div className='h-full flex flex-col items-center justify-evenly gap-2 pt-4'>
+      {!!book && (
+        <>
+          <section className='flex flex-col items-center justify-center w-11/12 h-full lg:w-full lg:flex-row'>
+            <div className={`mx-auto ${isReading && 'hidden'}`}>
+              <Card id={book.id}
+                title={book.nombre}
+                author={book.autor}
+                url_cover={book.url_portada}
+                url_audio={book.url_audio}
+                categories={book.categorias}
+                disabled
+              />
+            </div>
+
+            <div className={`${!isReading && 'hidden'} w-full mx-auto h-full lg:block`}>
+              <EpubViewer url={book.url_texto} />
+            </div>
+          </section>
+
+          <section className='w-full flex justify-between items-center text-xl text-white lg:pb-5'>
+            <button
+              className='lg:hidden flex gap-3 items-center bg-htc-lightblue rounded-md py-2 px-3'
+              onClick={() => { toggleReading() }}
+            >
+              <i className='bi bi-book'></i>
+              <small>Leer</small>
+            </button>
+          </section>
+        </>
       )}
     </div>
   )

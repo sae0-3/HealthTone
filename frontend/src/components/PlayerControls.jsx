@@ -1,9 +1,9 @@
-import { useStore } from '@hooks/useStore'
+import { ProgressBar } from '@/components/ProgressBar'
+import { useStore } from '@/hooks/useStore'
 import { useEffect } from 'react'
-import ProgressBar from 'react-bootstrap/esm/ProgressBar'
 
 
-export const PlayerControls = ({ className }) => {
+export const PlayerControls = () => {
   const {
     currentAudio,
     duration,
@@ -36,47 +36,44 @@ export const PlayerControls = ({ className }) => {
     return `${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`
   }
 
-  if (!currentAudio) {
-    return null
-  }
-
   return (
-    <section className={`${className} d-flex flex-column align-items-center justify-content-center gap-3`}>
-      <div className='d-flex justify-content-center gap-4'>
-        <button className='btn'
+    <div className='text-white lg:flex lg:flex-col lg:gap-1'>
+      <section className='w-full flex justify-end text-4xl lg:text-3xl lg:justify-center lg:gap-8'>
+        <button className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.max(playbackPosition - 10, 0)) }}
+          disabled={!currentAudio.url}
         >
-          <i className='bi bi-skip-backward fs-2 text-light'></i>
+          <i className='bi bi-skip-backward'></i>
         </button>
-        <button className='btn' disabled>
-          <i className='bi bi-skip-start-fill fs-1'></i>
+        {/* <button className='hidden lg:block disabled:opacity-50' disabled>
+          <i className='bi bi-skip-start-fill'></i>
+        </button> */}
+        <button className='disabled:opacity-50'
+          onClick={() => { togglePlay() }} disabled={!currentAudio.url}
+        >
+          <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill`}></i>
         </button>
-        <button className='btn' onClick={() => { togglePlay() }}>
-          <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill fs-1 text-light`}></i>
-        </button>
-        <button className='btn' disabled>
-          <i className='bi bi-skip-end-fill fs-1'></i>
-        </button>
-        <button className='btn'
+        {/* <button className='hidden lg:block disabled:opacity-50' disabled>
+          <i className='bi bi-skip-end-fill'></i>
+        </button> */}
+        <button className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.min(playbackPosition + 10, duration)) }}
+          disabled={!currentAudio.url}
         >
-          <i className='bi bi-skip-forward fs-2 text-light'></i>
+          <i className='bi bi-skip-forward'></i>
         </button>
-      </div>
+      </section>
 
-      <div
-        className='d-flex justify-content-center align-items-center flex-row gap-3'
-        style={{ width: '100%', maxWidth: '60rem' }}
-      >
+      <section className='hidden lg:flex gap-2 items-center justify-center'>
         <span>{formatTime(playbackPosition)}</span>
         <ProgressBar
           now={playbackPosition}
           max={duration}
-          style={{ width: '100%', maxWidth: '60rem', cursor: 'pointer' }}
           onClick={handleClickBar}
         />
+
         <span>{formatTime(duration)}</span>
-      </div>
-    </section>
+      </section>
+    </div>
   )
 }
