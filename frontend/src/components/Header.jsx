@@ -14,7 +14,7 @@ export const Header = ({ toggleSidebar }) => {
   }
 
   return (
-    <div className='h-20 bg-white border-b border-gray-200 flex items-center justify-between px-3 lg:justify-end lg:pl-0 lg:pr-20'>
+    <div className='h-20 bg-white border-b border-gray-200 flex items-center justify-between px-3 lg:justify-end lg:pl-0 lg:pr-20 gap-2'>
       <Link to='/' className='lg:hidden'>
         <img src='/healthtone_black.svg'
           className='w-16'
@@ -28,7 +28,7 @@ export const Header = ({ toggleSidebar }) => {
         <input
           type='text'
           placeholder='Buscar'
-          className='focus:outline-none min-w-20 max-w-28 sm:max-w-48'
+          className='focus:outline-none min-w-20 max-w-28 sm:max-w-48 lg:w-96'
           maxLength={100}
           value={inputValue}
           onChange={({ target: { value } }) => { setInputValue(value) }}

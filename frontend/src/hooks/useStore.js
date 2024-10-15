@@ -27,6 +27,8 @@ export const useStore = create((set) => ({
     return { currentAudio: audio, howl: newHowl, playbackPosition: 0 }
   }),
 
+  setPlaying: (value) => set({ isPlaying: value }),
+
   togglePlay: () => set((state) => {
     if (state.isPlaying) {
       state.howl?.pause()

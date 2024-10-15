@@ -20,7 +20,7 @@ export const LayoutContent = ({ title, section = '', search = '' }) => {
           No se encontraron resultados
         </p>
       ) : (
-        <section className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+        <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:5 gap-8'>
           {!!content && content.map((book) => {
             return (
               <div key={book.id}

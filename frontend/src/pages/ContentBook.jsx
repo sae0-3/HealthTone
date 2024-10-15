@@ -2,22 +2,19 @@ import { Card } from '@/components/Card'
 import { EpubViewer } from '@/components/EpubViewer'
 import { useGet } from '@/hooks/useGet'
 import { useStore } from '@/hooks/useStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 
 export const ContentBook = () => {
   const { id } = useParams()
   const [isReading, setIsReading] = useState(false)
-  const { setCurrentAudio, startAudio } = useStore()
+  const { setCurrentAudio, isPlaying, startAudio, setPosition } = useStore()
   const [book, error] = useGet(`http://localhost:4000/api/book/${id}`)
 
-  const toggleReading = () => {
-    setIsReading(!isReading)
-  }
-
-  const handlePlay = () => {
-    if (book) {
+  useEffect(() => {
+    if (!!book) {
+      setPosition(0)
       setCurrentAudio({
         id: book.id,
         title: book.nombre,
@@ -25,8 +22,15 @@ export const ContentBook = () => {
         cover: book.url_portada,
         url: book.url_audio
       })
+    }
+
+    if (isPlaying) {
       startAudio()
     }
+  }, [book])
+
+  const toggleReading = () => {
+    setIsReading(!isReading)
   }
 
   if (error) {
@@ -58,20 +62,13 @@ export const ContentBook = () => {
             </div>
           </section>
 
-          <section className='lg:hidden w-full flex justify-between items-center text-xl text-white'>
+          <section className='w-full flex justify-between items-center text-xl text-white lg:pb-5'>
             <button
-              className='flex gap-3 items-center bg-htc-lightblue rounded-md py-2 px-3'
+              className='lg:hidden flex gap-3 items-center bg-htc-lightblue rounded-md py-2 px-3'
               onClick={() => { toggleReading() }}
             >
               <i className='bi bi-book'></i>
               <small>Leer</small>
-            </button>
-            <button
-              className='flex gap-3 items-center bg-htc-lightblue rounded-md py-2 px-3'
-              onClick={() => { handlePlay() }}
-            >
-              <i className='bi bi-play-circle'></i>
-              <small>Reproducir</small>
             </button>
           </section>
         </>
