@@ -8,7 +8,7 @@ export const Header = ({ toggleSidebar }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    navigate(inputValue !== ''?`/search?input=${inputValue.trim()}`:`/`)
+    navigate(!!inputValue.trim() && `/?search=${inputValue.trim()}`)
   }
 
   return (
@@ -25,11 +25,11 @@ export const Header = ({ toggleSidebar }) => {
       >
         <input
           type='text'
-          placeholder='Buscar'
+          placeholder='Buscar Audiolibro'
           className='focus:outline-none min-w-20 max-w-28 sm:max-w-48 lg:w-96'
           maxLength={100}
           value={inputValue}
-          onChange={({ target: { value } }) => {setInputValue(value)}}
+          onChange={({ target: { value } }) => { setInputValue(value) }}
         />
 
         <div className='h-10 w-px bg-gray-300' />

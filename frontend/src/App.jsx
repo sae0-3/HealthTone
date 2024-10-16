@@ -4,7 +4,6 @@ import { ContentBook } from '@/pages/ContentBook'
 import { Explore } from '@/pages/Explore'
 import { Home } from '@/pages/Home'
 import { NotFound } from '@/pages/NotFound'
-import { Search } from '@/pages/Search'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
@@ -31,7 +30,6 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
-          <Route path='/search' element={<Search />} />
           <Route path='/book/:id' element={<ContentBook />} />
 
           <Route path='*' element={<NotFound />} />
