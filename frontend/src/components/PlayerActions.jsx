@@ -1,11 +1,14 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import { useStore } from '@/hooks/useStore'
 import { Howler } from 'howler'
-import { useState } from 'react'
-
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export const PlayerActions = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
   const {
+    currentAudio,
     volume,
     setVolume,
     setPosition,
@@ -13,6 +16,28 @@ export const PlayerActions = () => {
     toggleMuted
   } = useStore()
   const [isOpen, setIsOpen] = useState(false)
+  const lastPath = useRef('/')
+
+  useEffect(() => {
+    if (isOpen) {
+      navigate(`/book/${currentAudio.id}`)
+    } else {
+      console.log("nav",lastPath.current)
+      navigate(lastPath.current)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if(!location.pathname.startsWith(`/book/`)){
+      lastPath.current = location.pathname
+      console.log(lastPath)
+    }
+    if (location.pathname === '/'){
+      setIsOpen(false)
+    }else{
+      location.pathname === `/book/${currentAudio.id}`? setIsOpen(true): setIsOpen(isOpen)
+    }
+  }, [location.pathname])
 
   const handleVolumeBarClick = (e) => {
     if (muted) return

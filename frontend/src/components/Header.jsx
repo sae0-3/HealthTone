@@ -8,9 +8,7 @@ export const Header = ({ toggleSidebar }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (inputValue !== '') {
-      navigate(`/search?input=${inputValue}`)
-    }
+    navigate(inputValue !== ''?`/search?input=${inputValue}`:`/`)
   }
 
   return (
