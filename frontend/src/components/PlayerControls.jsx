@@ -61,18 +61,18 @@ export const PlayerControls = () => {
       <section className='w-full flex justify-end text-4xl lg:text-3xl lg:justify-center lg:gap-8'>
         <button className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.max(playbackPosition - 10, 0)) }}
-          disabled={!currentAudio}
+          disabled={!currentAudio.id}
         >
           <i className='bi bi-skip-backward'></i>
         </button>
         <button className='disabled:opacity-50'
-          onClick={() => { togglePlay() }} disabled={!currentAudio}
+          onClick={() => { togglePlay() }} disabled={!currentAudio.id}
         >
           <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill`}></i>
         </button>
         <button className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.min(playbackPosition + 10, duration)) }}
-          disabled={!currentAudio}
+          disabled={!currentAudio.id}
         >
           <i className='bi bi-skip-forward'></i>
         </button>
