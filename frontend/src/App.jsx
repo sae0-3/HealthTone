@@ -1,11 +1,12 @@
-import { Header } from '@components/Header'
-import { Player } from '@components/Player'
-import { useStore } from '@hooks/useStore'
-import { ContentBook } from '@pages/ContentBook'
-import Home from '@pages/Home'
-import NotFound from '@pages/NotFound'
+import { useStore } from '@/hooks/useStore'
+import { Layout } from '@/layouts/Layout'
+import { ContentBook } from '@/pages/ContentBook'
+import { Explore } from '@/pages/Explore'
+import { Home } from '@/pages/Home'
+import { NotFound } from '@/pages/NotFound'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import 'bootstrap-icons/font/bootstrap-icons.min.css'
 
 
 const App = () => {
@@ -25,15 +26,15 @@ const App = () => {
 
   return (
     <Router>
-      <Header />
+      <Layout>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/explore' element={<Explore />} />
+          <Route path='/book/:id' element={<ContentBook />} />
 
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/book/:id' element={<ContentBook />} />
-
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-      <Player />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Layout>
     </Router>
   )
 }

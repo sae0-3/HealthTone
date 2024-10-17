@@ -1,9 +1,7 @@
-const NotFound = () => {
+export const NotFound = () => {
   return (
-    <div className='container h1 text-center pt-5 mt-5 fw-bold'>
+    <div className='font-bold text-xl text-center'>
       Página no encontrada
     </div>
   )
 }
-
-export default NotFound
