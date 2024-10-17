@@ -49,7 +49,7 @@ export const PlayerActions = () => {
         <button
           className='disabled:opacity-50'
           onClick={() => { setIsOpen(!isOpen) }}
-          disabled={!currentAudio.id}
+          disabled
         >
           <i className={`bi bi-caret-${isOpen ? 'down' : 'up'}-fill fs-1 text-light`}></i>
         </button>
