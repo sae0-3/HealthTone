@@ -15,6 +15,8 @@ cd healthtone
 ```
 
 ```hs
+docker image rm healthtone-frontend
+docker image rm healthtone-backend
 docker compose up -d --build
 ```
 
