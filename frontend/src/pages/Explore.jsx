@@ -5,7 +5,7 @@ export const Explore = () => {
   const sections = [
     { title: 'Nuevos Lanzamientos', id: 'nuevos_lanzamientos' },
     { title: 'Populares', id: 'populares' },
-    { title: 'Poximos Lanzamientos', id: 'proximos_lanzamientos' },
+    { title: 'Próximos Lanzamientos', id: 'proximos_lanzamientos' },
   ]
 
   return (
