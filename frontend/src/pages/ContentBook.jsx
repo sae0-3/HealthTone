@@ -9,12 +9,11 @@ import { useParams } from 'react-router-dom'
 export const ContentBook = () => {
   const { id } = useParams()
   const [isReading, setIsReading] = useState(false)
-  const { setCurrentAudio, isPlaying, startAudio, setPosition } = useStore()
+  const { currentAudio, setCurrentAudio } = useStore()
   const [book, error] = useGet(`http://localhost:4000/api/book/${id}`)
 
   useEffect(() => {
-    if (!!book) {
-      setPosition(0)
+    if (!currentAudio?.id && !!book) {
       setCurrentAudio({
         id: book.id,
         title: book.nombre,
@@ -22,10 +21,6 @@ export const ContentBook = () => {
         cover: book.url_portada,
         url: book.url_audio
       })
-    }
-
-    if (isPlaying) {
-      startAudio()
     }
   }, [book])
 

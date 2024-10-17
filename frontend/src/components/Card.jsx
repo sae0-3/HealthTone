@@ -2,11 +2,13 @@ import { useStore } from '@/hooks/useStore'
 import { Link } from 'react-router-dom'
 
 
-export const Card = ({ id, title, author, url_cover, categories, disabled }) => {
-  const { setPlaying } = useStore()
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled }) => {
+  const { setPlaying, setCurrentAudio, startAudio } = useStore()
 
   const handlePlay = () => {
     if (!disabled) {
+      setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
+      startAudio()
       setPlaying(true)
     }
   }
