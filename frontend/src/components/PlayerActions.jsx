@@ -37,7 +37,7 @@ export const PlayerActions = () => {
 
         <div className='flex items-center gap-2 w-full'>
           <button onClick={() => { toggleMuted() }}>
-            <i className={`bi bi-volume-${muted || volume === 0 ? 'mute' : 'up'}-fill`}></i>
+            <i className={`bi bi-volume-${muted || volume < 5 ? 'mute' : 'up'}-fill`}></i>
           </button>
           <ProgressBar
             now={muted ? 0 : volume}

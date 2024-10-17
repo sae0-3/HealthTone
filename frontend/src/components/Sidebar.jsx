@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 export const Sidebar = ({ toggleSidebar }) => {
   const { pathname, search } = useLocation()
   const options = [
-    { label: 'Para ti', icon: 'house', to: '/' },
+    { label: 'Inicio', icon: 'house', to: '/' },
     { label: 'Explorar', icon: 'search', to: '/explore' },
   ]
 
