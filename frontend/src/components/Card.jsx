@@ -1,5 +1,4 @@
 import { useStore } from '@/hooks/useStore'
-import { Link } from 'react-router-dom'
 
 
 export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled }) => {
@@ -14,8 +13,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
   }
 
   return (
-    <Link
-      to={disabled ? '' : `/book/${id}`}
+    <button
       className={`group ${disabled && 'cursor-auto'}`}
       onClick={handlePlay}
     >
@@ -43,6 +41,6 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
           })}
         </div>
       )}
-    </Link>
+    </button>
   )
 }

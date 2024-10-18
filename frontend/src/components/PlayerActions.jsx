@@ -3,6 +3,7 @@ import { useStore } from '@/hooks/useStore'
 import { Howler } from 'howler'
 import { useState } from 'react'
 
+
 export const PlayerActions = () => {
   const {
     currentAudio,
@@ -49,7 +50,7 @@ export const PlayerActions = () => {
         <button
           className='disabled:opacity-50'
           onClick={() => { setIsOpen(!isOpen) }}
-          disabled={!currentAudio.id}
+          disabled
         >
           <i className={`bi bi-caret-${isOpen ? 'down' : 'up'}-fill fs-1 text-light`}></i>
         </button>
