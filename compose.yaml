@@ -1,0 +1,30 @@
+services:
+  database:
+    container_name: database
+    image: postgres:12.7
+    restart: always
+    environment:
+      - POSTGRES_USER=healthtone
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/structure:/docker-entrypoint-initdb.d
+
+
+  backend:
+    container_name: backend
+    depends_on:
+      - database
+    build: ./backend
+    ports:
+      - 4000:4000
+
+
+  frontend:
+    container_name: frontend
+    depends_on:
+      - backend
+    build: ./frontend
+    ports:
+      - 80:80
