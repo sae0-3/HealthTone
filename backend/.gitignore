@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+*.mp3
+*.jpg
+*.epub
+*.png
+*.jpeg
