@@ -7,3 +7,5 @@ BEGIN
     WHERE c.nombre ~* pattern OR c.autor ~* pattern;
 END;
 $$ LANGUAGE plpgsql;
+
+-- prueba
