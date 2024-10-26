@@ -74,11 +74,11 @@ CREATE TABLE CONTENIDO (
 -- ALTER TABLE IF EXISTS "Libros"."Progreso"
 --     OWNER to healthtone;
 
--- CREATE TABLE CATEGORIA (
---     id SERIAL PRIMARY KEY,
---     nombre VARCHAR(100) NOT NULL,
---     descripcion TEXT
--- );
+CREATE TABLE CATEGORIA (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT
+);
 
 CREATE TABLE R_CONTENIDO_CATEGORIA (
     id_contenido INT NOT NULL,
