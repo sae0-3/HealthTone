@@ -2,25 +2,25 @@ DROP DATABASE IF EXISTS db_healthtone;
 CREATE DATABASE db_healthtone;
 \c db_healthtone;
 
-CREATE schema "Libros"
-create schema "Personas"
+-- CREATE schema "Libros"
+-- create schema "Personas"
 
-CREATE TABLE IF NOT EXISTS "Personas"."Cliente"
-(
-    "Id_cliente" integer NOT NULL DEFAULT nextval('"Personas"."Cliente_Id_cliente_seq"'::regclass),
-    "Nombre" character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    "Apellido" character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    "Email" character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    "Contraseña" character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "Cliente_pkey" PRIMARY KEY ("Id_cliente"),
-    CONSTRAINT "Email_único" UNIQUE ("Email")
-        INCLUDE("Email")
-)
+-- CREATE TABLE IF NOT EXISTS "Personas"."Cliente"
+-- (
+--     "Id_cliente" integer NOT NULL DEFAULT nextval('"Personas"."Cliente_Id_cliente_seq"'::regclass),
+--     "Nombre" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Apellido" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Email" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Contraseña" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     CONSTRAINT "Cliente_pkey" PRIMARY KEY ("Id_cliente"),
+--     CONSTRAINT "Email_único" UNIQUE ("Email")
+--         INCLUDE("Email")
+-- )
 
-TABLESPACE pg_default;
+-- TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS "Personas"."Cliente"
-    OWNER to healthtone;
+-- ALTER TABLE IF EXISTS "Personas"."Cliente"
+--     OWNER to healthtone;
 
 CREATE TABLE CONTENIDO (
     id SERIAL PRIMARY KEY,
@@ -34,51 +34,51 @@ CREATE TABLE CONTENIDO (
 );
 
 
-CREATE TABLE "Libros"."Lista_favoritos"
-(
-    "Id_cliente" integer NOT NULL,
-    "Id_libro" integer NOT NULL,
-    PRIMARY KEY ("Id_cliente", "Id_libro"),
-    CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
-        REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
-        REFERENCES public.contenido (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-)
+-- CREATE TABLE "Libros"."Lista_favoritos"
+-- (
+--     "Id_cliente" integer NOT NULL,
+--     "Id_libro" integer NOT NULL,
+--     PRIMARY KEY ("Id_cliente", "Id_libro"),
+--     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
+--         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+--         NOT VALID,
+--     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
+--         REFERENCES public.contenido (id) MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+--         NOT VALID
+-- )
 
 
-CREATE TABLE IF NOT EXISTS "Libros"."Progreso"
-(
-    "Id_cliente" integer NOT NULL,
-    "Id_libro" integer NOT NULL,
-    "Progreso_en_segundos" integer NOT NULL,
-    "Ultima_reproducción" timestamp without time zone NOT NULL,
-    CONSTRAINT "Progreso_pkey" PRIMARY KEY ("Id_libro", "Id_cliente"),
-    CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
-        REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
-        REFERENCES public.contenido (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
+-- CREATE TABLE IF NOT EXISTS "Libros"."Progreso"
+-- (
+--     "Id_cliente" integer NOT NULL,
+--     "Id_libro" integer NOT NULL,
+--     "Progreso_en_segundos" integer NOT NULL,
+--     "Ultima_reproducción" timestamp without time zone NOT NULL,
+--     CONSTRAINT "Progreso_pkey" PRIMARY KEY ("Id_libro", "Id_cliente"),
+--     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
+--         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION,
+--     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
+--         REFERENCES public.contenido (id) MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+-- )
 
-TABLESPACE pg_default;
+-- TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS "Libros"."Progreso"
-    OWNER to healthtone;
+-- ALTER TABLE IF EXISTS "Libros"."Progreso"
+--     OWNER to healthtone;
 
-CREATE TABLE CATEGORIA (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT
-);
+-- CREATE TABLE CATEGORIA (
+--     id SERIAL PRIMARY KEY,
+--     nombre VARCHAR(100) NOT NULL,
+--     descripcion TEXT
+-- );
 
 CREATE TABLE R_CONTENIDO_CATEGORIA (
     id_contenido INT NOT NULL,
@@ -150,79 +150,79 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION "Libros".guardar_progreso(
-	id_cliente integer,
-	id_libro integer,
-	progreso integer)
-    RETURNS void
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-begin
-	insert into "Libros"."Progreso" (Id_cliente,Id_libro,Progreso_en_segundos,Ultima_reproducción)
-	values (Id_cliente,Id_libro,Progreso,NOW());
-end;
-$BODY$;
+-- CREATE OR REPLACE FUNCTION "Libros".guardar_progreso(
+-- 	id_cliente integer,
+-- 	id_libro integer,
+-- 	progreso integer)
+--     RETURNS void
+--     LANGUAGE 'plpgsql'
+--     COST 100
+--     VOLATILE PARALLEL UNSAFE
+-- AS $BODY$
+-- begin
+-- 	insert into "Libros"."Progreso" (Id_cliente,Id_libro,Progreso_en_segundos,Ultima_reproducción)
+-- 	values (Id_cliente,Id_libro,Progreso,NOW());
+-- end;
+-- $BODY$;
 
-ALTER FUNCTION "Libros".guardar_progreso(integer, integer, integer)
-    OWNER TO healthtone;
-
-
-CREATE OR REPLACE FUNCTION "Personas".insertar_usuario(
-	nombre character varying,
-	apellido character varying,
-	correo character varying,
-	"contraseña" character varying)
-    RETURNS void
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-begin
-	insert into "Personas"."Cliente" (Nombre,Apellido,Email,Contraseña)
-	values (nombre,apellido,email,contraseña);
-end;
-$BODY$;
-
-ALTER FUNCTION "Personas".insertar_usuario(character varying, character varying, character varying, character varying)
-    OWNER TO healthtone;
+-- ALTER FUNCTION "Libros".guardar_progreso(integer, integer, integer)
+--     OWNER TO healthtone;
 
 
-CREATE OR REPLACE FUNCTION "Libros".añadirFavorito(
-	codcliente integer,
-	codlibro integer)
-    RETURNS void
-    LANGUAGE 'plpgsql'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-BEGIN
-    INSERT INTO "Libros"."Lista_favoritos" (Id_cliente, Id_libro)
-    VALUES (codCliente, codLibro);
-END;
-$BODY$;
+-- CREATE OR REPLACE FUNCTION "Personas".insertar_usuario(
+-- 	nombre character varying,
+-- 	apellido character varying,
+-- 	correo character varying,
+-- 	"contraseña" character varying)
+--     RETURNS void
+--     LANGUAGE 'plpgsql'
+--     COST 100
+--     VOLATILE PARALLEL UNSAFE
+-- AS $BODY$
+-- begin
+-- 	insert into "Personas"."Cliente" (Nombre,Apellido,Email,Contraseña)
+-- 	values (nombre,apellido,email,contraseña);
+-- end;
+-- $BODY$;
 
-ALTER FUNCTION "Libros"."añadirFavorito"(integer, integer)
-    OWNER TO healthtone;
+-- ALTER FUNCTION "Personas".insertar_usuario(character varying, character varying, character varying, character varying)
+--     OWNER TO healthtone;
 
-CREATE OR REPLACE FUNCTION "Personas".validar_contraseña() RETURNS TRIGGER AS $$
-BEGIN
-    IF LENGTH(NEW.contraseña) < 8 THEN
-        RAISE EXCEPTION 'La contraseña debe tener al menos 8 caracteres.';
-    END IF;
 
-    IF NEW.contraseña !~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$' THEN
-        RAISE EXCEPTION 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.';
-    END IF;
+-- CREATE OR REPLACE FUNCTION "Libros".añadirFavorito(
+-- 	codcliente integer,
+-- 	codlibro integer)
+--     RETURNS void
+--     LANGUAGE 'plpgsql'
+--     COST 100
+--     VOLATILE PARALLEL UNSAFE
+-- AS $BODY$
+-- BEGIN
+--     INSERT INTO "Libros"."Lista_favoritos" (Id_cliente, Id_libro)
+--     VALUES (codCliente, codLibro);
+-- END;
+-- $BODY$;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+-- ALTER FUNCTION "Libros"."añadirFavorito"(integer, integer)
+--     OWNER TO healthtone;
 
-CREATE TRIGGER verificar_contraseña
-BEFORE INSERT OR UPDATE ON "Personas"."Cliente"
-FOR EACH ROW EXECUTE FUNCTION "Personas".validar_contraseña();
+-- CREATE OR REPLACE FUNCTION "Personas".validar_contraseña() RETURNS TRIGGER AS $$
+-- BEGIN
+--     IF LENGTH(NEW.contraseña) < 8 THEN
+--         RAISE EXCEPTION 'La contraseña debe tener al menos 8 caracteres.';
+--     END IF;
+
+--     IF NEW.contraseña !~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$' THEN
+--         RAISE EXCEPTION 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.';
+--     END IF;
+
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER verificar_contraseña
+-- BEFORE INSERT OR UPDATE ON "Personas"."Cliente"
+-- FOR EACH ROW EXECUTE FUNCTION "Personas".validar_contraseña();
 
 -- DATA
 INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
