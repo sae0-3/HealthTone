@@ -206,6 +206,24 @@ $BODY$;
 ALTER FUNCTION "Libros"."añadirFavorito"(integer, integer)
     OWNER TO healthtone;
 
+CREATE OR REPLACE FUNCTION "Personas".validar_contraseña() RETURNS TRIGGER AS $$
+BEGIN
+    IF LENGTH(NEW.contraseña) < 8 THEN
+        RAISE EXCEPTION 'La contraseña debe tener al menos 8 caracteres.';
+    END IF;
+
+    IF NEW.contraseña !~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$' THEN
+        RAISE EXCEPTION 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER verificar_contraseña
+BEFORE INSERT OR UPDATE ON "Personas"."Cliente"
+FOR EACH ROW EXECUTE FUNCTION "Personas".validar_contraseña();
+
 -- DATA
 INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
     ('Dime qué comes y te diré qué bacterias tienes', 'Blanca García-Orea Haro', 'http://localhost:4000/uploads/epub/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.epub', 'http://localhost:4000/uploads/imgs/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.jpg', 'http://localhost:4000/uploads/tracks/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.mp3'),
