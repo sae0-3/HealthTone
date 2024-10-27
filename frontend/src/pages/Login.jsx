@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react'
 
-const Login = () => {
 
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
+export const Login = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-    const handleSubmit = (e) => {
-        e.preventDeafault()
-        if(!email){
-            
-        }
+  const handleSubmit = (e) => {
+    e.preventDeafault()
+    if (!email) {
+
     }
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-2"> 
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-2">
       <div className="grid gap-2 max-w-2xl w-full mx-auto">
-        
         <div className="flex justify-center">
           <img src="/healthtone_black.svg" className="w-16" alt="logo-healthtone" />
         </div>
@@ -30,9 +29,9 @@ const Login = () => {
         <div className="flex justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
-            <form 
-                className="space-y-6"
-                onSubmit={handleSubmit}>
+            <form
+              className="space-y-6"
+              onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Correo Electrónico
@@ -43,7 +42,7 @@ const Login = () => {
                   required
                   className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Ingrese su correo"
-                  onChange={(e) => setemail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 {!email && <p className='text-red-600'>El correo electrónico que ingresaste no está conectado a una cuenta.</p>}
               </div>
@@ -58,7 +57,7 @@ const Login = () => {
                   required
                   className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Ingrese su contraseña"
-                  onChange={e => setpassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                 />
                 {!password && <p className='text-red-600'>La contraseña que ingresaste es incorrecta.</p>}
               </div>
@@ -80,14 +79,12 @@ const Login = () => {
         </div>
 
         <div className="text-sm text-center">
-          <span>¿No tienes una cuenta? Crea una </span>    
+          <span>¿No tienes una cuenta? Crea una </span>
           <a href="#" className="font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue">
             aquí
           </a>
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-export default Login;
