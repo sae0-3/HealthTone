@@ -1,10 +1,10 @@
 import {
-  getBookById as getById,
-  getBookAll as getAll
-} from './models.js'
+  getBookAll as getAll,
+  getBookById as getById
+} from '../models/book.models.js'
 
 
-export const getBookById = async (req, res) => {
+const getBookById = async (req, res) => {
   const id = req.params.id
 
   try {
@@ -16,7 +16,7 @@ export const getBookById = async (req, res) => {
   }
 }
 
-export const getBookAll = async (req, res) => {
+const getBookAll = async (req, res) => {
   const { search, section } = req.query
 
   try {
@@ -27,3 +27,6 @@ export const getBookAll = async (req, res) => {
     res.status(500).send({ error: 'Error al obetner los datos' })
   }
 }
+
+
+export { getBookAll, getBookById }

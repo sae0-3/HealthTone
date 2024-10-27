@@ -1,7 +1,7 @@
-import { pool } from './config/db.js'
+import { pool } from '../config/db.js'
 
 
-export const getBookById = async (id) => {
+const getBookById = async (id) => {
   const query = `
   SELECT
     co.id,
@@ -35,7 +35,7 @@ export const getBookById = async (id) => {
   }
 }
 
-export const getBookAll = async (search, section) => {
+const getBookAll = async (search, section) => {
   let query
   let params = []
 
@@ -153,3 +153,6 @@ export const getBookAll = async (search, section) => {
     throw new Error('Error en la base de datos al obtener contenido')
   }
 }
+
+
+export { getBookAll, getBookById }
