@@ -2,25 +2,14 @@ DROP DATABASE IF EXISTS db_healthtone;
 CREATE DATABASE db_healthtone;
 \c db_healthtone;
 
--- CREATE schema "Libros"
--- create schema "Personas"
 
--- CREATE TABLE IF NOT EXISTS "Personas"."Cliente"
--- (
---     "Id_cliente" integer NOT NULL DEFAULT nextval('"Personas"."Cliente_Id_cliente_seq"'::regclass),
---     "Nombre" character varying(40) COLLATE pg_catalog."default" NOT NULL,
---     "Apellido" character varying(40) COLLATE pg_catalog."default" NOT NULL,
---     "Email" character varying(40) COLLATE pg_catalog."default" NOT NULL,
---     "Contraseña" character varying(40) COLLATE pg_catalog."default" NOT NULL,
---     CONSTRAINT "Cliente_pkey" PRIMARY KEY ("Id_cliente"),
---     CONSTRAINT "Email_único" UNIQUE ("Email")
---         INCLUDE("Email")
--- )
-
--- TABLESPACE pg_default;
-
--- ALTER TABLE IF EXISTS "Personas"."Cliente"
---     OWNER to healthtone;
+CREATE TABLE USUARIO (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    apellidos VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    clave VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE CONTENIDO (
     id SERIAL PRIMARY KEY,
@@ -33,46 +22,14 @@ CREATE TABLE CONTENIDO (
     fecha_publicacion DATE
 );
 
-
--- CREATE TABLE "Libros"."Lista_favoritos"
--- (
---     "Id_cliente" integer NOT NULL,
---     "Id_libro" integer NOT NULL,
---     PRIMARY KEY ("Id_cliente", "Id_libro"),
---     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
---         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION
---         NOT VALID,
---     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
---         REFERENCES public.contenido (id) MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION
---         NOT VALID
--- )
-
-
--- CREATE TABLE IF NOT EXISTS "Libros"."Progreso"
--- (
---     "Id_cliente" integer NOT NULL,
---     "Id_libro" integer NOT NULL,
---     "Progreso_en_segundos" integer NOT NULL,
---     "Ultima_reproducción" timestamp without time zone NOT NULL,
---     CONSTRAINT "Progreso_pkey" PRIMARY KEY ("Id_libro", "Id_cliente"),
---     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
---         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION,
---     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
---         REFERENCES public.contenido (id) MATCH SIMPLE
---         ON UPDATE NO ACTION
---         ON DELETE NO ACTION
--- )
-
--- TABLESPACE pg_default;
-
--- ALTER TABLE IF EXISTS "Libros"."Progreso"
---     OWNER to healthtone;
+CREATE TABLE FAVORITO (
+   id_contenido INT NOT NULL,
+   id_usuario INT NOT NULL,
+   fecha DATE DEFAULT NOW(),
+   PRIMARY KEY (id_usuario, id_contenido),
+   FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
+   FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
+);
 
 CREATE TABLE CATEGORIA (
     id SERIAL PRIMARY KEY,
@@ -106,8 +63,19 @@ CREATE TABLE R_ESTRENO_CATEGORIA (
 
 CREATE TABLE VISUALIZACION (
     id SERIAL PRIMARY KEY,
+    id_usuario INT NOT NULL,
     id_contenido INT NOT NULL,
-    fecha DATE DEFAULT NOW(),
+    fecha TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
+    FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
+);
+
+CREATE TABLE PROGRESO (
+    id_usuario INT NOT NULL,
+    id_contenido INT NOT NULL,
+    progreso INT NOT NULL,
+    PRIMARY KEY (id_usuario, id_contenido),
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
     FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
 );
 
@@ -150,23 +118,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION "Libros".guardar_progreso(
--- 	id_cliente integer,
--- 	id_libro integer,
--- 	progreso integer)
---     RETURNS void
---     LANGUAGE 'plpgsql'
---     COST 100
---     VOLATILE PARALLEL UNSAFE
--- AS $BODY$
--- begin
--- 	insert into "Libros"."Progreso" (Id_cliente,Id_libro,Progreso_en_segundos,Ultima_reproducción)
--- 	values (Id_cliente,Id_libro,Progreso,NOW());
--- end;
--- $BODY$;
-
--- ALTER FUNCTION "Libros".guardar_progreso(integer, integer, integer)
---     OWNER TO healthtone;
+CREATE OR REPLACE FUNCTION guardar_progreso(
+    id_usuario INT,
+    id_contenido INT,
+    progreso INT
+) RETURNS void
+AS $$
+BEGIN
+    INSERT INTO PROGRESO (id_usuario, id_contenido, progreso)
+    VALUES (id_usuario, id_contenido, progreso)
+    ON CONFLICT (id_usuario, id_contenido)
+    DO UPDATE SET progreso = EXCLUDED.progreso;
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- CREATE OR REPLACE FUNCTION "Personas".insertar_usuario(
@@ -185,10 +149,6 @@ $$ LANGUAGE plpgsql;
 -- end;
 -- $BODY$;
 
--- ALTER FUNCTION "Personas".insertar_usuario(character varying, character varying, character varying, character varying)
---     OWNER TO healthtone;
-
-
 -- CREATE OR REPLACE FUNCTION "Libros".añadirFavorito(
 -- 	codcliente integer,
 -- 	codlibro integer)
@@ -203,26 +163,7 @@ $$ LANGUAGE plpgsql;
 -- END;
 -- $BODY$;
 
--- ALTER FUNCTION "Libros"."añadirFavorito"(integer, integer)
---     OWNER TO healthtone;
 
--- CREATE OR REPLACE FUNCTION "Personas".validar_contraseña() RETURNS TRIGGER AS $$
--- BEGIN
---     IF LENGTH(NEW.contraseña) < 8 THEN
---         RAISE EXCEPTION 'La contraseña debe tener al menos 8 caracteres.';
---     END IF;
-
---     IF NEW.contraseña !~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$' THEN
---         RAISE EXCEPTION 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.';
---     END IF;
-
---     RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- CREATE TRIGGER verificar_contraseña
--- BEFORE INSERT OR UPDATE ON "Personas"."Cliente"
--- FOR EACH ROW EXECUTE FUNCTION "Personas".validar_contraseña();
 
 -- DATA
 INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
@@ -236,12 +177,12 @@ INSERT INTO ESTRENO (nombre, autor, url_portada) VALUES
     ('Vacunas Verdades mentiras y controversia', 'Peter C Gotzsche', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/vacunas-verdades-mentiras-y-controversia-int.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvdmFjdW5hcy12ZXJkYWRlcy1tZW50aXJhcy15LWNvbnRyb3ZlcnNpYS1pbnQuanBnIiwiaWF0IjoxNzMwMDA5NTE2LCJleHAiOjE3NjE1NDU1MTZ9.BJymZPXGcL2pc7Dt3FliS1o4sznCrQooxWKc6vFNFR0&t=2024-10-27T06%3A11%3A56.244Z'),
     ('¡Es la microbiota, idiota!', 'Sari Arponen', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvRXNfbGFfbWljcm9iaW90YSxfaWRpb3RhIV9BbGllbnRhX0Rlc2N1YnJlX2RlX1NhcmlfQXJwb25lbl9WaXN0YS5qcGciLCJpYXQiOjE3MzAwMDk0OTIsImV4cCI6MTc2MTU0NTQ5Mn0.TsJXFvUvyV6oTL19zvsF3CwgFPZGxjnYadovR8TzBSo&t=2024-10-27T06%3A11%3A31.723Z');
 
-INSERT INTO VISUALIZACION (id_contenido, fecha)
-SELECT
-    c.id AS id_contenido,
-    (CURRENT_DATE - INTERVAL '70 days' * RANDOM())::DATE AS fecha
-FROM CONTENIDO c,
-    GENERATE_SERIES(1, (FLOOR(RANDOM() * 100 + 1))::INT) AS s;
+-- INSERT INTO VISUALIZACION (id_contenido, fecha)
+-- SELECT
+--     c.id AS id_contenido,
+--     (CURRENT_DATE - INTERVAL '70 days' * RANDOM())::DATE AS fecha
+-- FROM CONTENIDO c,
+--     GENERATE_SERIES(1, (FLOOR(RANDOM() * 100 + 1))::INT) AS s;
 
 UPDATE CONTENIDO
 SET fecha_subida = (
