@@ -10,10 +10,7 @@ import 'dotenv/config'
 const app = exprees()
 const PORT = 4000
 
-app.use(cors({
-  origin: '*',
-  credentials: true
-}))
+app.use(cors())
 
 app.use(exprees.json())
 app.use(cookieParser())

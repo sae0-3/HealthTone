@@ -36,7 +36,7 @@ const login = async (req, res) => {
     const user = await getUserByEmail(email)
 
     if (!user) {
-      return res.status(401).send({ error: 'Usuario no encontrado' })
+      return res.status(404).send({ error: 'Usuario no encontrado' })
     }
 
     const isMatch = await bcrypt.compare(password, user.clave)
@@ -45,24 +45,19 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id }, process.env.KEY_JWT, { expiresIn: '7d' })
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      // secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    })
-
-    res.json({ message: 'Login exitoso' })
+    res.json({
+      message: 'Login exitoso',
+      token,
+      user: {
+        id: user.id,
+        nombre: user.nombre,
+        email: user.email
+    } })
   } catch (err) {
     console.error(err)
     res.status(500).send({ error: 'Error en el proceso de inicio de sesión' })
   }
 }
 
-const logout = async (req, res) => {
-  res.clearCookie('token')
-  res.json({ message: 'Logout exitoso' })
-}
 
-export { login, logout, register }
+export { login, register }

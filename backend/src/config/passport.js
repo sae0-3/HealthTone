@@ -1,20 +1,11 @@
 import passport from 'passport'
-import { Strategy as JwtStrategy } from 'passport-jwt'
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 import { getUserById } from '../models/user.models.js'
 import 'dotenv/config'
 
 
-const cookieExtractor = (req) => {
-  let token = null
-  if (req && req.cookies) {
-    token = req.cookies['token']
-  }
-
-  return token
-}
-
 passport.use(new JwtStrategy({
-  jwtFromRequest: cookieExtractor,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.KEY_JWT,
 }, async (payload, done) => {
   try {
