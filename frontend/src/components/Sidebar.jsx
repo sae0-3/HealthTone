@@ -1,12 +1,22 @@
+import { useStore } from '@/hooks/useStore'
+import { useAuthStore } from '@/store/useAuthStore'
 import { Link, useLocation } from 'react-router-dom'
 
 
 export const Sidebar = ({ toggleSidebar }) => {
   const { pathname, search } = useLocation()
+  const { logout } = useAuthStore()
+  const { howl } = useStore()
   const options = [
     { label: 'Inicio', icon: 'house', to: '/' },
     { label: 'Explorar', icon: 'search', to: '/explore' },
   ]
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token')
+    howl.unload()
+    logout()
+  }
 
   return (
     <aside className='bg-htc-white h-screen w-full lg:w-52'>
@@ -31,6 +41,15 @@ export const Sidebar = ({ toggleSidebar }) => {
           </Link>
         ))}
       </div>
+
+      <Link
+        to='/login'
+        onClick={handleLogout}
+        className='flex gap-5 py-3 w-full items-center justify-center fixed bottom-0 mb-10 lg:w-52'
+      >
+        <i className='bi bi-box-arrow-left text-lg'></i>
+        <span className='text-lg'>Cerrar Sesión</span>
+      </Link>
     </aside>
   )
 }

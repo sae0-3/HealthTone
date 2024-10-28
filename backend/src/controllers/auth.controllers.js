@@ -45,16 +45,19 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id }, process.env.KEY_JWT, { expiresIn: '7d' })
-    res.json({ message: 'Login exitoso', token })
+    res.json({
+      message: 'Login exitoso',
+      token,
+      user: {
+        id: user.id,
+        nombre: user.nombre,
+        email: user.email
+    } })
   } catch (err) {
     console.error(err)
     res.status(500).send({ error: 'Error en el proceso de inicio de sesión' })
   }
 }
 
-const logout = async (req, res) => {
-  res.clearCookie('access_token')
-  res.json({ message: 'Logout exitoso' })
-}
 
-export { login, logout, register }
+export { login, register }

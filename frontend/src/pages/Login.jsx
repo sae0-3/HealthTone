@@ -1,5 +1,6 @@
+import { useAuthStore } from '@/store/useAuthStore'
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 
@@ -8,6 +9,13 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState({ status: -1, message: null })
   const navigate = useNavigate()
+  const { isAuthenticated, login } = useAuthStore()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -16,6 +24,7 @@ export const Login = () => {
       const response = await axios.post('http://localhost:4000/api/auth/login', { email, password })
       localStorage.setItem('access_token', response.data.token)
       navigate('/')
+      login(response.data.user)
     } catch ({ response: { status, data: { error } } }) {
       setError({
         status,
