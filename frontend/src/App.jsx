@@ -5,11 +5,13 @@ import { ContentBook } from '@/pages/ContentBook'
 import { Explore } from '@/pages/Explore'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
+import { Register } from './pages/Register'
 import { NotFound } from '@/pages/NotFound'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
+
 
 
 const App = () => {
@@ -39,6 +41,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        {/* <Route path='/register' element={<Register />} /> */}
 
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />
