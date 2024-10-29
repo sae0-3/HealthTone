@@ -28,5 +28,26 @@ const getBookAll = async (req, res) => {
   }
 }
 
+const listFiles = async (req, res) => {
+  try {
+    const [files] = await bucket.getFiles();
+    res.json({
+      bucket: process.env.FIREBASE_STORAGE_BUCKET,
+      files: files.map(file => ({
+        name: file.name,
+        size: file.metadata.size,
+        type: file.metadata.contentType,
+        updated: file.metadata.updated
+      }))
+    });
+  } catch (error) {
+    console.error('Error al listar archivos:', error);
+    res.status(500).json({
+      error: 'Error al listar archivos',
+      details: error.message
+    });
+  }
+};
 
-export { getBookAll, getBookById }
+
+export { getBookAll, getBookById, listFiles}
