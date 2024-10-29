@@ -1,13 +1,8 @@
-// src/pages/Favorites.jsx
-import React from 'react'
+import { LayoutContent } from '@/layouts/LayoutContent'
 
-const Favorites = () => {
-    return (
-        <div>
-            <h1 className="text-2xl font-bold text-center my-4">Mis Favoritos</h1>
-            {/* Aquí agregan la lógica para mostrar los elementos favoritos */}
-        </div>
-    )
+
+export const Favorites = () => {
+  return (
+    <LayoutContent title='Favoritos' section='favoritos' />
+  )
 }
-
-export default Favorites

@@ -4,7 +4,7 @@ import { getUserByEmail, registerUser } from '../models/user.models.js'
 
 
 const isValidPassword = (password) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]{8,}$/
   return passwordRegex.test(password)
 }
 
@@ -52,7 +52,8 @@ const login = async (req, res) => {
         id: user.id,
         nombre: user.nombre,
         email: user.email
-    } })
+      }
+    })
   } catch (err) {
     console.error(err)
     res.status(500).send({ error: 'Error en el proceso de inicio de sesión' })

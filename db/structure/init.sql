@@ -25,7 +25,7 @@ CREATE TABLE CONTENIDO (
 CREATE TABLE FAVORITO (
    id_contenido INT NOT NULL,
    id_usuario INT NOT NULL,
-   fecha DATE DEFAULT NOW(),
+   fecha TIMESTAMP DEFAULT NOW(),
    PRIMARY KEY (id_usuario, id_contenido),
    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
    FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
