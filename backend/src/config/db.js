@@ -4,11 +4,16 @@ import pg from 'pg'
 const { Pool } = pg
 
 export const pool = new Pool({
-  user: 'healthtone',
-  password: '1234',
-  host: 'localhost',
-  database: 'db_healthtone',
-  port: 5432
+  // user: 'healthtone',
+  // password: '1234',
+  // host: 'localhost',
+  // database: 'db_healthtone',
+  // port: 5432,
+  user: 'postgres.ehtxpvdysxarrsjrnxxx',
+  password: 'contraseña-HEALTHTONE',
+  host: 'aws-0-us-west-1.pooler.supabase.com',
+  database: 'postgres',
+  port: 6543,
 })
 
 async function conectarDB(reintentos = 5, espera = 2000) {
