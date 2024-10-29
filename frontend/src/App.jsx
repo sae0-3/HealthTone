@@ -3,6 +3,7 @@ import { useStore } from '@/hooks/useStore'
 import { Layout } from '@/layouts/Layout'
 import { ContentBook } from '@/pages/ContentBook'
 import { Explore } from '@/pages/Explore'
+import { Favorites } from '@/pages/Favorites'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
 import { Register } from './pages/Register'
@@ -47,7 +48,8 @@ const App = () => {
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
-          {/* <Route path='/book/:id' element={<ContentBook />} /> */}
+          <Route path='/favorites' element={<Favorites />} />
+          <Route path='/book/:id' element={<ContentBook />} />
 
         </Route>
 
