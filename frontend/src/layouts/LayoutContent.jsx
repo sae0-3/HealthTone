@@ -2,8 +2,11 @@ import { Card } from '@/components/Card'
 import { useGet } from '@/hooks/useGet'
 
 
-export const LayoutContent = ({ title, section = '', search = '' }) => {
-  const [content, error] = useGet(`http://localhost:4000/api/book/?section=${section}&search=${search}`)
+export const LayoutContent = ({ title, url, section='' }) => {
+  const [content, error] = useGet(url)
+  const [favs] = useGet('http://localhost:4000/api/book/favorites')
+
+  if (!favs) return null
 
   return (
     <div className='flex flex-col'>
@@ -33,6 +36,7 @@ export const LayoutContent = ({ title, section = '', search = '' }) => {
                   url_audio={book.url_audio}
                   categories={book.categorias}
                   disabled={section == 'proximos_lanzamientos'}
+                  isFav={favs && !!favs.find(b => b.id === book.id)}
                 />
               </div>
             )

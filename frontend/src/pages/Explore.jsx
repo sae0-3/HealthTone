@@ -12,7 +12,12 @@ export const Explore = () => {
     <div>
       {sections.map(({ title, id }) => {
         return (
-          <LayoutContent key={id} title={title} section={id} />
+          <LayoutContent
+            key={id}
+            title={title}
+            section={id}
+            url={`http://localhost:4000/api/book?section=${id}`}
+          />
         )
       })}
     </div>
