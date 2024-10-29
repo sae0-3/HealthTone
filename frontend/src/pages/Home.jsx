@@ -7,8 +7,14 @@ export const Home = () => {
   const query = search.split('=')[1]
 
   return !search ? (
-    <LayoutContent title='Sugerencias' section='sugerencias' />
+    <LayoutContent
+      title='Sugerencias'
+      url='http://localhost:4000/api/book/?section=sugerencias'
+    />
   ) : (
-    <LayoutContent title='Resultados' search={query} />
+    <LayoutContent
+      title='Resultados'
+      url={`http://localhost:4000/api/book?search=${query}`}
+    />
   )
 }

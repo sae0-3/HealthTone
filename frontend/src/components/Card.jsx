@@ -28,7 +28,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
   }
 
   return (
-    <Link to={`/book/${id}`}>
+    <Link to={!disabled && `/book/${id}`}>
       <div className={`group ${disabled && 'cursor-auto'} relative group`}>
         <div className='aspect-square overflow-hidden relative'>
           <img
