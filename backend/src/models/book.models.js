@@ -210,15 +210,16 @@ const getFavoriteAll = async (id_user) => {
       LEFT JOIN CATEGORIA ca ON ca.id = r.id_categoria
     WHERE fa.id_usuario = $1
     GROUP BY 
-      fa.id_usuario,
-      fa.id_contenido,
-      fa.fecha,
-      co.id,
-      co.nombre,
-      co.autor,
-      co.url_texto,
-      co.url_portada,
-      co.url_audio
+    fa.id_usuario,
+    fa.id_contenido,
+    fa.fecha,
+    co.id,
+    co.nombre,
+    co.autor,
+    co.url_texto,
+    co.url_portada,
+    co.url_audio
+    ORDER BY fa.fecha DESC
   `
 
   try {

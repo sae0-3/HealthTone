@@ -1,17 +1,18 @@
 import { useStore } from '@/hooks/useStore'
-import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled }) => {
+
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav }) => {
   const { setPlaying, setCurrentAudio, startAudio, currentAudio } = useStore()
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [iconHeart, setIconHeart] = useState(false)
+  const [iconHeart, setIconHeart] = useState(isFav)
   const isPlaying = currentAudio?.id === id
 
   const handlePlay = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     if (!disabled) {
       if (!isPlaying) setPlaying(true)
 
@@ -20,10 +21,17 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     }
   }
 
-  const handleFavorite = (e) => {
+  const handleFavorite = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-    setIsFavorite(!isFavorite)
+    const token = localStorage.getItem('access_token')
+
+    await axios.post('http://localhost:4000/api/book/favorite', { id_content: id }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
     setIconHeart(!iconHeart)
   }
 
