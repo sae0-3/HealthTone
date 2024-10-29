@@ -5,6 +5,7 @@ import { ContentBook } from '@/pages/ContentBook'
 import { Explore } from '@/pages/Explore'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
+import Favorites from '@/pages/Favorites'
 import { NotFound } from '@/pages/NotFound'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useEffect } from 'react'
@@ -43,6 +44,7 @@ const App = () => {
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
+          <Route path='/favorites' element={<Favorites />} />
           {/* <Route path='/book/:id' element={<ContentBook />} /> */}
 
         </Route>
