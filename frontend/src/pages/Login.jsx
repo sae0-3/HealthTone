@@ -1,43 +1,22 @@
-import { useAuthStore } from '@/store/useAuthStore'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 
 export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState({ status: -1, message: null })
-  const navigate = useNavigate()
-  const { isAuthenticated, login } = useAuthStore()
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/')
-    }
-  }, [isAuthenticated])
+  const handleSubmit = (e) => {
+    e.preventDeafault()
+    if (!email) {
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    try {
-      const response = await axios.post('http://localhost:4000/api/auth/login', { email, password })
-      localStorage.setItem('access_token', response.data.token)
-      navigate('/')
-      login(response.data.user)
-    } catch ({ response: { status, data: { error } } }) {
-      setError({
-        status,
-        message: error
-      })
     }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-2 py-5">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-2">
       <div className="grid gap-2 max-w-2xl w-full mx-auto">
         <div className="flex justify-center">
-          <img src="/healthtone_black.svg" className="w-24" alt="logo-healthtone" />
+          <img src="/healthtone_black.svg" className="w-16" alt="logo-healthtone" />
         </div>
 
         <div className="text-4xl text-center">
@@ -50,7 +29,9 @@ export const Login = () => {
         <div className="flex justify-center">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form
+              className="space-y-6"
+              onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Correo Electrónico
@@ -63,9 +44,7 @@ export const Login = () => {
                   placeholder="Ingrese su correo"
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {error.status === 404 && (
-                  <p className='text-red-600'>{error.message}</p>
-                )}
+                {!email && <p className='text-red-600'>El correo electrónico que ingresaste no está conectado a una cuenta.</p>}
               </div>
 
               <div>
@@ -80,15 +59,13 @@ export const Login = () => {
                   placeholder="Ingrese su contraseña"
                   onChange={e => setPassword(e.target.value)}
                 />
-                {error.status === 401 && (
-                  <p className='text-red-600'>{error.message}</p>
-                )}
+                {!password && <p className='text-red-600'>La contraseña que ingresaste es incorrecta.</p>}
               </div>
 
               <div className="text-sm">
-                <Link to="#" className="font-medium text-htc-lightblue hover:text-htc-blue">
+                <a href="#" className="font-medium text-htc-lightblue hover:text-htc-blue">
                   ¿Olvidaste tu contraseña?
-                </Link>
+                </a>
               </div>
 
               <button
@@ -103,9 +80,9 @@ export const Login = () => {
 
         <div className="text-sm text-center">
           <span>¿No tienes una cuenta? Crea una </span>
-          <Link to="/register" className="font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue">
+          <a href="#" className="font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue">
             aquí
-          </Link>
+          </a>
         </div>
       </div>
     </div>

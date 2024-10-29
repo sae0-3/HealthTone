@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 
 
 export const useGet = (url) => {
@@ -9,16 +8,14 @@ export const useGet = (url) => {
 
   useEffect(() => {
     const fetching = async () => {
-      setIsLoading(true)
-      const token = localStorage.getItem('access_token')
-
       try {
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        setResult(response.data)
+        const response = await fetch(url)
+        if (!response.ok) {
+          throw new Error('El fetch get no salio como se esperaba')
+        }
+
+        const data = await response.json()
+        setResult(data)
       } catch (err) {
         setError('Surgio un problema al hacer fetch de los datos')
       } finally {

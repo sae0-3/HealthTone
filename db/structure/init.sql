@@ -2,34 +2,77 @@ DROP DATABASE IF EXISTS db_healthtone;
 CREATE DATABASE db_healthtone;
 \c db_healthtone;
 
+-- CREATE schema "Libros"
+-- create schema "Personas"
 
-CREATE TABLE USUARIO (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    apellidos VARCHAR(255),
-    email VARCHAR(255) NOT NULL UNIQUE,
-    clave VARCHAR(255) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS "Personas"."Cliente"
+-- (
+--     "Id_cliente" integer NOT NULL DEFAULT nextval('"Personas"."Cliente_Id_cliente_seq"'::regclass),
+--     "Nombre" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Apellido" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Email" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     "Contraseña" character varying(40) COLLATE pg_catalog."default" NOT NULL,
+--     CONSTRAINT "Cliente_pkey" PRIMARY KEY ("Id_cliente"),
+--     CONSTRAINT "Email_único" UNIQUE ("Email")
+--         INCLUDE("Email")
+-- )
+
+-- TABLESPACE pg_default;
+
+-- ALTER TABLE IF EXISTS "Personas"."Cliente"
+--     OWNER to healthtone;
 
 CREATE TABLE CONTENIDO (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     autor VARCHAR(100),
-    url_texto TEXT NOT NULL,
-    url_portada TEXT NOT NULL,
-    url_audio TEXT NOT NULL,
+    url_texto VARCHAR(255) NOT NULL,
+    url_portada VARCHAR(255),
+    url_audio VARCHAR(255),
     fecha_subida DATE DEFAULT NOW(),
     fecha_publicacion DATE
 );
 
-CREATE TABLE FAVORITO (
-   id_contenido INT NOT NULL,
-   id_usuario INT NOT NULL,
-   fecha TIMESTAMP DEFAULT NOW(),
-   PRIMARY KEY (id_usuario, id_contenido),
-   FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
-   FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
-);
+
+-- CREATE TABLE "Libros"."Lista_favoritos"
+-- (
+--     "Id_cliente" integer NOT NULL,
+--     "Id_libro" integer NOT NULL,
+--     PRIMARY KEY ("Id_cliente", "Id_libro"),
+--     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
+--         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+--         NOT VALID,
+--     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
+--         REFERENCES public.contenido (id) MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+--         NOT VALID
+-- )
+
+
+-- CREATE TABLE IF NOT EXISTS "Libros"."Progreso"
+-- (
+--     "Id_cliente" integer NOT NULL,
+--     "Id_libro" integer NOT NULL,
+--     "Progreso_en_segundos" integer NOT NULL,
+--     "Ultima_reproducción" timestamp without time zone NOT NULL,
+--     CONSTRAINT "Progreso_pkey" PRIMARY KEY ("Id_libro", "Id_cliente"),
+--     CONSTRAINT "Id_cliente" FOREIGN KEY ("Id_cliente")
+--         REFERENCES "Personas"."Cliente" ("Id_cliente") MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION,
+--     CONSTRAINT "Id_libro" FOREIGN KEY ("Id_libro")
+--         REFERENCES public.contenido (id) MATCH SIMPLE
+--         ON UPDATE NO ACTION
+--         ON DELETE NO ACTION
+-- )
+
+-- TABLESPACE pg_default;
+
+-- ALTER TABLE IF EXISTS "Libros"."Progreso"
+--     OWNER to healthtone;
 
 CREATE TABLE CATEGORIA (
     id SERIAL PRIMARY KEY,
@@ -49,7 +92,7 @@ CREATE TABLE ESTRENO (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     autor VARCHAR(100),
-    url_portada TEXT,
+    url_portada VARCHAR(255),
     publicado BOOLEAN DEFAULT FALSE
 );
 
@@ -63,19 +106,8 @@ CREATE TABLE R_ESTRENO_CATEGORIA (
 
 CREATE TABLE VISUALIZACION (
     id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL,
     id_contenido INT NOT NULL,
-    fecha TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
-    FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
-);
-
-CREATE TABLE PROGRESO (
-    id_usuario INT NOT NULL,
-    id_contenido INT NOT NULL,
-    progreso INT NOT NULL,
-    PRIMARY KEY (id_usuario, id_contenido),
-    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
+    fecha DATE DEFAULT NOW(),
     FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
 );
 
@@ -87,9 +119,9 @@ RETURNS TABLE(
     id INT,
     nombre VARCHAR,
     autor VARCHAR,
-    url_texto TEXT,
-    url_portada TEXT,
-    url_audio TEXT,
+    url_texto VARCHAR,
+    url_portada VARCHAR,
+    url_audio VARCHAR,
     categorias JSON
 ) AS $$
 BEGIN
@@ -118,19 +150,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION guardar_progreso(
-    id_usuario INT,
-    id_contenido INT,
-    progreso INT
-) RETURNS void
-AS $$
-BEGIN
-    INSERT INTO PROGRESO (id_usuario, id_contenido, progreso)
-    VALUES (id_usuario, id_contenido, progreso)
-    ON CONFLICT (id_usuario, id_contenido)
-    DO UPDATE SET progreso = EXCLUDED.progreso;
-END;
-$$ LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION "Libros".guardar_progreso(
+-- 	id_cliente integer,
+-- 	id_libro integer,
+-- 	progreso integer)
+--     RETURNS void
+--     LANGUAGE 'plpgsql'
+--     COST 100
+--     VOLATILE PARALLEL UNSAFE
+-- AS $BODY$
+-- begin
+-- 	insert into "Libros"."Progreso" (Id_cliente,Id_libro,Progreso_en_segundos,Ultima_reproducción)
+-- 	values (Id_cliente,Id_libro,Progreso,NOW());
+-- end;
+-- $BODY$;
+
+-- ALTER FUNCTION "Libros".guardar_progreso(integer, integer, integer)
+--     OWNER TO healthtone;
 
 
 -- CREATE OR REPLACE FUNCTION "Personas".insertar_usuario(
@@ -149,6 +185,10 @@ $$ LANGUAGE plpgsql;
 -- end;
 -- $BODY$;
 
+-- ALTER FUNCTION "Personas".insertar_usuario(character varying, character varying, character varying, character varying)
+--     OWNER TO healthtone;
+
+
 -- CREATE OR REPLACE FUNCTION "Libros".añadirFavorito(
 -- 	codcliente integer,
 -- 	codlibro integer)
@@ -163,26 +203,45 @@ $$ LANGUAGE plpgsql;
 -- END;
 -- $BODY$;
 
+-- ALTER FUNCTION "Libros"."añadirFavorito"(integer, integer)
+--     OWNER TO healthtone;
 
+-- CREATE OR REPLACE FUNCTION "Personas".validar_contraseña() RETURNS TRIGGER AS $$
+-- BEGIN
+--     IF LENGTH(NEW.contraseña) < 8 THEN
+--         RAISE EXCEPTION 'La contraseña debe tener al menos 8 caracteres.';
+--     END IF;
+
+--     IF NEW.contraseña !~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$' THEN
+--         RAISE EXCEPTION 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.';
+--     END IF;
+
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- CREATE TRIGGER verificar_contraseña
+-- BEFORE INSERT OR UPDATE ON "Personas"."Cliente"
+-- FOR EACH ROW EXECUTE FUNCTION "Personas".validar_contraseña();
 
 -- DATA
 INSERT INTO CONTENIDO (nombre, autor, url_texto, url_portada, url_audio) VALUES
-    ('Dime qué comes y te diré qué bacterias tienes', 'Blanca García-Orea Haro', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/epubs/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.epub?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2VwdWJzL0RpbWVfcXVlX2NvbWVzX3lfdGVfZGlyZV9xdWVfYmFjdGVyaWFzX3RpZW5lc19BdWRpb2xpYnJvX2RlX0JsYW5jYS5lcHViIiwiaWF0IjoxNzMwMDA5NTcwLCJleHAiOjE3NjE1NDU1NzB9.958MGnFnxL_hr_aPwe5D6W7FAW6N8YhDuvSNRIDo1Fs&t=2024-10-27T06%3A12%3A49.679Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvRGltZV9xdWVfY29tZXNfeV90ZV9kaXJlX3F1ZV9iYWN0ZXJpYXNfdGllbmVzX0F1ZGlvbGlicm9fZGVfQmxhbmNhLmpwZyIsImlhdCI6MTczMDAwOTcxOCwiZXhwIjoxNzYxNTQ1NzE4fQ.--sYwa2py_Vw9O6R2jzjb7RDAOJIQ6hiTE9Vi20UEvo&t=2024-10-27T06%3A15%3A18.176Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/tracks/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.opus?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL3RyYWNrcy9EaW1lX3F1ZV9jb21lc195X3RlX2RpcmVfcXVlX2JhY3Rlcmlhc190aWVuZXNfQXVkaW9saWJyb19kZV9CbGFuY2Eub3B1cyIsImlhdCI6MTczMDAwOTQyMywiZXhwIjoxNzYxNTQ1NDIzfQ.pPppISWXKCXbHqavE4cSzKIOX_du95bYKpoJvmrquQk&t=2024-10-27T06%3A10%3A22.516Z'),
-    ('Diferencias entre virus, bacterias y hongos', 'Dr. Elena R. Martínez', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/epubs/bacteriasVirus.epub?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2VwdWJzL2JhY3Rlcmlhc1ZpcnVzLmVwdWIiLCJpYXQiOjE3MzAwMDk1MzcsImV4cCI6MTc2MTU0NTUzN30.npRfsoZrV9ySPOlXUvazUZoHNK_MNPQLGFfIdLz2PF8&t=2024-10-27T06%3A12%3A17.074Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/bacteriasVirus.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvYmFjdGVyaWFzVmlydXMuanBnIiwiaWF0IjoxNzMwMDA5NDU5LCJleHAiOjE3NjE1NDU0NTl9.eQKd823_FhkjSJS6qFFsN9Wswq5g9JOIIPr3qpXfIDs&t=2024-10-27T06%3A10%3A58.946Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/tracks/bacteriasVirus.opus?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL3RyYWNrcy9iYWN0ZXJpYXNWaXJ1cy5vcHVzIiwiaWF0IjoxNzMwMDA5MzM4LCJleHAiOjE3NjE1NDUzMzh9.I4i-Owj5m4yORdkcenLpyzA9wcGyBDHdZxndaT3qIwo&t=2024-10-27T06%3A08%3A57.549Z'),
-    ('El cancer no es una enfermedad', 'Dr. Andreas Morizt', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/epubs/cancer.epub?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2VwdWJzL2NhbmNlci5lcHViIiwiaWF0IjoxNzMwMDA5NTU4LCJleHAiOjE3NjE1NDU1NTh9.ypWWeYsVb7VhUMijWKV3aDPqdmHGenLMFogjmrjT6a4&t=2024-10-27T06%3A12%3A37.661Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/cancer.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvY2FuY2VyLmpwZyIsImlhdCI6MTczMDAwOTQ3OCwiZXhwIjoxNzYxNTQ1NDc4fQ.YG_7CldaA55t9tN8IHHL2AqwKG7-pQ1vfeXuIZb1VKk&t=2024-10-27T06%3A11%3A17.380Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/tracks/cancer.opus?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL3RyYWNrcy9jYW5jZXIub3B1cyIsImlhdCI6MTczMDAwOTQxNCwiZXhwIjoxNzYxNTQ1NDE0fQ.J7bWGuMgkaknrvomPyeZ9SkpnyjeV4vixymqZ94YBf8&t=2024-10-27T06%3A10%3A13.509Z'),
-    ('¿La marihuana es mala para el cerebro?', 'Mikel Alonso', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/epubs/marihuana.epub?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2VwdWJzL21hcmlodWFuYS5lcHViIiwiaWF0IjoxNzMwMDA5NTc3LCJleHAiOjE3NjE1NDU1Nzd9.qmc0X1MIr7Kyoeyq7O7VUFxveLGw4qjAPtIattoL7NY&t=2024-10-27T06%3A12%3A57.053Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/marihuana.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvbWFyaWh1YW5hLmpwZyIsImlhdCI6MTczMDAwOTUwMywiZXhwIjoxNzYxNTQ1NTAzfQ.UlF9E3AxWYvYaLyD8J__sRNfWxSa9MKWW18y2VLHThA&t=2024-10-27T06%3A11%3A42.865Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/tracks/marihuana.opus?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL3RyYWNrcy9tYXJpaHVhbmEub3B1cyIsImlhdCI6MTczMDAwOTQzMywiZXhwIjoxNzYxNTQ1NDMzfQ.FnlnnfgIvDXGich6AjstNIfvxjf3PBZhprdNV5PV0EM&t=2024-10-27T06%3A10%3A32.916Z'),
-    ('Pandemia, Epidemia y Endemia', 'Dr. Ignacio Lopez -Goñi', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/epubs/virusPandemias.epub?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2VwdWJzL3ZpcnVzUGFuZGVtaWFzLmVwdWIiLCJpYXQiOjE3MzAwMDk1OTEsImV4cCI6MTc2MTU0NTU5MX0.BFBC_6xIJetzPaz0uqwH92MC-aZ4XPXQsGuC5rKC5o4&t=2024-10-27T06%3A13%3A10.526Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/virusPandemias.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvdmlydXNQYW5kZW1pYXMuanBnIiwiaWF0IjoxNzMwMDA5NTI4LCJleHAiOjE3NjE1NDU1Mjh9.JL7gK2uhp-I8a6NrPZiqR2WdQMZRddDaky2-Ua-cZys&t=2024-10-27T06%3A12%3A08.121Z', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/tracks/virusPandemias.opus?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL3RyYWNrcy92aXJ1c1BhbmRlbWlhcy5vcHVzIiwiaWF0IjoxNzMwMDA5NDQzLCJleHAiOjE3NjE1NDU0NDN9.-QC4cRNS1z7exwWUOhTOzlf9Z1L_fa8cCVhG9ZQD5TU&t=2024-10-27T06%3A10%3A42.451Z');
+    ('Dime qué comes y te diré qué bacterias tienes', 'Blanca García-Orea Haro', 'http://localhost:4000/uploads/epub/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.epub', 'http://localhost:4000/uploads/imgs/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.jpg', 'http://localhost:4000/uploads/tracks/Dime_que_comes_y_te_dire_que_bacterias_tienes_Audiolibro_de_Blanca.mp3'),
+    ('Diferencias entre virus, bacterias y hongos', 'Dr. Elena R. Martínez', 'http://localhost:4000/uploads/epub/bacteriasVirus.epub', 'http://localhost:4000/uploads/imgs/bacteriasVirus.jpg', 'http://localhost:4000/uploads/tracks/bacteriasVirus.mp3'),
+    ('El cancer no es una enfermedad', 'Dr. Andreas Morizt', 'http://localhost:4000/uploads/epub/cancer.epub', 'http://localhost:4000/uploads/imgs/cancer.jpg', 'http://localhost:4000/uploads/tracks/cancer.mp3'),
+    ('¿La marihuana es mala para el cerebro?', 'Mikel Alonso', 'http://localhost:4000/uploads/epub/marihuana.epub', 'http://localhost:4000/uploads/imgs/marihuana.jpg', 'http://localhost:4000/uploads/tracks/marihuana.mp3'),
+    ('Pandemia, Epidemia y Endemia', 'Dr. Ignacio Lopez -Goñi', 'http://localhost:4000/uploads/epub/virusPandemias.epub', 'http://localhost:4000/uploads/imgs/virusPandemias.jpg', 'http://localhost:4000/uploads/tracks/virusPandemias.mp3');
 
 INSERT INTO ESTRENO (nombre, autor, url_portada) VALUES
-    ('Vacunas Verdades mentiras y controversia', 'Peter C Gotzsche', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/vacunas-verdades-mentiras-y-controversia-int.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvdmFjdW5hcy12ZXJkYWRlcy1tZW50aXJhcy15LWNvbnRyb3ZlcnNpYS1pbnQuanBnIiwiaWF0IjoxNzMwMDA5NTE2LCJleHAiOjE3NjE1NDU1MTZ9.BJymZPXGcL2pc7Dt3FliS1o4sznCrQooxWKc6vFNFR0&t=2024-10-27T06%3A11%3A56.244Z'),
-    ('¡Es la microbiota, idiota!', 'Sari Arponen', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvRXNfbGFfbWljcm9iaW90YSxfaWRpb3RhIV9BbGllbnRhX0Rlc2N1YnJlX2RlX1NhcmlfQXJwb25lbl9WaXN0YS5qcGciLCJpYXQiOjE3MzAwMDk0OTIsImV4cCI6MTc2MTU0NTQ5Mn0.TsJXFvUvyV6oTL19zvsF3CwgFPZGxjnYadovR8TzBSo&t=2024-10-27T06%3A11%3A31.723Z');
+    ('Vacunas Verdades mentiras y controversia', 'Peter C Gotzsche', 'http://localhost:4000/uploads/imgs/vacunas-verdades-mentiras-y-controversia-int.jpg'),
+    ('¡Es la microbiota, idiota!', 'Sari Arponen', 'http://localhost:4000/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpg');
 
--- INSERT INTO VISUALIZACION (id_contenido, fecha)
--- SELECT
---     c.id AS id_contenido,
---     (CURRENT_DATE - INTERVAL '70 days' * RANDOM())::DATE AS fecha
--- FROM CONTENIDO c,
---     GENERATE_SERIES(1, (FLOOR(RANDOM() * 100 + 1))::INT) AS s;
+INSERT INTO VISUALIZACION (id_contenido, fecha)
+SELECT
+    c.id AS id_contenido,
+    (CURRENT_DATE - INTERVAL '70 days' * RANDOM())::DATE AS fecha
+FROM CONTENIDO c,
+    GENERATE_SERIES(1, (FLOOR(RANDOM() * 100 + 1))::INT) AS s;
 
 UPDATE CONTENIDO
 SET fecha_subida = (
