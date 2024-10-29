@@ -230,5 +230,22 @@ const getFavoriteAll = async (id_user) => {
   }
 }
 
+const toggleFavorite = async (id_user, id_content) => {
+  try {
+    await deleteFavorite(id_user, id_content)
+    return 'Eliminado'
+  } catch (err) {
+    await saveFavorite(id_user, id_content)
+    return 'Agregado'
+  }
+}
 
-export { deleteFavorite, getBookAll, getBookById, getFavoriteAll, saveFavorite }
+
+export {
+  deleteFavorite,
+  getBookAll,
+  getBookById,
+  getFavoriteAll,
+  saveFavorite,
+  toggleFavorite
+}
