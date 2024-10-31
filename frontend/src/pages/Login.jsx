@@ -12,6 +12,7 @@ export const Login = () => {
   const navigate = useNavigate()
   const { mutate: login, error, isPending } = useLogin()
   const { state: prevLocation } = useLocation()
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -66,21 +67,28 @@ export const Login = () => {
                 )}
               </div>
 
-              <div>
+              <div className='relative'>
                 <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
                   Contraseña
                 </label>
                 <input
                   id='password'
-                  type='password'
+                  type={showPassword ? 'text' : 'password'}
                   name='password'
                   required
                   className='mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                   placeholder='Ingrese su contraseña'
                   onChange={handleChange}
                 />
+                <button
+                  type='button'
+                  className='absolute inset-y-0 right-0 flex items-center pt-6 pr-3'
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <i className={`bi bi-eye${showPassword ? '-fill' : ''}`}></i>
+                </button>
                 {error && error.status === 401 && (
-                  <p className='text-red-600'>Contraseña Inconrrecta</p>
+                  <p className='text-red-600'>Contraseña incorrecta</p>
                 )}
               </div>
 
