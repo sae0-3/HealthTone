@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
-export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav }) => {
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, favorites, setFavorites }) => {
   const { setPlaying, setCurrentAudio, startAudio, currentAudio } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
@@ -39,8 +39,14 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
       saveFavorite(id)
     }
 
+    setFavorites((prevFavorites) => {
+      const isFavorite = prevFavorites.includes(id)
+      return (!isFavorite)
+        ? [...prevFavorites, id]
+        : prevFavorites.filter(idBook => idBook !== id)
+    })
+
     setIconHeart(!iconHeart)
-    isFav = !isFav
     setShowNotification(false)
   }
 
