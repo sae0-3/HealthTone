@@ -8,12 +8,16 @@ const authRoutes = Router()
 authRoutes.post('/register', register)
 authRoutes.post('/login', login)
 authRoutes.get('/verify', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
   res.status(200).json({
+    token,
     user: {
       id: req.user.id,
       name: req.user.nombre,
       email: req.user.email
-    }
+    },
   })
 })
 

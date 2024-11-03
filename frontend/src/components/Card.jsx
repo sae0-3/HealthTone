@@ -1,42 +1,45 @@
-import { useStore } from '@/hooks/useStore'
-import axios from 'axios'
+import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
+import audioStore from '@/store/audioStore'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
 export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav }) => {
-  const { setPlaying, setCurrentAudio, startAudio, currentAudio } = useStore()
+  const { setPlaying, setCurrentAudio, startAudio, currentAudio } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
+  const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
+  const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
+
   const isPlaying = currentAudio?.id === id
 
   const handlePlay = (e) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (!disabled) {
-      if (!isPlaying) setPlaying(true)
+    if (!isPlaying) setPlaying(true)
 
-      setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
-      startAudio()
-    }
+    setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
+    startAudio()
   }
 
   const handleFavorite = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-    const token = localStorage.getItem('access_token')
 
-    await axios.post('http://localhost:4000/api/book/favorite', { id_content: id }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+    if (iconHeart) {
+      deleteFavorite(id)
+    } else {
+      saveFavorite(id)
+    }
 
     setIconHeart(!iconHeart)
   }
 
   return (
-    <Link to={!disabled && `/book/${id}`}>
+    <Link
+      to={!disabled && `/book/${id}`}
+      className='border shadow-sm rounded-xl hover:shadow-lg transition'
+    >
       <div className={`group ${disabled && 'cursor-auto'} relative group`}>
         <div className='aspect-square overflow-hidden relative'>
           <img
@@ -50,7 +53,6 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
               className={`absolute bottom-2 left-2 rounded-md p-2 transition-colors duration-300 hidden group-hover:block
                           ${isPlaying ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}
               `}
-              style={{ width: '40px', height: '40px' }}
             >
               <div className="flex items-center justify-center h-full">
                 <i className={isPlaying ? `bi bi-play-fill text-2xl` : `bi bi-play text-2xl`}></i>
@@ -63,7 +65,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
               onClick={handleFavorite}
               className={`absolute bottom-2 right-2 rounded-md p-2 transition-colors duration-300 hidden group-hover:block
                 ${iconHeart ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}`}
-              style={{ width: '40px', height: '40px' }}
+              disabled={isPendingPost || isPendingDelete}
             >
               <i className={iconHeart ? `bi bi-heart-fill text-lg` : `bi bi-heart text-lg`}></i>
             </button>

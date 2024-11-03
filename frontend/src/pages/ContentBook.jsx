@@ -1,7 +1,9 @@
 import { Card } from '@/components/Card'
 import { EpubViewer } from '@/components/EpubViewer'
-import { useGet } from '@/hooks/useGet'
-import { useStore } from '@/hooks/useStore'
+import { Error } from '@/components/Error'
+import { Loading } from '@/components/Loading'
+import { useGetBook } from '@/hooks/useBooks'
+import audioStore from '@/store/audioStore'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -9,8 +11,10 @@ import { useParams } from 'react-router-dom'
 export const ContentBook = () => {
   const { id } = useParams()
   const [isReading, setIsReading] = useState(false)
-  const { currentAudio, setCurrentAudio } = useStore()
-  const [book, error] = useGet(`http://localhost:4000/api/book/${id}`)
+  const { currentAudio, setCurrentAudio } = audioStore()
+  const { data, isLoading, error } = useGetBook(id)
+
+  const book = data?.data
 
   useEffect(() => {
     if (!currentAudio?.id && !!book) {
@@ -28,13 +32,10 @@ export const ContentBook = () => {
     setIsReading(!isReading)
   }
 
-  if (error) {
-    return (
-      <p className='font-semibold text-red-600 text-center pt-5'>
-        No se logro recupear la información
-      </p>
-    )
-  }
+  if (isLoading)
+    return <Loading />
+  if (error)
+    return <Error>No se logro recupear la información</Error>
 
   return (
     <div className='h-full flex flex-col items-center justify-evenly gap-2 pt-4'>
