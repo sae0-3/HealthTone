@@ -2,13 +2,14 @@ import { Card } from '@/components/Card'
 import { Error } from '@/components/Error'
 import { Loading } from '@/components/Loading'
 import { useGetBooksFavorites } from '@/hooks/useBooks'
+import { useState } from 'react'
 
 
 export const LayoutContent = ({ title, disabled, content }) => {
   const favs = useGetBooksFavorites()
-
   const books = content.data?.data || []
   const favoriteIds = new Set(favs.data?.data?.map((book) => book.id))
+  const [favorites, setFavorites] = useState(new Array(favoriteIds))
 
   const renderStatus = () => {
     if (content.isLoading || favs.isLoading)
@@ -38,6 +39,8 @@ export const LayoutContent = ({ title, disabled, content }) => {
               categories={book.categorias}
               disabled={disabled}
               isFav={favoriteIds.has(book.id)}
+              favorites={favorites}
+              setFavorites={setFavorites}
             />
           ))}
         </section>

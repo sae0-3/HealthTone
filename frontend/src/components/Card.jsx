@@ -1,15 +1,16 @@
+import { Notification } from '@/components/Notification'
 import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
-export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav }) => {
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, favorites, setFavorites }) => {
   const { setPlaying, setCurrentAudio, startAudio, currentAudio } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
   const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
-
+  const [showNotification, setShowNotification] = useState(false)
   const isPlaying = currentAudio?.id === id
 
   const handlePlay = (e) => {
@@ -22,7 +23,13 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     startAudio()
   }
 
-  const handleFavorite = async (e) => {
+  const handleFavorite = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowNotification(true)
+  }
+
+  const confirmFavorite = async (e) => {
     e.preventDefault()
     e.stopPropagation()
 
@@ -32,7 +39,15 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
       saveFavorite(id)
     }
 
+    setFavorites((prevFavorites) => {
+      const isFavorite = prevFavorites.includes(id)
+      return (!isFavorite)
+        ? [...prevFavorites, id]
+        : prevFavorites.filter(idBook => idBook !== id)
+    })
+
     setIconHeart(!iconHeart)
+    setShowNotification(false)
   }
 
   return (
@@ -71,6 +86,14 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
             </button>
           )}
         </div>
+
+        {showNotification && (
+          <Notification
+            message={isFav ? '¿Esta seguro de que desea eliminar de favoritos?' : 'Se ha añadido correctamente'}
+            onConfirm={confirmFavorite}
+            onCancel={() => setShowNotification(false)}
+          />
+        )}
 
         <div className='px-3 py-4'>
           <p className='font-bold text-base mb-2'>{title}</p>
