@@ -4,8 +4,7 @@ import {
   getBookAll,
   getBookById,
   getFavoriteAll,
-  saveFavorite,
-  toggleFavorite
+  postFavorite,
 } from '../controllers/book.controllers.js'
 
 
@@ -13,9 +12,8 @@ const bookRoutes = Router()
 
 bookRoutes.get('/', getBookAll)
 bookRoutes.get('/favorites', getFavoriteAll)
-bookRoutes.post('/favorites', saveFavorite)
-bookRoutes.post('/favorite', toggleFavorite)
-bookRoutes.delete('/favorites', deleteFavorite)
+bookRoutes.post('/favorites/:id', postFavorite)
+bookRoutes.delete('/favorites/:id', deleteFavorite)
 bookRoutes.get('/:id', getBookById)
 
 export default bookRoutes

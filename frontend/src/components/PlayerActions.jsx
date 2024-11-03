@@ -1,5 +1,5 @@
 import { ProgressBar } from '@/components/ProgressBar'
-import { useStore } from '@/hooks/useStore'
+import audioStore from '@/store/audioStore'
 import { Howler } from 'howler'
 import { useState } from 'react'
 
@@ -12,7 +12,7 @@ export const PlayerActions = () => {
     setPosition,
     muted,
     toggleMuted
-  } = useStore()
+  } = audioStore()
   const [isOpen, setIsOpen] = useState(false)
 
   const handleVolumeBarClick = (e) => {

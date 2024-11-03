@@ -1,11 +1,9 @@
+import { useGetBooksFavorites } from '@/hooks/useBooks'
 import { LayoutContent } from '@/layouts/LayoutContent'
 
 
 export const Favorites = () => {
-  return (
-    <LayoutContent
-      title='Favoritos'
-      section='favoritos'
-      url='http://localhost:4000/api/book/favorites' />
-  )
+  const favorites = useGetBooksFavorites()
+
+  return <LayoutContent title='Favoritos' content={favorites} />
 }

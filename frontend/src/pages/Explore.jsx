@@ -1,25 +1,36 @@
+import { useGetBooksSection } from '@/hooks/useBooks'
 import { LayoutContent } from '@/layouts/LayoutContent'
 
 
 export const Explore = () => {
   const sections = [
-    { title: 'Nuevos Lanzamientos', id: 'nuevos_lanzamientos' },
-    { title: 'Populares', id: 'populares' },
-    { title: 'Próximos Lanzamientos', id: 'proximos_lanzamientos' },
+    {
+      title: 'Nuevos Lanzamientos',
+      id: 'nuevos_lanzamientos',
+      content: useGetBooksSection('nuevos_lanzamientos')
+    },
+    {
+      title: 'Populares',
+      id: 'populares',
+      content: useGetBooksSection('populares')
+    },
+    {
+      title: 'Próximos Lanzamientos',
+      id: 'proximos_lanzamientos',
+      content: useGetBooksSection('proximos_lanzamientos')
+    },
   ]
 
   return (
-    <div>
-      {sections.map(({ title, id }) => {
-        return (
-          <LayoutContent
-            key={id}
-            title={title}
-            section={id}
-            url={`http://localhost:4000/api/book?section=${id}`}
-          />
-        )
-      })}
-    </div>
+    <>
+      {sections.map(({ title, id, content }) => (
+        <LayoutContent
+          key={id}
+          title={title}
+          content={content}
+          disabled={id === 'proximos_lanzamientos'}
+        />
+      ))}
+    </>
   )
 }
