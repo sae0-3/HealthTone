@@ -1,9 +1,10 @@
-// import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import exprees from 'express'
 import passport from './config/passport.js'
 import authRoutes from './routes/auth.routes.js'
 import bookRoutes from './routes/book.routes.js'
+import progressRoutes from './routes/progress.routes.js';
 import 'dotenv/config'
 import storageRoutes from './routes/storage.js';
 
@@ -14,10 +15,11 @@ const PORT = 4000
 app.use(cors())
 
 app.use(exprees.json())
-// app.use(cookieParser())
+app.use(cookieParser())
 
 app.use('/api/auth', authRoutes)
-app.use('/api/books', passport.authenticate('jwt', { session: false }), bookRoutes)
+app.use('/api/book', passport.authenticate('jwt', { session: false }), bookRoutes)
+app.use('/api/progreso', passport.authenticate('jwt', { session: false }), progressRoutes);
 app.use('/api', storageRoutes); 
 
 app.listen(PORT, () => {
