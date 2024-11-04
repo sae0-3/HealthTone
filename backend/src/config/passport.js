@@ -1,7 +1,7 @@
+import 'dotenv/config'
 import passport from 'passport'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
-import { getUserById } from '../models/user.models.js'
-import 'dotenv/config'
+import { getUserById } from '../models/v0/user.models.js'
 
 
 passport.use(new JwtStrategy({

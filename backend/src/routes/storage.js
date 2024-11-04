@@ -2,9 +2,9 @@ import { Router } from 'express'
 import { listStorageFiles, streamEpub } from '../controllers/firebase-controllers.js'
 
 
-const router = Router()
+const storageRoutes = Router()
 
-router.get('/storage/files', listStorageFiles)
-router.get('/storage/epub/:fileName', streamEpub)
+storageRoutes.get('/storage/files', listStorageFiles)
+storageRoutes.get('/storage/epub/:fileName', streamEpub)
 
-export default router
+export default storageRoutes
