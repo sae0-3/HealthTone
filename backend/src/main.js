@@ -10,6 +10,7 @@ import {
   bookRoutes as bookRoutesV1,
   userRoutes as userRoutesV1,
 } from './routes/v1/index.js'
+import progressRoutes from './routes/progress.routes.js'
 
 
 const app = express()
@@ -25,6 +26,7 @@ app.use('/api/books', passport.authenticate('jwt', { session: false }), bookRout
 app.use('/api/v1/auth', authRoutesV1)
 app.use('/api/v1/books', bookRoutesV1)
 app.use('/api/v1/users', userRoutesV1)
+app.use('/api/progreso', passport.authenticate('jwt', { session: false }), progressRoutes)
 
 app.listen(PORT, () => {
   console.log(`El servidor se esta ejecutando en el puerto ${PORT}`)
