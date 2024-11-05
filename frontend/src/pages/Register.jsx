@@ -48,11 +48,27 @@ export const Register = () => {
         [name]: nameRegex.test(value) ? '' : 'Solo se permiten letras y espacios',
       })
     } else if (name === 'email') {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      setErrors({
-        ...errors,
-        email: emailRegex.test(value) ? '' : 'Formato de correo inválido',
-      })
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const allowedDomains = ['hotmail.com','gmail.com','yahoo.com','outlook.com'];
+      const domain=value.split('@')[1];
+      
+      if (!emailRegex.test(value)) {
+        setErrors({
+          ...errors,
+          email: 'Formato de correo inválido',
+        });
+      } else if (!allowedDomains.includes(domain)) {
+        setErrors({
+          ...errors,
+          email: 'Dominio de correo no permitido',
+        });
+      } else {
+        setErrors({
+          ...errors,
+          email: '',
+        });
+      }
+
     } else {
       setErrors({})
     }
