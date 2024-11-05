@@ -28,7 +28,7 @@ export const LayoutContent = ({ title, disabled, content }) => {
       </section>
 
       {renderStatus() || (
-        <section className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:5 gap-8'>
+        <section className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:5 gap-4 lg:gap-8'>
           {books.map((book) => (
             <Card key={book.id}
               id={book.id}

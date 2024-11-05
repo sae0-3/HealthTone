@@ -65,7 +65,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
           {!disabled && (
             <button
               onClick={handlePlay}
-              className={`absolute bottom-2 left-2 rounded-md p-2 transition-colors duration-300 hidden group-hover:block
+              className={`absolute bottom-2 left-2 rounded-md p-2 transition-colors duration-300 lg:hidden lg:group-hover:block
                           ${isPlaying ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}
               `}
             >
@@ -78,7 +78,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
           {!disabled && (
             <button
               onClick={handleFavorite}
-              className={`absolute bottom-2 right-2 rounded-md p-2 transition-colors duration-300 hidden group-hover:block
+              className={`absolute bottom-2 right-2 rounded-md p-2 transition-colors duration-300 lg:hidden lg:group-hover:block
                 ${iconHeart ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}`}
               disabled={isPendingPost || isPendingDelete}
             >
