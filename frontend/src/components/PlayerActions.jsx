@@ -2,6 +2,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
 import { Howler } from 'howler'
 import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 
 export const PlayerActions = () => {
@@ -11,9 +12,12 @@ export const PlayerActions = () => {
     setVolume,
     setPosition,
     muted,
-    toggleMuted
+    toggleMuted,
+    isOpenDescription,
+    toggleOpenDescription,
   } = audioStore()
-  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate()
+  const { pathname, state } = useLocation()
 
   const handleVolumeBarClick = (e) => {
     if (muted) return
@@ -24,6 +28,14 @@ export const PlayerActions = () => {
 
     Howler.volume(Math.min(Math.max(newVolume, 0), 1))
     setVolume(newVolume * 100)
+  }
+
+  const handleOpen = () => {
+    toggleOpenDescription()
+    navigate(isOpenDescription
+      ? state || '/'
+      : `/book/${currentAudio.id}`
+      , { state: pathname })
   }
 
   return (
@@ -49,10 +61,10 @@ export const PlayerActions = () => {
 
         <button
           className='disabled:opacity-50'
-          onClick={() => { setIsOpen(!isOpen) }}
-          disabled
+          onClick={handleOpen}
+          disabled={!currentAudio.id}
         >
-          <i className={`bi bi-caret-${isOpen ? 'down' : 'up'}-fill fs-1 text-light`}></i>
+          <i className={`bi bi-caret-${isOpenDescription ? 'down' : 'up'}-fill fs-1 text-light`}></i>
         </button>
       </div>
     </div>

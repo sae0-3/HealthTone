@@ -10,6 +10,7 @@ const audioStore = create((set) => ({
   volume: 100,
   muted: false,
   duration: 0,
+  isOpenDescription: false,
 
   setCurrentAudio: (audio) => set((state) => {
     state.howl?.unload()
@@ -65,7 +66,11 @@ const audioStore = create((set) => ({
   logoutAudio: () => set((state) => {
     state.howl?.unload()
     return { isPlaying: false, playbackPosition: 0, duration: 0 }
-  })
+  }),
+
+  toggleOpenDescription: () => set((state) => ({ isOpenDescription: !state.isOpenDescription })),
+
+  setIsOpenDescription: (value) => set({ isOpenDescription: value }),
 }))
 
 export default audioStore
