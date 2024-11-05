@@ -214,7 +214,11 @@ export const Register = () => {
               <button
                 type='submit'
                 className='w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-htc-lightblue hover:bg-htc-blue focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-40'
-                disabled={formData.password !== formData.confirmPassword || isPending || !acceptedConditions}
+                disabled={
+                  formData.password !== formData.confirmPassword ||
+                  isPending || !acceptedConditions ||
+                  errors.name || errors.lastname || errors.email
+                }
               >
                 {isPending ? 'Registrandose...' : 'Registrarse'}
               </button>
