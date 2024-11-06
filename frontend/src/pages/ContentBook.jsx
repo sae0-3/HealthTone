@@ -35,7 +35,7 @@ export const ContentBook = () => {
   if (isLoading)
     return <Loading />
   if (error)
-    return <Error>No se logro recupear la información</Error>
+    return <Error>{error.response.data.message}</Error>
 
   return (
     <div className='h-full flex flex-col items-center justify-evenly gap-2 pt-4'>

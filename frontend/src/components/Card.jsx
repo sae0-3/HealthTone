@@ -6,12 +6,16 @@ import { Link } from 'react-router-dom'
 
 
 export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, favorites, setFavorites }) => {
-  const { setPlaying, setCurrentAudio, startAudio, currentAudio } = audioStore()
+  const { setPlaying, setCurrentAudio, startAudio, currentAudio, setIsOpenDescription } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
   const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
   const [showNotification, setShowNotification] = useState(false)
   const isPlaying = currentAudio?.id === id
+
+  const handleClick = () => {
+    setIsOpenDescription(currentAudio.id === id)
+  }
 
   const handlePlay = (e) => {
     e.preventDefault()
@@ -54,6 +58,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     <Link
       to={!disabled && `/book/${id}`}
       className='border shadow-sm rounded-xl hover:shadow-lg transition'
+      onClick={handleClick}
     >
       <div className={`group ${disabled && 'cursor-auto'} relative group`}>
         <div className='aspect-square overflow-hidden relative'>
