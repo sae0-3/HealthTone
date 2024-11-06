@@ -131,8 +131,8 @@ export const Register = () => {
                   onChange={handleChange}
                 />
                 {errors.email && <small className='text-red-600'>{errors.email}</small>}
-                {errorState && errorState.status === 500 && (
-                  <small className='text-red-600'>El correo electronico ya fue registrado anteriormente</small>
+                {errorState && errorState.status === 409 && (
+                  <small className='text-red-600'>{error.response.data.message}</small>
                 )}
               </div>
 
@@ -161,7 +161,7 @@ export const Register = () => {
                 </div>
 
                 {errorState && errorState.status === 400 && (
-                  <small className='text-red-600'>La contraseña debe contener minimo ocho caracteres, una letra mayuscula, minuscula, número y caracter especial</small>
+                  <small className='text-red-600'>{error.response.data.message}</small>
                 )}
               </div>
 

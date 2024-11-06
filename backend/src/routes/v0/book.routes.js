@@ -5,7 +5,7 @@ import {
   getBookById,
   getFavoriteAll,
   postFavorite,
-} from '../controllers/book.controllers.js'
+} from '../../controllers/v0/book.controllers.js'
 
 
 const bookRoutes = Router()

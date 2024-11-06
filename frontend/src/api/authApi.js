@@ -7,4 +7,4 @@ export const postLogin = (email, password) =>
 export const postRegister = (name, lastname, email, password) =>
   axiosInstance.post('/auth/register', { name, lastname, email, password })
 
-export const getVerifyToken = () => axiosInstance.get('/auth/verify')
+export const getVerifyToken = () => axiosInstance.get('/users/profile')
