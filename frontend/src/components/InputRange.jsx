@@ -17,6 +17,23 @@ const InputRange = ({now,min=0, max, onClick}) => {
           background: `linear-gradient(to right, #3E5C76 calc(${progress}% + 5px), #e5e7eb ${progress}%)`
         }}
       />
+      <style jsx>{`
+        input[type="range"]::-webkit-slider-thumb {
+          height: 8px;
+          width: 8px;
+          background-color: #3E5C76;
+          border-radius: 50%;
+          cursor: pointer;
+          -webkit-appearance: none;
+        }
+        input[type="range"]::-moz-range-thumb {
+          height: 8px;
+          width: 8px;
+          background-color: #3E5C76;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      `}</style>
     </div>
   )
 }
