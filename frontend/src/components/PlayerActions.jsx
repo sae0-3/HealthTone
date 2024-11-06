@@ -3,6 +3,7 @@ import audioStore from '@/store/audioStore'
 import { Howler } from 'howler'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import InputRange from './InputRange'
 
 
 export const PlayerActions = () => {
@@ -52,7 +53,7 @@ export const PlayerActions = () => {
           <button onClick={() => { toggleMuted() }}>
             <i className={`bi bi-volume-${muted || volume < 5 ? 'mute' : 'up'}-fill`}></i>
           </button>
-          <ProgressBar
+          <InputRange
             now={muted ? 0 : volume}
             max={100}
             onClick={handleVolumeBarClick}

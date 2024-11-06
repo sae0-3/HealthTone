@@ -1,6 +1,7 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
 import { useEffect, useRef } from 'react'
+import InputRange from './InputRange'
 
 
 export const PlayerControls = () => {
@@ -80,7 +81,7 @@ export const PlayerControls = () => {
 
       <section className='hidden lg:flex gap-2 items-center justify-center'>
         <span>{formatTime(playbackPosition)}</span>
-        <ProgressBar
+        <InputRange
           now={playbackPosition}
           max={duration}
           onClick={handleClickBar}
