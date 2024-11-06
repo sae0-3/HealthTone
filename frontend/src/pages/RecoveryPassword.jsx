@@ -1,13 +1,14 @@
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import RecoverEmail from '../components/Email'
-
+import Email from '../components/Email'
+import { useContext } from 'react'
 
 const RecoveryPassword = () => {
 
-  const handleSubmitEmail = async (e) => {
+
+  const handleSubmitEmail = async (e, formData) => {
     e.preventDefault()
-    login(formData)
+    //sendCodeOTP(formData)
   }
 
 
@@ -24,7 +25,7 @@ const RecoveryPassword = () => {
             <span className='text-htc-lightblue'>Healthtone</span>
           </h1>
         </div>
-          <RecoverEmail onSubmit={handleSubmitEmail}/>
+          <Email onSubmit={handleSubmitEmail}/>
         <div className='text-sm text-center'>
           <span>¿No tienes una cuenta? Crea una </span>
           <Link to='/register' className='font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue'>
