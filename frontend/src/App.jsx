@@ -13,7 +13,7 @@ import authStore from '@/store/authStore'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
-
+import RecoveryPassword from './pages/RecoveryPassword'
 
 export const App = () => {
   const { data, isSuccess } = useVerifyToken()
@@ -28,6 +28,7 @@ export const App = () => {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/recoveryPassword' element={<RecoveryPassword />} />
 
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />

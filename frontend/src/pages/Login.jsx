@@ -97,7 +97,7 @@ export const Login = () => {
               </div>
 
               <div className='text-sm'>
-                <Link to='#' className='font-medium text-htc-lightblue hover:text-htc-blue'>
+                <Link to='/recoveryPassword' className='font-medium text-htc-lightblue hover:text-htc-blue'>
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
