@@ -63,7 +63,7 @@ export const Login = () => {
                   onChange={handleChange}
                 />
                 {error && error.status === 404 && (
-                  <p className='text-red-600'>Usuario no encontrado</p>
+                  <small className='text-red-600'>{error.response.data.message}</small>
                 )}
               </div>
 
@@ -92,7 +92,7 @@ export const Login = () => {
                 </div>
 
                 {error && error.status === 401 && (
-                  <p className='text-red-600'>Contraseña incorrecta</p>
+                  <small className='text-red-600'>{error.response.data.message}</small>
                 )}
               </div>
 

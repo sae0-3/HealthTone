@@ -20,10 +20,10 @@ export const ContentBook = () => {
     if (!currentAudio?.id && !!book) {
       setCurrentAudio({
         id: book.id,
-        title: book.nombre,
-        author: book.autor,
-        cover: book.url_portada,
-        url: book.url_audio
+        title: book.title,
+        author: book.author,
+        cover: book.cover_path,
+        url: book.audio_path
       })
     }
   }, [book])
@@ -44,17 +44,17 @@ export const ContentBook = () => {
           <section className='flex flex-col items-center justify-center w-11/12 h-full lg:w-full lg:flex-row'>
             <div className={`mx-auto ${isReading && 'hidden'}`}>
               <Card id={book.id}
-                title={book.nombre}
-                author={book.autor}
-                url_cover={book.url_portada}
-                url_audio={book.url_audio}
-                categories={book.categorias}
+                title={book.title}
+                author={book.author}
+                url_cover={book.cover_path}
+                url_audio={book.audio_path}
+                categories={book.categories}
                 disabled
               />
             </div>
 
             <div className={`${!isReading && 'hidden'} w-full mx-auto h-full lg:block`}>
-              <EpubViewer url={book.url_texto} />
+              <EpubViewer url={book.text_path} />
             </div>
           </section>
 
