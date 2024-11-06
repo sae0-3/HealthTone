@@ -1,6 +1,6 @@
 
 
-const sendEmail = () => {
+const sendEmail = ({ recipient_email, OTP }) => {
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
