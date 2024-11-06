@@ -2,7 +2,7 @@ import { Card } from '@/components/Card'
 import { EpubViewer } from '@/components/EpubViewer'
 import { Error } from '@/components/Error'
 import { Loading } from '@/components/Loading'
-import { useGetBook } from '@/hooks/useBooks'
+import { useGetBook, useGetBooksFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -13,8 +13,10 @@ export const ContentBook = () => {
   const [isReading, setIsReading] = useState(false)
   const { currentAudio, setCurrentAudio } = audioStore()
   const { data, isLoading, error } = useGetBook(id)
+  const favoritos = useGetBooksFavorites()
 
   const book = data?.data
+  const favs = new Set(favoritos.data?.data.books.map((book) => book.id))
 
   useEffect(() => {
     if (!currentAudio?.id && !!book) {
@@ -32,10 +34,13 @@ export const ContentBook = () => {
     setIsReading(!isReading)
   }
 
-  if (isLoading)
+  if (isLoading || favoritos.isLoading)
     return <Loading />
   if (error)
     return <Error>{error.response.data.message}</Error>
+  if (favoritos.error) {
+    return <Error>{favoritos.error.response.data.message}</Error>
+  }
 
   return (
     <div className='h-full flex flex-col items-center justify-evenly gap-2 pt-4'>
@@ -49,7 +54,7 @@ export const ContentBook = () => {
                 url_cover={book.cover_path}
                 url_audio={book.audio_path}
                 categories={book.categories}
-                disabled
+                isFav={favs.has(book.id)}
               />
             </div>
 

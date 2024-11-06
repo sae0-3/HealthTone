@@ -1,11 +1,11 @@
-import { Notification } from '@/components/Notification'
+import { Modal } from '@/components/Modal'
 import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
-export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, favorites, setFavorites }) => {
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav }) => {
   const { setPlaying, setCurrentAudio, startAudio, currentAudio, setIsOpenDescription } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
@@ -37,24 +37,15 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     e.preventDefault()
     e.stopPropagation()
 
-    if (iconHeart) {
-      deleteFavorite(id)
-    } else {
-      saveFavorite(id)
-    }
-
-    setFavorites((prevFavorites) => {
-      const isFavorite = prevFavorites.includes(id)
-      return (!isFavorite)
-        ? [...prevFavorites, id]
-        : prevFavorites.filter(idBook => idBook !== id)
-    })
+    if (iconHeart) deleteFavorite(id)
+    else saveFavorite(id)
 
     setIconHeart(!iconHeart)
     setShowNotification(false)
   }
 
   return (
+    <>
     <Link
       to={!disabled && `/book/${id}`}
       className='border shadow-sm rounded-xl hover:shadow-lg transition'
@@ -92,14 +83,6 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
           )}
         </div>
 
-        {showNotification && (
-          <Notification
-            message={isFav ? '¿Esta seguro de que desea eliminar de favoritos?' : 'Se ha añadido correctamente'}
-            onConfirm={confirmFavorite}
-            onCancel={() => setShowNotification(false)}
-          />
-        )}
-
         <div className='px-3 py-4'>
           <p className='font-bold text-base mb-2'>{title}</p>
           <p className='text-gray-700 text-xs'>{author}</p>
@@ -119,5 +102,26 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
         )}
       </div>
     </Link>
+
+    {showNotification && (
+      <Modal
+        title={isFav ? '¿Se eliminará de Favoritos?' : '¿Se agregará a Favoritos?'}
+        onClose={() => setShowNotification(false)}
+      >
+        <div className='flex justify-between'>
+          <button
+            type='button'
+            className='py-3 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-red-400 hover:bg-red-800 focus:ring-2 focus:ring-offset-2 focus:ring-red-500'
+            onClick={() => setShowNotification(false)}
+          >Cancelar</button>
+          <button
+            type='button'
+            className='py-3 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-htc-lightblue hover:bg-htc-blue focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+            onClick={confirmFavorite}
+          >Aceptar</button>
+        </div>
+      </Modal>
+    )}
+    </>
   )
 }
