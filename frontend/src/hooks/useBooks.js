@@ -63,3 +63,9 @@ export const useDeleteBookFavorites = (id_content) => {
     onSuccess: () => queryClient.invalidateQueries(['books', 'favorites', id]),
   })  
 }
+
+export const useGetBooksFavoritesBySearch = (query) => useQuery({
+  queryKey: ['books', 'favorites', query],
+  queryFn: () => getBooksFavoritesBySearch(query),
+  enabled: !!query,
+})
