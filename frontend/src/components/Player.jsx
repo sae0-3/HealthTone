@@ -2,11 +2,14 @@ import { PlayerActions } from '@/components/PlayerActions'
 import { PlayerControls } from '@/components/PlayerControls'
 import { PlayerInfo } from '@/components/PlayerInfo'
 import audioStore from '@/store/audioStore'
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
+import { geetProgress, updateProgress } from '@/api/audioProgress'
+import { getProgress } from '../api/audioProgress'
 
 
 export const Player = () => {
   const { setCurrentAudio, currentAudio } = audioStore()
+  const [progress, setProgress] = useState(0) ////////
 
   useEffect(() => {
     const initialAudio = {
@@ -18,7 +21,24 @@ export const Player = () => {
     }
 
     setCurrentAudio(initialAudio)
-  }, [setCurrentAudio])
+    /////
+    if(currentAudio && currentAudio.id){
+      getProgress(currentAudio.id).then((savedProgress) => {
+        setProgress(savedProgress)
+      })
+    }
+  }, [setCurrentAudio, currentAudio])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (currentAudio && currentAudio.id) {
+        updateProgress(currentAudio.id, progress)
+      }
+    }, 5000)
+
+    return () => clearInterval(intervalId)
+  }, [progress, currentAudio])
+
 
   if (!currentAudio) {
     return null
@@ -31,7 +51,7 @@ export const Player = () => {
       </div>
 
       <div className='w-1/6 lg:w-1/2'>
-        <PlayerControls />
+        <PlayerControls onProgressChange={setProgress} progress={progress} />
       </div>
 
       <div className='hidden lg:block lg:w-3/12'>
