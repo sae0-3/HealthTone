@@ -3,15 +3,20 @@ import { RecoveryContext } from '../pages/RecoveryPassword'
 
 const Email = () => {
 
-  const {setEmail, email, setPage} = useContext(RecoveryContext)
+  const {setEmail, email, setPage, setOtp} = useContext(RecoveryContext)
   
   const handleChange = (e) => { 
     setEmail(e.target.value)
   }
 
   const handleSubmit = (e) => {
-    console.log(email)
     e.preventDefault()
+    console.log(email)
+    const OTPcode = Math.floor(Math.random() * 9000 + 1000)
+    setOtp(OTPcode)
+    console.log(OTPcode)
+    setPage('OTP')
+    //enviar el codigo OTP al email correspondiente
   }
 
   return (

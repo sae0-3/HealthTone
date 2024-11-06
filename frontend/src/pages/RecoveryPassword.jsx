@@ -2,6 +2,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Email from '../components/Email'
 import { createContext, useContext, useState} from 'react'
+import OTP from '../components/OTP'
 
 export const RecoveryContext = createContext()
 
@@ -29,15 +30,17 @@ const RecoveryPassword = () => {
           </div>
 
           {page === 'Email' && <Email />}
-          {page === 'OTP' && <Email />}
+          {page === 'OTP' && <OTP />}
           {page === 'Recover' && <Email />}
 
-          <div className='text-sm text-center'>
+          {page!=='OTP'&&
+            <div className='text-sm text-center'>
             <span>¿No tienes una cuenta? Crea una </span>
             <Link to='/register' className='font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue'>
               aquí
             </Link>
           </div>
+          }
         </div>
       </div>
     </RecoveryContext.Provider>
