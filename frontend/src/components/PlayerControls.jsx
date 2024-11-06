@@ -47,7 +47,12 @@ export const PlayerControls = () => {
     const { clientX } = e
     const { left, width } = e.currentTarget.getBoundingClientRect()
     const newTime = ((clientX - left) / width) * duration
-    setPosition(newTime)
+    if(newTime<0){
+      setPosition(0)
+    }else{
+      setPosition(newTime)
+    }
+
     howl.seek(newTime)
   }
 
