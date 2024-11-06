@@ -3,8 +3,7 @@ import { PlayerControls } from '@/components/PlayerControls'
 import { PlayerInfo } from '@/components/PlayerInfo'
 import audioStore from '@/store/audioStore'
 import { useEffect,useState } from 'react'
-import { geetProgress, updateProgress } from '@/api/audioProgress'
-import { getProgress } from '../api/audioProgress'
+import { getProgress, updateProgress } from '@/api/audioProgress'
 
 
 export const Player = () => {
