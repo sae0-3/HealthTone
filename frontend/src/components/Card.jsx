@@ -1,7 +1,8 @@
 import { Modal } from '@/components/Modal'
 import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
-import { useState } from 'react'
+import { Howl } from 'howler'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
@@ -12,6 +13,19 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
   const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
   const [showNotification, setShowNotification] = useState(false)
   const isPlaying = currentAudio?.id === id
+  const [duration, setDuration] = useState(0)
+  const [parsedDuration, setParsedDuration] = useState('00:00')
+
+  const newHowl = new Howl({
+    src: [url_audio],
+    onload: () => setDuration(newHowl.duration()),
+  })
+
+  useEffect(() => {
+    const minutes = Math.floor(duration / 60)
+    const seconds = Math.floor(duration % 60)
+    setParsedDuration(`${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`)
+  }, [duration])
 
   const handleClick = () => {
     setIsOpenDescription(currentAudio.id === id)
@@ -47,25 +61,24 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
   return (
     <>
       <Link
-        to={!disabled && `/book/${id}`}
+        to={!disabled && !isContent && `/book/${id}`}
         className='border shadow-sm rounded-xl hover:shadow-lg transition'
         onClick={handleClick}
       >
-        <div className={`group ${disabled && 'cursor-auto'} relative group`}>
+        <div className={`group ${disabled && isContent && 'cursor-auto'} relative group`}>
           <div className='aspect-square overflow-hidden relative'>
             <img
-              className={`m-auto h-full ${!disabled && 'group-hover:scale-105 group-focus:scale-105 transition-transform duration-500'}`}
+              className={`m-auto h-full ${!disabled && !isContent && 'group-hover:scale-105 group-focus:scale-105 transition-transform duration-500'}`}
               src={url_cover}
               alt={`portada_${title}`}
             />
             {!disabled && (
               <button
                 onClick={handlePlay}
-                className={`absolute bottom-2 left-2 rounded-md p-2 transition-colors duration-300 lg:hidden lg:group-hover:block
-                          ${isPlaying ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}
+                className={`absolute bottom-2 left-2 rounded-md p-2 transition-colors duration-300 ${isContent ? '' : 'lg:hidden lg:group-hover:block'} ${isPlaying ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}
               `}
               >
-                <div className="flex items-center justify-center h-full">
+                <div className='flex items-center justify-center h-full'>
                   <i className={isPlaying ? `bi bi-play-fill text-2xl` : `bi bi-play text-2xl`}></i>
                 </div>
               </button>
@@ -74,8 +87,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
             {!disabled && (
               <button
                 onClick={handleFavorite}
-                className={`absolute bottom-2 right-2 rounded-md p-2 transition-colors duration-300 lg:hidden lg:group-hover:block
-                ${iconHeart ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}`}
+                className={`absolute bottom-2 right-2 rounded-md p-2 transition-colors duration-300 ${isContent ? '' : 'lg:hidden lg:group-hover:block'} ${iconHeart ? 'bg-htc-lightblue text-white' : 'bg-htc-white text-black'}`}
                 disabled={isPendingPost || isPendingDelete}
               >
                 <i className={iconHeart ? `bi bi-heart-fill text-lg` : `bi bi-heart text-lg`}></i>
@@ -89,8 +101,8 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
               <p className='text-gray-700'>{author}</p>
               {isContent &&
                 <div className='flex gap-1'>
-                  <i className="bi bi-clock-history"></i>
-                  <p>00:00</p>
+                  <i className='bi bi-clock-history'></i>
+                  <p>{parsedDuration}</p>
                 </div>
               }
 
