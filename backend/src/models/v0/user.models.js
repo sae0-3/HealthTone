@@ -41,5 +41,23 @@ const getUserById = async (id) => {
   }
 }
 
+const updateClave = async (id_usuario, nuevaClave) => {
+  const query = `
+    UPDATE usuario
+    SET clave = $1
+    WHERE id = $2
+    RETURNING id, clave;
+  `;
+  
+  try {
+    const result = await pool.query(query, [nuevaClave, id_usuario]);
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error al actualizar la clave:', error);
+    throw new Error('Error en la base de datos al actualizar la clave');
+  }
+};
 
-export { getUserByEmail, getUserById, registerUser }
+
+
+export { getUserByEmail, getUserById, registerUser, updateClave }

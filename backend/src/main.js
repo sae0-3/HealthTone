@@ -10,6 +10,8 @@ import {
   bookRoutes as bookRoutesV1,
   userRoutes as userRoutesV1,
 } from './routes/v1/index.js'
+import progressRoutes from './routes/progress.routes.js'
+import userRoutes from './routes/user.routes.js'
 
 
 const app = express()
@@ -21,6 +23,8 @@ app.use('/api', storageRoutes)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/books', passport.authenticate('jwt', { session: false }), bookRoutes)
+app.use('/api/progreso', passport.authenticate('jwt', { session: false }), progressRoutes)
+app.use('/api/usuario', passport.authenticate('jwt', { session: false }), userRoutes);
 
 app.use('/api/v1/auth', authRoutesV1)
 app.use('/api/v1/books', bookRoutesV1)
