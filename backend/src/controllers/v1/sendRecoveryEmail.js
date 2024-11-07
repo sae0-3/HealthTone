@@ -1,31 +1,20 @@
-import nodemailer from 'nodemailer'
+import { getUserByEmail, } from '../../models/v1/getUserByEmail.js'
+import { CustomError } from '../../utils/CustomError.js'
+import { sendEmail } from '../../utils/email.js'
 
 
-export const sendEmail = (recipient_email, OTP) => {
-  return new Promise((resolve, reject) => {
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MY_EMAIL,
-        pass: process.env.MY_PASSWORD,
-      }
-    })
-
-    const mail_configs = {
-      from: process.env.MY_EMAIL,
-      to: recipient_email,
-      subject: 'HEALTHTONE PASSWORD RECOVERY',
-      html:
-`<!DOCTYPE html>
-<html lang="en" >
+export const sendRecoveryEmail = async (req, res) => {
+  const { recipient_email, OTP } = req.body
+  const title = 'HEALTHTONE PASSWORD RECOVERY'
+  const content = `
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>CodePen - OTP Email Template</title>
-  
-
 </head>
+
 <body>
-<!-- partial:index.partial.html -->
 <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
   <div style="margin:50px auto;width:70%;padding:20px 0">
     <div style="border-bottom:1px solid #eee">
@@ -43,18 +32,23 @@ export const sendEmail = (recipient_email, OTP) => {
     </div>
   </div>
 </div>
-<!-- partial -->
-  
 </body>
-</html>`,
+</html>
+`
+
+  try {
+    const user = await getUserByEmail(recipient_email)
+    if (!user) {
+      throw new CustomError('El correo no fue encontrado.', 404)
     }
 
-    transporter.sendMail(mail_configs, function (error, info) {
-      if (error) {
-        console.log(error)
-        return reject({ message: 'Ah ocurrido un error' })
-      }
-      return resolve({ message: 'Email enviado correctamente' })
+    const result = await sendEmail(title, content, recipient_email, OTP)
+    res.status(200).json(result.message)
+  } catch (err) {
+    console.error('CONTROLLER recoveryPassword:', err)
+    res.status(err.statusCode || 500).json({
+      statusCode: err.statusCode || 500,
+      message: err.message || 'Error interno del servidor',
     })
-  })
+  }
 }
