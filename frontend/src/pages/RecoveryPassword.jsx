@@ -1,14 +1,13 @@
+import Email from '@/components/Email'
+import OTP from '@/components/OTP'
+import Recover from '@/components/Recover'
+import { createContext, useState } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import Email from '../components/Email'
-import { createContext, useContext, useState} from 'react'
-import OTP from '../components/OTP'
-import Recover from '../components/Recover'
 
 export const RecoveryContext = createContext()
 
 const RecoveryPassword = () => {
-
   const [page, setPage] = useState('Email')
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState('')
@@ -34,13 +33,13 @@ const RecoveryPassword = () => {
           {page === 'OTP' && <OTP />}
           {page === 'Recover' && <Recover />}
 
-          {page!=='OTP'&&
+          {page !== 'OTP' &&
             <div className='text-sm text-center'>
-            <span>¿No tienes una cuenta? Crea una </span>
-            <Link to='/register' className='font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue'>
-              aquí
-            </Link>
-          </div>
+              <span>¿No tienes una cuenta? Crea una </span>
+              <Link to='/register' className='font-medium text-htc-lightblue hover:text-htc-blue border-b border-htc-blue hover:border-htc-blue'>
+                aquí
+              </Link>
+            </div>
           }
         </div>
       </div>

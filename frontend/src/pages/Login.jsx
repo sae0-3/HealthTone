@@ -87,7 +87,7 @@ export const Login = () => {
                     className='absolute right-3 top-[calc(50%+1px)] transform -translate-y-1/2 flex items-center'
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    <i className={`bi bi-eye${showPassword ? '-fill' : ''}`}></i>
+                    <i className={`bi bi-eye${showPassword ? '-slash' : ''}-fill`}></i>
                   </button>
                 </div>
 

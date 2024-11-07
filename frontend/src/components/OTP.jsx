@@ -1,26 +1,25 @@
-import React, { useContext, useState } from 'react'
-import { RecoveryContext } from '../pages/RecoveryPassword'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { RecoveryContext } from '../pages/RecoveryPassword'
+
 
 const Email = () => {
-
-  const { setEmail, email, setPage, setOtp, otp } = useContext(RecoveryContext)
+  const { email, setPage, otp } = useContext(RecoveryContext)
   const [OTPinput, setOTPinput] = useState([0, 0, 0, 0])
+  const [error, setError] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (parseInt(OTPinput.join('')) === otp) {
-      setPage('Recover')
-      return
-    }
-    console.log(parseInt(OTPinput.join('')))
-    console.log(otp)
-    console.log(OTPinput)
-    console.log(parseInt(OTPinput.join('') === otp))
-    alert(
-      "El codigo que ingreso es incorrecto, intente de nuevo"
-    )
-    return
+
+    if (parseInt(OTPinput.join('')) === otp) setPage('Recover')
+    else setError('El código no coincide.')
+  }
+
+  const handleSetOTP = (e, idx) => {
+    const arr = OTPinput
+    arr[idx] = e.target.value
+    setError('')
+    setOTPinput(arr)
   }
 
   return (
@@ -34,106 +33,53 @@ const Email = () => {
                 Nosotros enviamos un codigo al email {email}
               </label>
 
-              <div className="flex flex-col space-y-16">
-                <div className="flex flex-row items-center justify-between mx-auto w-full max-w-xs">
-                  <div className="w-16 h-16 ">
+              <div className='flex flex-col space-y-16'>
+                <div className='flex flex-row items-center justify-between mx-auto w-full max-w-xs'>
+                  <div className='w-16 h-16 '>
                     <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-htc-blue"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          e.target.value,
-                          OTPinput[1],
-                          OTPinput[2],
-                          OTPinput[3],
-                        ])
-                      }
+                      maxLength='1'
+                      className='w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-htc-blue'
+                      type='text'
+                      name=''
+                      id=''
+                      onChange={(e) => handleSetOTP(e, 0)}
                     ></input>
                   </div>
-                  <div className="w-16 h-16 ">
+                  <div className='w-16 h-16 '>
                     <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          e.target.value,
-                          OTPinput[2],
-                          OTPinput[3],
-                        ])
-                      }
+                      maxLength='1'
+                      className='w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700'
+                      type='text'
+                      name=''
+                      id=''
+                      onChange={(e) => handleSetOTP(e, 1)}
                     ></input>
                   </div>
-                  <div className="w-16 h-16 ">
+                  <div className='w-16 h-16 '>
                     <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          OTPinput[1],
-                          e.target.value,
-                          OTPinput[3],
-                        ])
-                      }
+                      maxLength='1'
+                      className='w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700'
+                      type='text'
+                      name=''
+                      id=''
+                      onChange={(e) => handleSetOTP(e, 2)}
                     ></input>
                   </div>
-                  <div className="w-16 h-16 ">
+                  <div className='w-16 h-16 '>
                     <input
-                      maxLength="1"
-                      className="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
-                      type="text"
-                      name=""
-                      id=""
-                      onChange={(e) =>
-                        setOTPinput([
-                          OTPinput[0],
-                          OTPinput[1],
-                          OTPinput[2],
-                          e.target.value,
-                        ])
-                      }
+                      maxLength='1'
+                      className='w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700'
+                      type='text'
+                      name=''
+                      id=''
+                      onChange={(e) => handleSetOTP(e, 3)}
                     ></input>
                   </div>
                 </div>
-                {/* 
-                <div className="flex flex-col space-y-5">
-                  <div>
-                    <a
-                      onClick={() => verfiyOTP()}
-                      className="flex flex-row cursor-pointer items-center justify-center text-center w-full border rounded-xl outline-none py-5 bg-blue-700 border-none text-white text-sm shadow-sm"
-                    >
-                      Verify Account
-                    </a>
-                  </div>
-
-                  <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-gray-500">
-                    <p>Didn't recieve code?</p>{" "}
-                    <a
-                      className="flex flex-row items-center"
-                      style={{
-                        color: disable ? "gray" : "blue",
-                        cursor: disable ? "none" : "pointer",
-                        textDecorationLine: disable ? "none" : "underline",
-                      }}
-                      onClick={() => resendOTP()}
-                    >
-                      {disable ? `Resend OTP in ${timerCount}s` : "Resend OTP"}
-                    </a>
-                  </div>
-                </div> */}
               </div>
-
             </div>
+
+            {error && <small className='text-red-600 flex justify-center'>{error}</small>}
 
             <button
               type='submit'

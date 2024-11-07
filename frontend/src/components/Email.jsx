@@ -1,28 +1,25 @@
-import React, { useContext } from 'react'
-import { sendEmail } from '../api/authApi'
-import { RecoveryContext } from '../pages/RecoveryPassword'
+import { useContext, useEffect } from 'react'
+import { useSendEmail } from '@/hooks/useSendEmail'
+import { RecoveryContext } from '@/pages/RecoveryPassword'
+
 
 const Email = () => {
+  const { setEmail, email, setPage, setOtp } = useContext(RecoveryContext)
+  const { mutate: sendEmail, error, isPending, isSuccess } = useSendEmail()
 
-  const {setEmail, email, setPage, setOtp} = useContext(RecoveryContext)
-  
-  const handleChange = (e) => { 
+  useEffect(() => {
+    if (isSuccess) setPage('OTP')
+  }, [isSuccess])
+
+  const handleChange = (e) => {
     setEmail(e.target.value)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(email)
     const OTP = Math.floor(Math.random() * 9000 + 1000)
+    sendEmail({ recipient_email: email, OTP })
     setOtp(OTP)
-    console.log(OTP)
-
-    sendEmail({recipient_email: email,OTP})
-      .then(() => setPage("OTP"))
-      .catch(console.log)
-      return 
-
-    //enviar el codigo OTP al email correspondiente
   }
 
   return (
@@ -49,8 +46,9 @@ const Email = () => {
           <button
             type='submit'
             className='w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-htc-lightblue hover:bg-htc-blue focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50'
+            disabled={isPending}
           >
-            Recuperar Contraseña
+            {isPending ? 'Recuperar Contraseña...' : 'Recuperar Contraseña'}
           </button>
         </form>
       </div>

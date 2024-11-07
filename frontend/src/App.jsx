@@ -1,4 +1,3 @@
-import { Loading } from '@/components/Loading'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { useVerifyToken } from '@/hooks/useAuth'
 import { Layout } from '@/layouts/Layout'
@@ -8,12 +7,13 @@ import { Favorites } from '@/pages/Favorites'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
 import { NotFound } from '@/pages/NotFound'
+import RecoveryPassword from '@/pages/RecoveryPassword'
 import { Register } from '@/pages/Register'
 import authStore from '@/store/authStore'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
-import RecoveryPassword from './pages/RecoveryPassword'
+
 
 export const App = () => {
   const { data, isSuccess } = useVerifyToken()

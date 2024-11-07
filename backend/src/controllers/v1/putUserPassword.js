@@ -1,17 +1,14 @@
+import bcrypt from 'bcryptjs'
 import { putUserPassword as change } from '../../models/v1/index.js'
-import { AccessDeniedError, InvalidPasswordError, MissingCredentialsError } from '../../utils/CustomError.js'
+import { InvalidPasswordError, MissingCredentialsError } from '../../utils/CustomError.js'
 import { isValidPassword } from '../../utils/validatePassword.js'
 
 
 export const putUserPassword = async (req, res) => {
-  const { password } = req.body
+  const { email, password } = req.body
 
   try {
-    if (!req.user) {
-      throw new AccessDeniedError()
-    }
-
-    if (!password) {
+    if (!email || !password) {
       throw new MissingCredentialsError()
     }
 
@@ -19,7 +16,8 @@ export const putUserPassword = async (req, res) => {
       throw new InvalidPasswordError()
     }
 
-    await change(req.user.id, password)
+    const hashedPassword = await bcrypt.hash(password, 7)
+    await change(email, hashedPassword)
     res.status(201).send('Contraseña cambiada')
   } catch (err) {
     console.error('CONTROLLER putUserPassword:', err)
