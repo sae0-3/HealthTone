@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { getProgressByUserAndContent } from '../controllers/progress.controllers.js';
-import { updateProgreso } from '../controllers/progress.controllers.js';
+import { getProgressByUserAndContent, updateProgreso } from '../../controllers/v0/progress.controllers.js';
 
 const progressRoutes = Router();
 

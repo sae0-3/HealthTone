@@ -5,13 +5,13 @@ import passport from './config/passport.js'
 import storageRoutes from './routes/storage.js'
 import authRoutes from './routes/v0/auth.routes.js'
 import bookRoutes from './routes/v0/book.routes.js'
+import progressRoutes from './routes/v0/progress.routes.js'
+import userRoutes from './routes/v0/user.routes.js'
 import {
   authRoutes as authRoutesV1,
   bookRoutes as bookRoutesV1,
   userRoutes as userRoutesV1,
 } from './routes/v1/index.js'
-import progressRoutes from './routes/progress.routes.js'
-import userRoutes from './routes/user.routes.js'
 
 
 const app = express()
