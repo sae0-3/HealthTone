@@ -55,9 +55,9 @@ export const ContentBook = () => {
                 url_audio={book.audio_path}
                 categories={book.categories}
                 isFav={favs.has(book.id)}
+                isContent={true}
               />
             </div>
-
             <div className={`${!isReading && 'hidden'} w-full mx-auto h-full lg:block`}>
               <EpubViewer url={book.text_path} />
             </div>
