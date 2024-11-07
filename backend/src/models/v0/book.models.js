@@ -1,4 +1,4 @@
-import { pool } from '../config/db.js'
+import { pool } from '../../config/db.js'
 
 
 const getBookById = async (id) => {
@@ -231,22 +231,11 @@ const getFavoriteAll = async (id_user) => {
   }
 }
 
-const toggleFavorite = async (id_user, id_content) => {
-  try {
-    await deleteFavorite(id_user, id_content)
-    return 'Eliminado'
-  } catch (err) {
-    await saveFavorite(id_user, id_content)
-    return 'Agregado'
-  }
-}
-
 
 export {
   deleteFavorite,
   getBookAll,
   getBookById,
   getFavoriteAll,
-  saveFavorite,
-  toggleFavorite
+  saveFavorite
 }

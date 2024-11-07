@@ -1,7 +1,7 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
 import { Howler } from 'howler'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 
@@ -14,10 +14,18 @@ export const PlayerActions = () => {
     muted,
     toggleMuted,
     isOpenDescription,
+    setIsOpenDescription,
     toggleOpenDescription,
   } = audioStore()
   const navigate = useNavigate()
   const { pathname, state } = useLocation()
+
+  useEffect(() => {
+    if (pathname.split('/')[1] === 'book') {
+      setIsOpenDescription(true)
+      navigate(pathname, { state: '/' })
+    }
+  }, [])
 
   const handleVolumeBarClick = (e) => {
     if (muted) return

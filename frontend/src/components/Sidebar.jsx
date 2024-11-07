@@ -14,6 +14,7 @@ export const Sidebar = ({ toggleSidebar }) => {
   ]
 
   const handleLogout = () => {
+    setIsOpenDescription(false)
     logoutAudio()
     logout()
   }
@@ -35,7 +36,7 @@ export const Sidebar = ({ toggleSidebar }) => {
             to={to}
             key={to}
             className={`flex gap-4 items-center justify-center bg-gradient-to-r ${pathname === to && !search && 'from-htc-lightblue'} to-white-500 py-3`}
-            onClick={() => { toggleSidebar() }}
+            onClick={() => { toggleSidebar(); setIsOpenDescription(false) }}
           >
             <i className={`bi bi-${icon} text-lg`}></i>
             <small className='text-lg'>{label}</small>
