@@ -5,6 +5,8 @@ import passport from './config/passport.js'
 import storageRoutes from './routes/storage.js'
 import authRoutes from './routes/v0/auth.routes.js'
 import bookRoutes from './routes/v0/book.routes.js'
+import progressRoutes from './routes/v0/progress.routes.js'
+import userRoutes from './routes/v0/user.routes.js'
 import {
   authRoutes as authRoutesV1,
   bookRoutes as bookRoutesV1,
@@ -21,6 +23,8 @@ app.use('/api', storageRoutes)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/books', passport.authenticate('jwt', { session: false }), bookRoutes)
+app.use('/api/progreso', passport.authenticate('jwt', { session: false }), progressRoutes)
+app.use('/api/usuario', passport.authenticate('jwt', { session: false }), userRoutes);
 
 app.use('/api/v1/auth', authRoutesV1)
 app.use('/api/v1/books', bookRoutesV1)
