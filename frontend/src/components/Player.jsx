@@ -1,45 +1,32 @@
 import { PlayerActions } from '@/components/PlayerActions'
 import { PlayerControls } from '@/components/PlayerControls'
 import { PlayerInfo } from '@/components/PlayerInfo'
+import { useGetProgress } from '@/hooks/useProgress'
 import audioStore from '@/store/audioStore'
-import { useEffect,useState } from 'react'
-import { getProgress, updateProgress } from '@/api/audioProgress'
+import { useEffect } from 'react'
 
 
 export const Player = () => {
-  const { setCurrentAudio, currentAudio } = audioStore()
-  const [progress, setProgress] = useState(0) ////////
+  const { setCurrentAudio, currentAudio, setPosition } = audioStore()
+  const { data, isLoading } = useGetProgress()
+  const audio = data?.data || {}
 
   useEffect(() => {
+    if (currentAudio?.id) return
+
     const initialAudio = {
-      id: null,
-      title: 'Unknow Title',
-      author: 'Unknow Author',
-      cover: null,
-      url: null
+      id: audio.id || null,
+      title: audio.title || 'Unknow Title',
+      author: audio.author || 'Unknow Author',
+      cover: audio.cover || null,
+      url: audio.url || null
     }
 
     setCurrentAudio(initialAudio)
-    /////
-    if(currentAudio && currentAudio.id){
-      getProgress(currentAudio.id).then((savedProgress) => {
-        setProgress(savedProgress)
-      })
-    }
-  }, [setCurrentAudio, currentAudio])
+    setPosition(audio.progress || 0)
+  }, [setCurrentAudio, setPosition, data])
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (currentAudio && currentAudio.id) {
-        updateProgress(currentAudio.id, progress)
-      }
-    }, 5000)
-
-    return () => clearInterval(intervalId)
-  }, [progress, currentAudio])
-
-
-  if (!currentAudio) {
+  if (isLoading) {
     return null
   }
 
@@ -50,7 +37,7 @@ export const Player = () => {
       </div>
 
       <div className='w-1/6 lg:w-1/2'>
-        <PlayerControls onProgressChange={setProgress} progress={progress} />
+        <PlayerControls />
       </div>
 
       <div className='hidden lg:block lg:w-3/12'>
