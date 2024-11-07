@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Email from '../components/Email'
 import { createContext, useContext, useState} from 'react'
 import OTP from '../components/OTP'
+import Recover from '../components/Recover'
 
 export const RecoveryContext = createContext()
 
@@ -31,7 +32,7 @@ const RecoveryPassword = () => {
 
           {page === 'Email' && <Email />}
           {page === 'OTP' && <OTP />}
-          {page === 'Recover' && <Email />}
+          {page === 'Recover' && <Recover />}
 
           {page!=='OTP'&&
             <div className='text-sm text-center'>
