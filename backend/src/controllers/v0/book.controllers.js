@@ -4,8 +4,7 @@ import {
   getBookById as getById,
   getFavoriteAll as getFavs,
   saveFavorite as saveFav,
-  toggleFavorite as toggleFav
-} from '../models/book.models.js'
+} from '../../models/v0/book.models.js'
 
 
 const getBookById = async (req, res) => {

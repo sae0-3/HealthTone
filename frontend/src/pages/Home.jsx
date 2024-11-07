@@ -1,15 +1,23 @@
+import { useGetBooks, useGetBooksFavoritesBySearch, useGetBooksSearch } from '@/hooks/useBooks'
 import { LayoutContent } from '@/layouts/LayoutContent'
-import { useGetBooks, useGetBooksSearch } from '@/hooks/useBooks'
 import { useLocation } from 'react-router-dom'
 
 
 export const Home = () => {
-  const { search } = useLocation()
+  const { search, state } = useLocation()
   const query = search.split('=')[1]
-  const books = !search ? useGetBooks() : null
-  const booksSearch = search ? useGetBooksSearch(query) : null
+  let title, books
 
-  return !search
-    ? <LayoutContent title='Sugerencias' content={books} />
-    : <LayoutContent title='Resultados' content={booksSearch} />
+  if (!search) {
+    title = 'Sugerencias'
+    books = useGetBooks()
+  } else if (!state) {
+    title = 'Resultados'
+    books = useGetBooksSearch(query)
+  } else {
+    title = 'Resultados - Favoritos'
+    books = useGetBooksFavoritesBySearch(query)
+  }
+
+  return <LayoutContent title={title} content={books} />
 }

@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import passport from '../config/passport.js'
-import { login, register } from '../controllers/auth.controllers.js'
+import passport from '../../config/passport.js'
+import { login, register } from '../../controllers/v0/auth.controllers.js'
 
 
 const authRoutes = Router()
@@ -19,6 +19,12 @@ authRoutes.get('/verify', passport.authenticate('jwt', { session: false }), (req
       email: req.user.email
     },
   })
+})
+
+authRoutes.post("/send_recovery_email", (req, res) => {
+  sendEmail(req.body)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message))
 })
 
 export default authRoutes

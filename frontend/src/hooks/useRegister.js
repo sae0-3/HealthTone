@@ -3,5 +3,5 @@ import { useMutation } from '@tanstack/react-query'
 
 
 export const useRegister = () => useMutation({
-  mutationFn: ({ name, email, password }) => postRegister(name, null, email, password),
+  mutationFn: ({ name, lastname, email, password }) => postRegister(name, lastname, email, password),
 })

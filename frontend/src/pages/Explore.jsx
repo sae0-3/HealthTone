@@ -7,7 +7,7 @@ export const Explore = () => {
     {
       title: 'Nuevos Lanzamientos',
       id: 'nuevos_lanzamientos',
-      content: useGetBooksSection('nuevos_lanzamientos')
+      content: useGetBooksSection('nuevos')
     },
     {
       title: 'Populares',
@@ -17,7 +17,7 @@ export const Explore = () => {
     {
       title: 'Próximos Lanzamientos',
       id: 'proximos_lanzamientos',
-      content: useGetBooksSection('proximos_lanzamientos')
+      content: useGetBooksSection('proximos')
     },
   ]
 

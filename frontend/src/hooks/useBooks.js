@@ -5,7 +5,9 @@ import {
   getBooksBySearch,
   getBooksBySection,
   getBooksFavorites,
+  getBooksFavoritesBySearch,
   postFavorite,
+  postView,
 } from '@/api/bookApi'
 import authStore from '@/store/authStore'
 import queryClient from '@/utils/queryClient'
@@ -61,3 +63,9 @@ export const useDeleteBookFavorites = (id_content) => {
     onSuccess: () => queryClient.invalidateQueries(['books', 'favorites', id]),
   })  
 }
+
+export const useGetBooksFavoritesBySearch = (query) => useQuery({
+  queryKey: ['books', 'favorites', query],
+  queryFn: () => getBooksFavoritesBySearch(query),
+  enabled: !!query,
+})

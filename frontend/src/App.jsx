@@ -1,4 +1,3 @@
-import { Loading } from '@/components/Loading'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { useVerifyToken } from '@/hooks/useAuth'
 import { Layout } from '@/layouts/Layout'
@@ -8,6 +7,7 @@ import { Favorites } from '@/pages/Favorites'
 import { Home } from '@/pages/Home'
 import { Login } from '@/pages/Login'
 import { NotFound } from '@/pages/NotFound'
+import RecoveryPassword from '@/pages/RecoveryPassword'
 import { Register } from '@/pages/Register'
 import authStore from '@/store/authStore'
 import { useEffect } from 'react'
@@ -28,6 +28,7 @@ export const App = () => {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/recoveryPassword' element={<RecoveryPassword />} />
 
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />
