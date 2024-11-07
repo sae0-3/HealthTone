@@ -8,8 +8,15 @@ const Email = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
-    //verificar el OTP enviado con el OTP recibido
+    if(parseInt(OTPinput.join('') === otp)){
+      setPage('reset')
+      return
+    }
+    console.log(parseInt(OTPinput.join(''), otp, OTPinput))
+    alert(
+      "El codigo que ingreso es incorrecto, intente de nuevo"
+    )
+    return
   }
 
   return (
@@ -19,7 +26,7 @@ const Email = () => {
         <form className='space-y-6' onSubmit={handleSubmit}>
           <div>
             <label htmlFor='otp' className='block text-sm font-medium text-gray-700 pb-2'>
-              ingrese el codigo que fue enviado al correo ingresado
+              Nosotros enviamos un codigo al email {email}
             </label>
             
             <div className="flex flex-col space-y-16">

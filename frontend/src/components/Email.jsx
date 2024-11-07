@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { sendEmail } from '../api/authApi'
 import { RecoveryContext } from '../pages/RecoveryPassword'
 
 const Email = () => {
@@ -12,10 +13,15 @@ const Email = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(email)
-    const OTPcode = Math.floor(Math.random() * 9000 + 1000)
-    setOtp(OTPcode)
-    console.log(OTPcode)
-    setPage('OTP')
+    const OTP = Math.floor(Math.random() * 9000 + 1000)
+    setOtp(OTP)
+    console.log(OTP)
+
+    sendEmail({recipient_email: email,OTP})
+      .then(() => setPage("OTP"))
+      .catch(console.log)
+      return 
+
     //enviar el codigo OTP al email correspondiente
   }
 
