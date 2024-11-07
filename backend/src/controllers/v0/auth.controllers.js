@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { getUserByEmail, registerUser } from '../models/user.models.js'
+import { getUserByEmail, registerUser } from '../../models/v0/user.models.js'
 
 
 const isValidPassword = (password) => {
@@ -46,7 +46,6 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.KEY_JWT, { expiresIn: '7d' })
     res.json({
-      message: 'Login exitoso',
       token,
       user: {
         id: user.id,

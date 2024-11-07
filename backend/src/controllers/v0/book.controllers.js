@@ -4,8 +4,7 @@ import {
   getBookById as getById,
   getFavoriteAll as getFavs,
   saveFavorite as saveFav,
-  toggleFavorite as toggleFav
-} from '../models/book.models.js'
+} from '../../models/v0/book.models.js'
 
 
 const getBookById = async (req, res) => {
@@ -32,9 +31,9 @@ const getBookAll = async (req, res) => {
   }
 }
 
-const saveFavorite = async (req, res) => {
+const postFavorite = async (req, res) => {
   const { id: id_user } = req.user
-  const { id_content } = req.body
+  const id_content = req.params.id
 
   try {
     await saveFav(id_user, id_content)
@@ -47,7 +46,7 @@ const saveFavorite = async (req, res) => {
 
 const deleteFavorite = async (req, res) => {
   const { id: id_user } = req.user
-  const { id_content } = req.body
+  const id_content = req.params.id
 
   try {
     await deleteFav(id_user, id_content)
@@ -70,25 +69,10 @@ const getFavoriteAll = async (req, res) => {
   }
 }
 
-const toggleFavorite = async (req, res) => {
-  const { id: id_user } = req.user
-  const { id_content } = req.body
-
-  try {
-    const result = await toggleFav(id_user, id_content)
-    res.status(201).send(result)
-  } catch (err) {
-    console.error(err)
-    res.status(500).send({ error: 'Error al gestionar el favorito' })
-  }
-}
-
-
 export {
   deleteFavorite,
   getBookAll,
   getBookById,
   getFavoriteAll,
-  saveFavorite,
-  toggleFavorite
+  postFavorite,
 }

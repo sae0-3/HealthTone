@@ -74,6 +74,7 @@ CREATE TABLE PROGRESO (
     id_usuario INT NOT NULL,
     id_contenido INT NOT NULL,
     progreso INT NOT NULL,
+    fecha TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY (id_usuario, id_contenido),
     FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
     FOREIGN KEY (id_contenido) REFERENCES CONTENIDO(id)
@@ -177,7 +178,7 @@ INSERT INTO ESTRENO (nombre, autor, url_portada) VALUES
     ('Vacunas Verdades mentiras y controversia', 'Peter C Gotzsche', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/vacunas-verdades-mentiras-y-controversia-int.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvdmFjdW5hcy12ZXJkYWRlcy1tZW50aXJhcy15LWNvbnRyb3ZlcnNpYS1pbnQuanBnIiwiaWF0IjoxNzMwMDA5NTE2LCJleHAiOjE3NjE1NDU1MTZ9.BJymZPXGcL2pc7Dt3FliS1o4sznCrQooxWKc6vFNFR0&t=2024-10-27T06%3A11%3A56.244Z'),
     ('¡Es la microbiota, idiota!', 'Sari Arponen', 'https://ehtxpvdysxarrsjrnxxx.supabase.co/storage/v1/object/sign/uploads/imgs/Es_la_microbiota,_idiota!_Alienta_Descubre_de_Sari_Arponen_Vista.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJ1cGxvYWRzL2ltZ3MvRXNfbGFfbWljcm9iaW90YSxfaWRpb3RhIV9BbGllbnRhX0Rlc2N1YnJlX2RlX1NhcmlfQXJwb25lbl9WaXN0YS5qcGciLCJpYXQiOjE3MzAwMDk0OTIsImV4cCI6MTc2MTU0NTQ5Mn0.TsJXFvUvyV6oTL19zvsF3CwgFPZGxjnYadovR8TzBSo&t=2024-10-27T06%3A11%3A31.723Z');
 
-insert into usuario (nombre, email, clave) values ('Eddy', 'Eddy@gmail.com', '$2a$07$.ZosE28xu4aOz5XCrVF0kOO5WarRBP2k1ISNPL4IcPPfTjnWJ8kHW'); --Eddy1234@
+insert into usuario (nombre, email, clave) values ('Eddy', 'eddysejas37@gmail.com', '$2a$07$.ZosE28xu4aOz5XCrVF0kOO5WarRBP2k1ISNPL4IcPPfTjnWJ8kHW'); --Eddy1234@
 
 -- INSERT INTO VISUALIZACION (id_contenido, fecha)
 -- SELECT
