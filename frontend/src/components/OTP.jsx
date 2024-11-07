@@ -8,15 +8,7 @@ const Email = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(parseInt(OTPinput.join('') === otp)){
-      setPage('reset')
-      return
-    }
-    console.log(parseInt(OTPinput.join(''), otp, OTPinput))
-    alert(
-      "El codigo que ingreso es incorrecto, intente de nuevo"
-    )
-    return
+
   }
 
   return (
