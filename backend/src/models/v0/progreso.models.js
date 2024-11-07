@@ -1,4 +1,4 @@
-import { pool } from '../config/db.js';
+import { pool } from '../../config/db.js';
 
 export const getProgresoById = async (id_usuario, id_contenido) => {
   const query = `SELECT progreso FROM PROGRESO WHERE id_usuario = $1 AND id_contenido = $2`;

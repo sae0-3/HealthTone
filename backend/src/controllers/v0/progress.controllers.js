@@ -1,5 +1,5 @@
-import { pool } from '../config/db.js';
-import { getProgresoById } from '../models/progreso.models.js';
+import { pool } from '../../config/db.js';
+import { getProgresoById } from '../../models/v0/progreso.models.js';
 
 const getProgressByUserAndContent = async (req, res) => {
   const { id_usuario, id_contenido } = req.params;

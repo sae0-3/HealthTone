@@ -1,4 +1,4 @@
-import { updateClave } from '../models/v0/user.models.js';
+import { updateClave } from '../../models/v0/user.models.js';
 
 export const updateUserClave = async (req, res) => {
   const { id_usuario, nuevaClave } = req.body;
