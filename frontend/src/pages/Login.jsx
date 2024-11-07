@@ -40,7 +40,7 @@ export const Login = () => {
 
         <div className='text-4xl text-center'>
           <h1>
-            Bienvenido a <br />
+            Bienvenido a<br />
             <span className='text-htc-lightblue'>Healthtone</span>
           </h1>
         </div>

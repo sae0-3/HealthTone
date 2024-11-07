@@ -1,7 +1,7 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
 import { useEffect, useRef } from 'react'
-
+import axios from 'axios' // Importa axios para las solicitudes HTTP
 
 export const PlayerControls = () => {
   const {
@@ -20,6 +20,34 @@ export const PlayerControls = () => {
   useEffect(() => {
     playbackRef.current = playbackPosition
   }, [playbackPosition])
+
+  useEffect(() => {
+    if (!currentAudio.id || !isPlaying) return
+
+    const saveProgress = () => {
+      axios.post('/api/progreso', {
+        id_usuario: currentAudio.userId,
+        id_contenido: currentAudio.id,
+        progreso: Math.floor(playbackRef.current)
+      }).catch(err => console.error('Error al guardar el progreso:', err))
+    }
+
+    const interval = setInterval(saveProgress, 15000)
+
+    return () => clearInterval(interval)
+  }, [isPlaying, currentAudio])
+
+  // Guardar progreso al pausar la reproducción
+  const handlePause = () => {
+    togglePlay()
+    if (!isPlaying && currentAudio.id) {
+      axios.post('/api/progreso', {
+        id_usuario: currentAudio.userId,
+        id_contenido: currentAudio.id,
+        progreso: Math.floor(playbackRef.current)
+      }).catch(err => console.error('Error al guardar el progreso:', err))
+    }
+  }
 
   useEffect(() => {
     if (!isPlaying || !howl) return
@@ -66,7 +94,8 @@ export const PlayerControls = () => {
           <i className='bi bi-skip-backward'></i>
         </button>
         <button className='disabled:opacity-50'
-          onClick={() => { togglePlay() }} disabled={!currentAudio.id}
+          onClick={handlePause} // Usa la función para guardar al pausar
+          disabled={!currentAudio.id}
         >
           <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill`}></i>
         </button>
