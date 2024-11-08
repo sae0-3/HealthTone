@@ -3,6 +3,10 @@ import { pool } from '../config/db.js';
 export const saveProgress = async (req, res) => {
   const { id_usuario, id_contenido, progreso } = req.body;
 
+  if (!id_usuario || !id_contenido || progreso === undefined) {
+    return res.status(400).send('Faltan parámetros requeridos');
+  }
+
   try {
     await pool.query(`
       INSERT INTO PROGRESO (id_usuario, id_contenido, progreso)

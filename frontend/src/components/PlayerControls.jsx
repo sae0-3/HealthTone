@@ -1,7 +1,7 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
 import { useEffect, useRef } from 'react'
-import axios from 'axios' // Importa axios para las solicitudes HTTP
+import axios from '../utils/axiosConfig'; // Importa axios para las solicitudes HTTP
 
 export const PlayerControls = () => {
   const {
@@ -13,6 +13,7 @@ export const PlayerControls = () => {
     playbackPosition,
     setPosition
   } = audioStore()
+
 
   const animationRef = useRef(null)
   const playbackRef = useRef(playbackPosition)
@@ -41,6 +42,11 @@ export const PlayerControls = () => {
   const handlePause = () => {
     togglePlay()
     if (!isPlaying && currentAudio.id) {
+      console.log('Guardando progreso al pausar:');
+      console.log('ID de usuario:', currentAudio.userId);
+      console.log('ID de contenido:', currentAudio.id);
+      console.log('Progreso:', Math.floor(playbackRef.current));
+      
       axios.post('/api/progreso', {
         id_usuario: currentAudio.userId,
         id_contenido: currentAudio.id,

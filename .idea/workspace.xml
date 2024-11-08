@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="65643fb7-a565-4a7d-8671-27737a3a3fdd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/controllers/progressController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/progressController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/progressRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/progressRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Player.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Player.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerControls.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/audioStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/audioStore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/authStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/authStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

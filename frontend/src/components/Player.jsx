@@ -1,27 +1,31 @@
-import { PlayerActions } from '@/components/PlayerActions'
-import { PlayerControls } from '@/components/PlayerControls'
-import { PlayerInfo } from '@/components/PlayerInfo'
-import audioStore from '@/store/audioStore'
-import { useEffect } from 'react'
-
+import { PlayerActions } from '@/components/PlayerActions';
+import { PlayerControls } from '@/components/PlayerControls';
+import { PlayerInfo } from '@/components/PlayerInfo';
+import audioStore from '@/store/audioStore';
+import authStore from '@/store/authStore'; // Importar authStore
+import { useEffect } from 'react';
 
 export const Player = () => {
-  const { setCurrentAudio, currentAudio } = audioStore()
+  const { setCurrentAudio, currentAudio } = audioStore();
+  const { user } = authStore(); 
 
   useEffect(() => {
+
     const initialAudio = {
       id: null,
       title: 'Unknow Title',
       author: 'Unknow Author',
       cover: null,
-      url: null
-    }
+      url: null,
+      userId: user?.userId || null
+    };
 
-    setCurrentAudio(initialAudio)
-  }, [setCurrentAudio])
+
+    setCurrentAudio(initialAudio);
+  }, [setCurrentAudio, user]);
 
   if (!currentAudio) {
-    return null
+    return null;
   }
 
   return (
@@ -38,5 +42,5 @@ export const Player = () => {
         <PlayerActions />
       </div>
     </div>
-  )
-}
+  );
+};

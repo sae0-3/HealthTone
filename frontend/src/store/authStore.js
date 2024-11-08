@@ -6,8 +6,15 @@ const authStore = create((set) => ({
   user: {},
 
   login: (user, token) => {
-    localStorage.setItem('access_token', token)
-    set({ isAuthenticated: true, user })
+
+    
+    const userWithId = {
+      ...user,
+      userId: user.id
+    };
+  
+    localStorage.setItem('access_token', token);
+    set({ isAuthenticated: true, user: userWithId });
   },
 
   logout: () => {

@@ -1,11 +1,10 @@
 import express from 'express';
-import { saveProgress } from '../controllers/progressController.js';
+import { saveProgress } from '../controllers/progressController.js'; // Asegúrate de que la ruta sea correcta
 
 const router = express.Router();
 
+// Manejar solicitudes POST para guardar el progreso
+router.post('/progreso', saveProgress);
 
-router.all('/progreso', (req, res) => {
-    res.send(`Recibida una solicitud ${req.method}.`);
-  });
-  
 export default router;
+

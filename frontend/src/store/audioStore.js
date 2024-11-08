@@ -1,6 +1,6 @@
 import { Howl } from 'howler'
 import { create } from 'zustand'
-
+import authStore from '@/store/authStore';
 
 const audioStore = create((set) => ({
   currentAudio: null,
@@ -13,19 +13,26 @@ const audioStore = create((set) => ({
   isOpenDescription: false,
 
   setCurrentAudio: (audio) => set((state) => {
-    state.howl?.unload()
+    const { user } = authStore.getState();
+    const userId = user?.id || null;
+
+    state.howl?.unload();
 
     const newHowl = new Howl({
       src: [audio.url],
       volume: state.volume / 100,
       onload: () => {
-        const audioDuration = newHowl.duration()
-        set({ duration: audioDuration })
+        const audioDuration = newHowl.duration();
+        set({ duration: audioDuration });
       },
       onend: () => set({ isPlaying: false, playbackPosition: 0 }),
-    })
+    });
 
-    return { currentAudio: audio, howl: newHowl, playbackPosition: 0 }
+    return {
+      currentAudio: { ...audio, userId },
+      howl: newHowl,
+      playbackPosition: 0
+    };
   }),
 
   setPlaying: (value) => set({ isPlaying: value }),
