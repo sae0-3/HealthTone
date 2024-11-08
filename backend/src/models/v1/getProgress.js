@@ -9,9 +9,9 @@ export const getProgress = async (id_user) => {
       id,
       nombre as title,
       autor as author,
-      url_portada as cover_path,
-      url_audio as audio_path,
-      progreso
+      url_portada as cover,
+      url_audio as url,
+      progreso as progress
     FROM PROGRESO p
       JOIN CONTENIDO co on co.id = p.id_contenido
     WHERE p.id_usuario = $1
