@@ -21,8 +21,8 @@ app.use('/api/auth', authRoutes);
 // Rutas protegidas
 app.use('/api/books', passport.authenticate('jwt', { session: false }), bookRoutes);
 app.use('/api', passport.authenticate('jwt', { session: false }), storageRoutes);
-// app.use('/api', passport.authenticate('jwt', { session: false }), progressRoutes);
-app.use('/api', progressRoutes);
+app.use('/api', passport.authenticate('jwt', { session: false }), progressRoutes);
+// app.use('/api', progressRoutes);
 
 app.listen(PORT, () => {
   console.log(`El servidor se está ejecutando en el puerto ${PORT}`);

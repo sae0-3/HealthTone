@@ -1,7 +1,7 @@
-import { ProgressBar } from '@/components/ProgressBar'
-import audioStore from '@/store/audioStore'
-import { useEffect, useRef } from 'react'
-import axios from '../utils/axiosConfig'; // Importa axios para las solicitudes HTTP
+import { ProgressBar } from '@/components/ProgressBar';
+import audioStore from '@/store/audioStore';
+import { useEffect, useRef } from 'react';
+import { useSaveProgress } from '@/hooks/useSaveProgress';
 
 export const PlayerControls = () => {
   const {
@@ -11,101 +11,104 @@ export const PlayerControls = () => {
     isPlaying,
     togglePlay,
     playbackPosition,
-    setPosition
-  } = audioStore()
+    setPosition,
+  } = audioStore();
 
+  const animationRef = useRef(null);
+  const playbackRef = useRef(playbackPosition);
 
-  const animationRef = useRef(null)
-  const playbackRef = useRef(playbackPosition)
-
-  useEffect(() => {
-    playbackRef.current = playbackPosition
-  }, [playbackPosition])
+  const { mutate: saveProgress } = useSaveProgress(); // Hook para guardar progreso
 
   useEffect(() => {
-    if (!currentAudio.id || !isPlaying) return
+    playbackRef.current = playbackPosition;
+  }, [playbackPosition]);
 
-    const saveProgress = () => {
-      axios.post('/api/progreso', {
+  useEffect(() => {
+    if (!currentAudio.id || !isPlaying) return;
+
+    const handleSaveProgress = () => {
+      saveProgress({
         id_usuario: currentAudio.userId,
         id_contenido: currentAudio.id,
-        progreso: Math.floor(playbackRef.current)
-      }).catch(err => console.error('Error al guardar el progreso:', err))
-    }
+        progreso: Math.floor(playbackRef.current),
+      });
+    };
 
-    const interval = setInterval(saveProgress, 15000)
+    const interval = setInterval(handleSaveProgress, 15000);
 
-    return () => clearInterval(interval)
-  }, [isPlaying, currentAudio])
+    return () => clearInterval(interval);
+  }, [isPlaying, currentAudio, saveProgress]);
 
-  // Guardar progreso al pausar la reproducción
   const handlePause = () => {
-    togglePlay()
+    togglePlay();
     if (!isPlaying && currentAudio.id) {
       console.log('Guardando progreso al pausar:');
       console.log('ID de usuario:', currentAudio.userId);
       console.log('ID de contenido:', currentAudio.id);
       console.log('Progreso:', Math.floor(playbackRef.current));
-      
-      axios.post('/api/progreso', {
+
+      saveProgress({
         id_usuario: currentAudio.userId,
         id_contenido: currentAudio.id,
-        progreso: Math.floor(playbackRef.current)
-      }).catch(err => console.error('Error al guardar el progreso:', err))
+        progreso: Math.floor(playbackRef.current),
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    if (!isPlaying || !howl) return
+    if (!isPlaying || !howl) return;
 
     const updatePosition = () => {
-      const currentPos = howl.seek() || 0
-      playbackRef.current = currentPos
+      const currentPos = howl.seek() || 0;
+      playbackRef.current = currentPos;
 
       if (Math.abs(currentPos - playbackPosition) > 0.5) {
-        setPosition(currentPos)
+        setPosition(currentPos);
       }
 
-      animationRef.current = requestAnimationFrame(updatePosition)
-    }
+      animationRef.current = requestAnimationFrame(updatePosition);
+    };
 
-    animationRef.current = requestAnimationFrame(updatePosition)
+    animationRef.current = requestAnimationFrame(updatePosition);
 
     return () => {
-      cancelAnimationFrame(animationRef.current)
-    }
-  }, [isPlaying, howl, setPosition, playbackPosition])
+      cancelAnimationFrame(animationRef.current);
+    };
+  }, [isPlaying, howl, setPosition, playbackPosition]);
 
   const handleClickBar = (e) => {
-    const { clientX } = e
-    const { left, width } = e.currentTarget.getBoundingClientRect()
-    const newTime = ((clientX - left) / width) * duration
-    setPosition(newTime)
-    howl.seek(newTime)
-  }
+    const { clientX } = e;
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const newTime = ((clientX - left) / width) * duration;
+    setPosition(newTime);
+    howl.seek(newTime);
+  };
 
   const formatTime = (time) => {
-    const minutes = Math.floor(time / 60)
-    const seconds = Math.floor(time % 60)
-    return `${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`
-  }
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`;
+  };
 
   return (
     <div className='text-white lg:flex lg:flex-col lg:gap-1'>
       <section className='w-full flex justify-end text-4xl lg:text-3xl lg:justify-center lg:gap-8'>
-        <button className='hidden lg:block disabled:opacity-50'
+        <button
+          className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.max(playbackPosition - 10, 0)) }}
           disabled={!currentAudio.id}
         >
           <i className='bi bi-skip-backward'></i>
         </button>
-        <button className='disabled:opacity-50'
+        <button
+          className='disabled:opacity-50'
           onClick={handlePause} // Usa la función para guardar al pausar
           disabled={!currentAudio.id}
         >
           <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill`}></i>
         </button>
-        <button className='hidden lg:block disabled:opacity-50'
+        <button
+          className='hidden lg:block disabled:opacity-50'
           onClick={() => { setPosition(Math.min(playbackPosition + 10, duration)) }}
           disabled={!currentAudio.id}
         >
@@ -115,13 +118,9 @@ export const PlayerControls = () => {
 
       <section className='hidden lg:flex gap-2 items-center justify-center'>
         <span>{formatTime(playbackPosition)}</span>
-        <ProgressBar
-          now={playbackPosition}
-          max={duration}
-          onClick={handleClickBar}
-        />
+        <ProgressBar now={playbackPosition} max={duration} onClick={handleClickBar} />
         <span>{formatTime(duration)}</span>
       </section>
     </div>
-  )
-}
+  );
+};
