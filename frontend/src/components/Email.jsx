@@ -43,6 +43,10 @@ const Email = () => {
             />
           </div>
 
+          {error && (
+            <small className='text-red-600 flex justify-center'>{error.response.data.message}</small>
+          )}
+
           <button
             type='submit'
             className='w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-htc-lightblue hover:bg-htc-blue focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50'

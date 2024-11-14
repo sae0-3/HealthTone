@@ -18,3 +18,7 @@ export const deleteFavorite = (id) => axiosInstance.delete(`/books/favorites/${i
 export const postView = (id) => axiosInstance.post(`/books/${id}`)
 
 export const getBooksFavoritesBySearch = (query) => axiosInstance.get(`/books/favorites/?search=${query}`)
+
+export const getProgress = () => axiosInstance.get('/books/progress')
+
+export const postProgress = (id_content, progress) => axiosInstance.post('/books/progress', { id_content, progress })

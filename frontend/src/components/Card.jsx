@@ -1,7 +1,6 @@
 import { Modal } from '@/components/Modal'
 import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
-import { Howl } from 'howler'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -13,19 +12,23 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
   const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
   const [showNotification, setShowNotification] = useState(false)
   const isPlaying = currentAudio?.id === id
-  const [duration, setDuration] = useState(0)
-  const [parsedDuration, setParsedDuration] = useState('00:00')
-
-  const newHowl = new Howl({
-    src: [url_audio],
-    onload: () => setDuration(newHowl.duration()),
-  })
+  const [duration, setDuration] = useState('00:00')
 
   useEffect(() => {
-    const minutes = Math.floor(duration / 60)
-    const seconds = Math.floor(duration % 60)
-    setParsedDuration(`${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`)
-  }, [duration])
+    const audio = new Audio(url_audio)
+    const handleLoadedMetadata = () => {
+      const audioDuration = audio.duration
+      const minutes = Math.floor(audioDuration / 60)
+      const seconds = Math.floor(audioDuration % 60)
+      setDuration(`${minutes > 9 ? minutes : '0' + minutes}:${seconds > 9 ? seconds : '0' + seconds}`)
+    }
+
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata)
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata)
+    }
+  }, [url_audio])
 
   const handleClick = () => {
     setIsOpenDescription(currentAudio.id === id)
@@ -65,7 +68,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
         className='border shadow-sm rounded-xl hover:shadow-lg transition'
         onClick={handleClick}
       >
-        <div className={`group ${disabled && isContent && 'cursor-auto'} relative group`}>
+        <div className={`group ${(disabled || isContent) && 'cursor-auto'} relative group`}>
           <div className='aspect-square overflow-hidden relative'>
             <img
               className={`m-auto h-full ${!disabled && !isContent && 'group-hover:scale-105 group-focus:scale-105 transition-transform duration-500'}`}
@@ -102,7 +105,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
               {isContent &&
                 <div className='flex gap-1'>
                   <i className='bi bi-clock-history'></i>
-                  <p>{parsedDuration}</p>
+                  <p>{duration}</p>
                 </div>
               }
 
