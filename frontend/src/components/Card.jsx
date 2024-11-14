@@ -38,10 +38,18 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     e.preventDefault()
     e.stopPropagation()
 
-    if (!isPlaying) setPlaying(true)
-
     setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
-    startAudio()
+
+    setTimeout(() => {
+      const { howl, startAudio, setPosition } = audioStore.getState()
+
+      if (howl) {
+	howl.once('load', () => {
+	  setPosition(17) // pruebita xd
+	  startAudio() 
+	})
+      }
+    }, 100)
   }
 
   const handleFavorite = (e) => {
