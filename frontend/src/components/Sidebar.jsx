@@ -1,41 +1,22 @@
-import { usePostProgress } from '@/hooks/useProgress'
 import audioStore from '@/store/audioStore'
 import authStore from '@/store/authStore'
-import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 
 export const Sidebar = ({ toggleSidebar }) => {
   const { pathname, search } = useLocation()
   const { logout } = authStore()
-  const { logoutAudio, setIsOpenDescription, currentAudio, playbackPosition } = audioStore()
-  const { mutate: save, isPending } = usePostProgress()
-  const [logoutState, setLogoutState] = useState(false)
+  const { logoutAudio, setIsOpenDescription } = audioStore()
   const options = [
     { label: 'Inicio', icon: 'house', to: '/' },
     { label: 'Explorar', icon: 'search', to: '/explore' },
     { label: 'Favoritos', icon: 'heart', to: '/favorites' },
   ]
 
-  useEffect(() => {
-    if (logoutState && !isPending) logout()
-  }, [setLogoutState, isPending])
-
   const handleLogout = async () => {
-    try {
-      if (currentAudio?.id) {
-        await save({
-          id_content: currentAudio.id,
-          progress: parseInt(playbackPosition, 10)
-        })
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setIsOpenDescription(false)
-      logoutAudio()
-      setLogoutState(true)
-    }
+    setIsOpenDescription(false)
+    logoutAudio()
+    logout()
   }
 
   return (
