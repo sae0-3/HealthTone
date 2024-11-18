@@ -9,7 +9,7 @@ import { isValidPassword } from '../../utils/validatePassword.js'
 
 
 export const postUser = async (req, res) => {
-  const { name, lastname, email, password } = req.body
+  const { name, lastname, email, password, username } = req.body
 
   try {
     if (!name || !email || !password) {
@@ -25,8 +25,12 @@ export const postUser = async (req, res) => {
       throw new InvalidPasswordError()
     }
 
+    const finalUsername = username
+      ? username
+      : `${name}${email.substring(0, 5)}${parseInt(Math.random() * 100000)}`
+
     const hashedPassword = await bcrypt.hash(password, 7)
-    const result = await createUser({ name, lastname, email, password: hashedPassword })
+    const result = await createUser({ name, lastname, email, password: hashedPassword, username: finalUsername })
     res.status(201).json({
       user: result,
     })
