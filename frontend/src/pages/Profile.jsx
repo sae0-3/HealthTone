@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { Link } from 'react-router-dom'
+import PasswordUpdate from '../components/PasswordUpdate'
 
 const Profile = () => {
+  const [card, setCard] = useState('')
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false)
+  const [isEditOpen, setisEditOpen] = useState(false)
+
   return (
-    <>
+    <div className="container mx-auto px-4">
       <section className="py-4">
         <h2 className="text-2xl font-bold">Mi Perfil</h2>
       </section>
@@ -55,16 +61,28 @@ const Profile = () => {
             </span>
           </button>
           <div className="flex gap-2">
-            <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white">
+            <button 
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white"
+              onClick={() => {setisEditOpen(true)}}>
               Editar Perfil
             </button>
-            <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white">
+            <button 
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white"
+              onClick={() => {setIsPasswordOpen(true)}}>
               Cambiar Contraseña
             </button>
           </div>
         </div>
       </div>
-    </>
+
+      {isPasswordOpen && (
+        <PasswordUpdate setOpen={setIsPasswordOpen} />
+      )}
+      
+      {isEditOpen && (
+        <EditProfile setOpen={setisEditOpen} />
+      )}
+    </div>
   )
 }
 
