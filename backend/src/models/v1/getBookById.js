@@ -21,7 +21,15 @@ export const getBookById = async (id) => {
         ) FILTER (WHERE ca.id IS NOT NULL),
         '[]'
       ) AS categories,
-      COUNT(v.id) as views
+      COUNT(v.id) as views,
+      COALESCE(
+        (
+          SELECT ROUND(AVG(calif.calificacion)::numeric, 1)
+          FROM CALIFICACION calif
+          WHERE calif.id_contenido = co.id
+        ),
+        0
+    ) AS rating
     FROM CONTENIDO co
       LEFT JOIN R_CONTENIDO_CATEGORIA r on id_contenido = co.id
       LEFT JOIN CATEGORIA ca on ca.id = id_categoria
