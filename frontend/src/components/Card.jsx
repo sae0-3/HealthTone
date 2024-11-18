@@ -115,18 +115,18 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
 
             <StarRating rating={2.1} />
 
-            {!!categories && categories.length > 0 && (
-              <div className='mt-3 flex flex-wrap'>
-                {categories.map(({ nombre }, idx) => (
+            {/* {!!categories && categories.length > 0 && (
+              <div className='mt-3 flex flex-wrap gap-1'>
+                {categories.map(({ name }, idx) => (
                   <span
-                    key={`${nombre}-${idx}`}
+                    key={`${name}-${idx}`}
                     className='inline-block bg-gray-200 rounded-full px-2 py-px text-sm font-semibold text-gray-700 m-px'
                   >
-                    #{nombre}
+                    #{name}
                   </span>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
 
         </div>
