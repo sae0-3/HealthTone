@@ -45,6 +45,24 @@ export const Sidebar = ({ toggleSidebar }) => {
         ))}
       </div>
 
+      <Link 
+        className="flex items-center justify-center gap-4 fixed bottom-20 mb-5 w-full lg:w-52 hover:cursor-pointer"
+        to={'/user'}>
+        <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-htc-blue">
+          <img
+            src="src/assets/med.jpg"
+            alt="User Avatar"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div>
+          <p className="text-lg">
+            Perfil
+          </p>
+        </div>
+      </Link>
+
+
       <button
         onClick={handleLogout}
         className='flex gap-5 py-3 w-full items-center justify-center fixed bottom-0 mb-10 lg:w-52'
