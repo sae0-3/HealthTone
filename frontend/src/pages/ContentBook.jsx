@@ -59,6 +59,7 @@ export const ContentBook = () => {
                 categories={book.categories}
                 isFav={favs.has(book.id)}
                 isContent
+                rating={book.rating}
               />
             </div>
             <div className={`${!isReading && 'hidden'} w-full mx-auto h-full lg:block`}>
@@ -84,41 +85,17 @@ export const ContentBook = () => {
             </button>
           </section>
 
-          <Comments comments={comments} />
+          <Comments id_content={id} />
         </>
       )}
 
       {viewQualification && (
         <Qualification
+          id={id}
           setView={setViewQualification}
-          initValue={2}
+          initValue={book.rating || 0}
         />
       )}
     </div>
   )
 }
-
-
-const comments = [
-  {
-    id: 1,
-    name: "Primer Nombre",
-    profile: "",
-    comment: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Esse, impedit!",
-    date: "2024-11-17 15:34:45.123456",
-  },
-  {
-    id: 2,
-    name: "Segundo Nombre",
-    profile: "",
-    comment: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint dolorum perferendis asperiores cumque illum, explicabo quaerat est quam error unde?",
-    date: "2024-11-17 15:35:45.123456",
-  },
-  {
-    id: 1,
-    name: "Primer Nombre",
-    profile: "",
-    comment: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium perspiciatis repellendus quidem eaque cumque molestiae!",
-    date: "2024-11-17 17:34:45.123456",
-  }
-]

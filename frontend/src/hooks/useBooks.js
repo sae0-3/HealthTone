@@ -6,7 +6,10 @@ import {
   getBooksBySection,
   getBooksFavorites,
   getBooksFavoritesBySearch,
+  getComments,
+  postComment,
   postFavorite,
+  postQualification,
   postView,
 } from '@/api/bookApi'
 import authStore from '@/store/authStore'
@@ -61,11 +64,27 @@ export const useDeleteBookFavorites = (id_content) => {
   return useMutation({
     mutationFn: () => deleteFavorite(id_content),
     onSuccess: () => queryClient.invalidateQueries(['books', 'favorites', id]),
-  })  
+  })
 }
 
 export const useGetBooksFavoritesBySearch = (query) => useQuery({
   queryKey: ['books', 'favorites', query],
   queryFn: () => getBooksFavoritesBySearch(query),
   enabled: !!query,
+})
+
+export const usePostQualification = (id_content) => useMutation({
+  mutationFn: ({ qualification }) => postQualification(id_content, qualification),
+  onSuccess: () => queryClient.invalidateQueries(['book', id_content]),
+})
+
+export const useGetComments = (id_content) => useQuery({
+  queryKey: ['book', 'comments', id_content],
+  queryFn: () => getComments(id_content),
+  enabled: !!id_content,
+})
+
+export const usePostComment = (id_content) => useMutation({
+  mutationFn: ({ message }) => postComment(id_content, message),
+  onSuccess: () => queryClient.invalidateQueries(['books', 'comments', id_content]),
 })

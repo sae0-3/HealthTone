@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
-export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, isContent }) => {
+export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, isContent, rating }) => {
   const { setPlaying, setCurrentAudio, startAudio, currentAudio, setIsOpenDescription } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
@@ -113,7 +113,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
               </div>
             </div>
 
-            <StarRating rating={2.1} />
+            {rating && <StarRating rating={parseFloat(rating)} />}
 
             {/* {!!categories && categories.length > 0 && (
               <div className='mt-3 flex flex-wrap gap-1'>

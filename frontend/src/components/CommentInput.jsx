@@ -1,13 +1,22 @@
 import { useState } from 'react'
+import { usePostComment } from '@/hooks/useBooks'
 
 
-export const CommentInput = () => {
+export const CommentInput = ({ id }) => {
   const [comment, setComment] = useState('')
+  const { mutate: post, isPending } = usePostComment(id)
 
   const handleSubmit = () => {
     if (comment.trim()) {
-      console.log('Comentario enviado:', comment)
-      setComment('')
+      try {
+        post({
+          message: comment
+        })
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setComment('')
+      }
     }
   }
 
@@ -26,6 +35,7 @@ export const CommentInput = () => {
         <button
           onClick={handleSubmit}
           className='ml-3 p-2 bg-htc-lightblue text-white rounded-md hover:bg-htc-darkblue transition focus:outline-none'
+          disabled={isPending}
         >
           <i className='bi bi-send-fill text-lg'></i>
         </button>

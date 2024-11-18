@@ -37,6 +37,7 @@ export const LayoutContent = ({ title, disabled, content }) => {
               categories={book.categories}
               disabled={disabled}
               isFav={favoriteIds.has(book.id)}
+              rating={book.rating}
             />
           ))}
         </section>

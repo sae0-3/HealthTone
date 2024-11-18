@@ -1,4 +1,4 @@
-export const Comment = ({ id, name, message, date, profile }) => {
+export const Comment = ({ id, author, message, date }) => {
   const formatDate = (date) =>
     new Date(date).toLocaleString('es-ES', {
       year: '2-digit',
@@ -13,7 +13,7 @@ export const Comment = ({ id, name, message, date, profile }) => {
 
         <div className='ml-4 flex-1'>
           <div className='flex justify-between items-center'>
-            <span className='font-bold text-sm'>{name}</span>
+            <span className='font-bold text-sm'>{author.username}</span>
             <span className='text-xs text-gray-500'>{formatDate(date)}</span>
           </div>
 

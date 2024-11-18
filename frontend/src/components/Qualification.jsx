@@ -1,13 +1,28 @@
 import { Modal } from '@/components/Modal'
+import { usePostQualification } from '@/hooks/useBooks'
 import { useState } from 'react'
 
 
-export const Qualification = ({ initValue = 0, setView }) => {
+export const Qualification = ({ id, initValue = 0, setView }) => {
   const [value, setValue] = useState(initValue)
+  const { mutate: post, isPending } = usePostQualification(id)
 
   const handleCloseCalif = () => {
     setView(false)
-    setValue(0)
+  }
+
+  const handleSubmit = async () => {
+    try {
+      if (value != 0) {
+        await post({
+          qualification: value
+        })
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      handleCloseCalif()
+    }
   }
 
   return (
@@ -32,7 +47,8 @@ export const Qualification = ({ initValue = 0, setView }) => {
         <button
           type='button'
           className='py-2 px-3 rounded-md shadow-sm text-sm font-medium text-white bg-htc-lightblue hover:bg-htc-blue focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
-        // onClick={ }
+          disabled={isPending}
+          onClick={handleSubmit}
         >Aceptar</button>
       </div>
     </Modal>
