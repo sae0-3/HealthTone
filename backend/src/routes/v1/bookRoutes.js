@@ -4,6 +4,8 @@ import {
   deleteFavorite,
   getBookAll,
   getBookById,
+  getBooksByCategorie,
+  getCategories,
   getComments,
   getFavorites,
   getProgress,
@@ -18,6 +20,8 @@ import {
 const bookRoutes = Router()
 
 bookRoutes.get('/', getBookAll)
+bookRoutes.get('/categories', getCategories)
+bookRoutes.get('/categories/:id', getBooksByCategorie)
 bookRoutes.get('/comments/:id', getComments)
 bookRoutes.post('/comments', passport.authenticate('jwt', { session: false }), postComment)
 bookRoutes.get('/favorites', passport.authenticate('jwt', { session: false }), getFavorites)

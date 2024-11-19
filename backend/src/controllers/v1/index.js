@@ -1,6 +1,8 @@
 export { deleteFavorite } from './deleteFavorite.js'
 export { getBookAll } from './getBookAll.js'
 export { getBookById } from './getBookById.js'
+export { getBooksByCategorie } from './getBooksByCategorie.js'
+export { getCategories } from './getCategories.js'
 export { getComments } from './getComments.js'
 export { getFavorites } from './getFavorites.js'
 export { getProgress } from './getProgress.js'
