@@ -1,17 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 import PasswordUpdate from '../components/PasswordUpdate'
 import Select from 'react-select' // Importa el componente Select
+import { useGetCountries } from '../hooks/useCountries'
 
 const Profile = () => {
   const [card, setCard] = useState('')
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [isEditOpen, setisEditOpen] = useState(false)
   const [date, setDate] = useState(Date())
+  const { data } = useGetCountries()
+  const [countriesName, setCountriesName] = useState([])
 
-  const [data, setData] = useState({
+  useEffect(() => {
+    if (data) {
+      setCountriesName((prevCountries) => [
+        ...prevCountries,
+        ...data.map((data) => data.translations.spa.common)
+      ]);
+    }
+    console.log(countriesName);
+  }, [data])
+
+  const [form, setForm] = useState({
     correo: "",
     fechaNacimiento: "",
     pais: "",
@@ -21,8 +34,8 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setData((prevData) => ({
-      ...prevData,
+    setForm((prevForm) => ({
+      ...prevForm,
       [name]: value,
     }))
   }
@@ -53,7 +66,7 @@ const Profile = () => {
     { value: 'Hombre', label: 'Hombre' },
     { value: 'Mujer', label: 'Mujer' },
   ]
-  
+
   const countryOptions = [
     { value: 'Bolivia', label: 'Bolivia' },
     { value: 'Brasil', label: 'Brasil' },
@@ -127,14 +140,16 @@ const Profile = () => {
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">País:</span>
-            <Select
+            {countriesName && 
+              <Select
               name="genero"
-              value={countryOptions.find(option => option.value === data.pais) || null}
-              onChange={(selectedOption) => setData({ ...data, pais: selectedOption.value })}
-              options={countryOptions}
-              className='w-64'
+              value={{ value: form.pais, label: form.pais }} // Vincula el valor seleccionado directamente desde el estado
+              onChange={(selectedOption) => setForm({ ...form, pais: selectedOption.value })} // Actualiza el estado
+              options={countriesName.map((country) => ({ value: country, label: country }))} // Mapea las opciones al vuelo
+              className="w-64"
               styles={style}
-              />
+            />
+            }
           </div>
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
@@ -142,7 +157,7 @@ const Profile = () => {
             <input
               type="text"
               name="numero"
-              value={data.numero || '78340433'}
+              value={form.numero || '78340433'}
               onFocus={() => handleFocus('phone')}
               onBlur={() => handleBlur('phone')}
               onChange={handleChange}
@@ -154,12 +169,12 @@ const Profile = () => {
             <span className="text-gray-600 font-medium">Género:</span>
             <Select
               name="genero"
-              value={genderOptions.find(option => option.value === data.genero) || null}
-              onChange={(selectedOption) => setData({ ...data, genero: selectedOption.value })}
+              value={genderOptions.find(option => option.value === form.genero) || null}
+              onChange={(selectedOption) => setForm({ ...form, genero: selectedOption.value })}
               options={genderOptions}
               className='w-64'
               styles={style}
-              />
+            />
           </div>
         </div>
 
