@@ -56,7 +56,6 @@ export const ContentBook = () => {
                 author={book.author}
                 url_cover={book.cover_path}
                 url_audio={book.audio_path}
-                categories={book.categories}
                 isFav={favs.has(book.id)}
                 isContent
                 rating={book.rating}

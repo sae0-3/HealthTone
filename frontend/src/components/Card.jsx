@@ -115,7 +115,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
 
             {rating && <StarRating rating={parseFloat(rating)} />}
 
-            {/* {!!categories && categories.length > 0 && (
+            {!!categories && categories.length > 0 && (
               <div className='mt-3 flex flex-wrap gap-1'>
                 {categories.map(({ name }, idx) => (
                   <span
@@ -126,7 +126,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
                   </span>
                 ))}
               </div>
-            )} */}
+            )}
           </div>
 
         </div>

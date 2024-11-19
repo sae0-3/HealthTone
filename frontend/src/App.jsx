@@ -1,6 +1,8 @@
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { useVerifyToken } from '@/hooks/useAuth'
 import { Layout } from '@/layouts/Layout'
+import { Categorie } from '@/pages/Categorie'
+import { Categories } from '@/pages/Categories'
 import { ContentBook } from '@/pages/ContentBook'
 import { Explore } from '@/pages/Explore'
 import { Favorites } from '@/pages/Favorites'
@@ -32,6 +34,8 @@ export const App = () => {
 
         <Route element={<ProtectedRoute> <Layout /> </ProtectedRoute>}>
           <Route path='/' element={<Home />} />
+          <Route path='/categories' element={<Categories />} />
+          <Route path='/categories/:categorie' element={<Categorie />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/favorites' element={<Favorites />} />
           <Route path='/book/:id' element={<ContentBook />} />

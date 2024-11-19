@@ -6,6 +6,7 @@ import {
   getBooksBySection,
   getBooksFavorites,
   getBooksFavoritesBySearch,
+  getCategories,
   getComments,
   postComment,
   postFavorite,
@@ -87,4 +88,9 @@ export const useGetComments = (id_content) => useQuery({
 export const usePostComment = (id_content) => useMutation({
   mutationFn: ({ message }) => postComment(id_content, message),
   onSuccess: () => queryClient.invalidateQueries(['books', 'comments', id_content]),
+})
+
+export const useGetCategories = () => useQuery({
+  queryKey: ['books', 'categories'],
+  queryFn: getCategories,
 })

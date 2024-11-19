@@ -9,8 +9,9 @@ export const Sidebar = ({ toggleSidebar }) => {
   const { logoutAudio, setIsOpenDescription } = audioStore()
   const options = [
     { label: 'Inicio', icon: 'house', to: '/' },
-    { label: 'Explorar', icon: 'search', to: '/explore' },
+    { label: 'Explorar', icon: 'search-heart', to: '/explore' },
     { label: 'Favoritos', icon: 'heart', to: '/favorites' },
+    { label: 'Categorias', icon: 'tags', to: '/categories' },
   ]
 
   const handleLogout = async () => {
@@ -38,7 +39,7 @@ export const Sidebar = ({ toggleSidebar }) => {
             className={`flex gap-4 items-center justify-center bg-gradient-to-r ${pathname === to && !search && 'from-htc-lightblue'} to-white-500 py-3`}
             onClick={() => { toggleSidebar(); setIsOpenDescription(false) }}
           >
-            <i className={`bi bi-${icon} text-lg`}></i>
+            <i className={`bi bi-${icon}${pathname === to && !search ? '-fill' : ''} text-lg`}></i>
             <small className='text-lg'>{label}</small>
           </Link>
         ))}
