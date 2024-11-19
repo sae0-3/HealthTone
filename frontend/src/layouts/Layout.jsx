@@ -2,9 +2,10 @@ import { Header } from '@/components/Header'
 import { Player } from '@/components/Player'
 import { Sidebar } from '@/components/Sidebar'
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 
-export const Layout = ({ children }) => {
+export const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const toggleSidebar = () => {
@@ -23,7 +24,7 @@ export const Layout = ({ children }) => {
         </header>
 
         <main className='flex-1 p-3 mb-20 mt-16 lg:mt-0 lg:mb-0 lg:px-16 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500'>
-          {children}
+          <Outlet />
         </main>
 
         <footer className='fixed h-20 bg-htc-lightblue bottom-0 left-0 w-full lg:w-auto lg:static z-10'>

@@ -1,13 +1,32 @@
 import { PlayerActions } from '@/components/PlayerActions'
 import { PlayerControls } from '@/components/PlayerControls'
 import { PlayerInfo } from '@/components/PlayerInfo'
-import { useStore } from '@/hooks/useStore'
+import { useGetProgress } from '@/hooks/useProgress'
+import audioStore from '@/store/audioStore'
+import { useEffect } from 'react'
 
 
 export const Player = () => {
-  const { currentAudio } = useStore()
+  const { setCurrentAudio, currentAudio, setPosition } = audioStore()
+  const { data, isLoading } = useGetProgress()
+  const audio = data?.data || {}
 
-  if (!currentAudio) {
+  useEffect(() => {
+    if (currentAudio?.id) return
+
+    const initialAudio = {
+      id: audio.id || null,
+      title: audio.title || 'Unknow Title',
+      author: audio.author || 'Unknow Author',
+      cover: audio.cover || null,
+      url: audio.url || null
+    }
+
+    setCurrentAudio(initialAudio)
+    setPosition(audio.progress || 0)
+  }, [setCurrentAudio, setPosition, data])
+
+  if (isLoading) {
     return null
   }
 
