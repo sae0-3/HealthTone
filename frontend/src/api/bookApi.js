@@ -30,3 +30,7 @@ export const getComments = (id_content) => axiosInstance.get(`/books/comments/${
 export const postComment = (id_content, message) => axiosInstance.post('/books/comments', { id_content, message })
 
 export const getCategories = () => axiosInstance.get('/books/categories')
+
+export const getBooksByCategorie = (id) => axiosInstance.get(`/books/categories/${id}`)
+
+export const getCategorie = (id) => axiosInstance.get(`/books/categorie/${id}`)

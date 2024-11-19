@@ -5,6 +5,7 @@ import {
   getBookAll,
   getBookById,
   getBooksByCategorie,
+  getCategorie,
   getCategories,
   getComments,
   getFavorites,
@@ -20,6 +21,7 @@ import {
 const bookRoutes = Router()
 
 bookRoutes.get('/', getBookAll)
+bookRoutes.get('/categorie/:id', getCategorie)
 bookRoutes.get('/categories', getCategories)
 bookRoutes.get('/categories/:id', getBooksByCategorie)
 bookRoutes.get('/comments/:id', getComments)

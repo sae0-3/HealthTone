@@ -2,10 +2,12 @@ import {
   deleteFavorite,
   getBookById,
   getBooks,
+  getBooksByCategorie,
   getBooksBySearch,
   getBooksBySection,
   getBooksFavorites,
   getBooksFavoritesBySearch,
+  getCategorie,
   getCategories,
   getComments,
   postComment,
@@ -93,4 +95,14 @@ export const usePostComment = (id_content) => useMutation({
 export const useGetCategories = () => useQuery({
   queryKey: ['books', 'categories'],
   queryFn: getCategories,
+})
+
+export const useGetBooksByCategorie = (categorie) => useQuery({
+  queryKey: ['books', 'categories', categorie],
+  queryFn: () => getBooksByCategorie(categorie),
+})
+
+export const useGetCategorie = (id) => useQuery({
+  queryKey: ['categorie', id],
+  queryFn: () => getCategorie(id),
 })
