@@ -138,9 +138,7 @@ const PasswordUpdate = ({ setOpen }) => {
           {data.newPassword !== data.confirmPassword && (
             <small className='text-red-600'>La contraseña no coincide</small>
           )}
-          {!isSuccess && (
-            <small className='text-red-600'>Ha ocurrido un problema</small>
-          )}
+          {isSuccess?<small className='text-red-600'>Ha ocurrido un problema</small>:null}
           <div className="flex justify-end gap-2">
             <button
               type="button"
