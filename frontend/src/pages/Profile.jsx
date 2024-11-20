@@ -3,83 +3,71 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Link } from 'react-router-dom'
 import PasswordUpdate from '../components/PasswordUpdate'
-import Select from 'react-select' // Importa el componente Select
+import Select from 'react-select'
 import { useGetCountries } from '../hooks/useCountries'
 
 const Profile = () => {
-  const [card, setCard] = useState('')
+  const [card, setCard] = useState()
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [isEditOpen, setisEditOpen] = useState(false)
   const [date, setDate] = useState(Date())
   const { data } = useGetCountries()
   const [countriesName, setCountriesName] = useState([])
+  const [imageUrl, setImageUrl] = useState('')
 
   useEffect(() => {
     if (data) {
       setCountriesName((prevCountries) => [
         ...prevCountries,
         ...data.map((data) => data.translations.spa.common)
-      ]);
+      ])
     }
-    console.log(countriesName);
   }, [data])
 
   const [form, setForm] = useState({
-    correo: "",
-    fechaNacimiento: "",
+    email: "jhojanrios.12@gmail.com",
+    constraseña: "1234567",
+    fechaNacimiento: "04/07/2003",
     pais: "",
     numero: "",
-    genero: "Mujer",
+    genero: "",
   })
+
+  const sendData = () => {
+    console.log(form)
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    if (name === 'numero' && !/^\d*$/.test(value) || value.length>7) return
     setForm((prevForm) => ({
       ...prevForm,
       [name]: value,
     }))
   }
 
-  const [isFocused, setIsFocused] = useState({
-    birthDate: false,
-    country: false,
-    phone: false,
-    gender: false,
-    password: false,
-  })
-
-  const handleFocus = (field) => {
-    setIsFocused((prevState) => ({
-      ...prevState,
-      [field]: true,
-    }))
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const showUrl = URL.createObjectURL(file)
+      setImageUrl(showUrl)
+    }
   }
-
-  const handleBlur = (field) => {
-    setIsFocused((prevState) => ({
-      ...prevState,
-      [field]: false,
-    }))
-  }
-
-  const genderOptions = [
-    { value: 'Hombre', label: 'Hombre' },
-    { value: 'Mujer', label: 'Mujer' },
-  ]
-
-  const countryOptions = [
-    { value: 'Bolivia', label: 'Bolivia' },
-    { value: 'Brasil', label: 'Brasil' },
-  ]
 
   const style = {
     control: (provided) => ({
       ...provided,
       borderColor: '#3E5C76',
-      borderWidth: '1px',
+      color: '#cbd5e1',
+      borderWidth: '2px',
+      borderRadius: '0.2rem',
       boxShadow: 'none',
       '&:hover': {
         borderColor: '#3E5C76',
+        cursor: 'text',
+      },
+      '&:focus': {
+        outline: 'none',
       },
     }),
     menu: (provided) => ({
@@ -88,13 +76,23 @@ const Profile = () => {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#3E5C76' : state.isFocused ? '#d9e2ec' : 'white',
-      color: state.isSelected ? 'white' : '#3E5C76',
+      backgroundColor: state.isSelected || state.isFocused ? '#d9e2ec' : 'white',
+      color: state.isSelected ? 'black' : 'black',
       '&:hover': {
         backgroundColor: '#d9e2ec',
       },
     }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#9ca3af',
+    })
   }
+
+
+  const genderOptions = [
+    { value: "Hombre", label: "Hombre" },
+    { value: "Mujer", label: "Mujer" },
+  ]
 
   return (
     <div className="container mx-auto px-4">
@@ -109,22 +107,48 @@ const Profile = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-6">
           <div className="md:text-left w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-htc-blue">
             <img
-              src="src/assets/med.jpg"
+              src={imageUrl ? imageUrl : '/src/assets/med.jpg'}
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/png, image/jpeg"
+              className="hidden"
+              onChange={handleFileChange}
+            />
           </div>
           <div className="text-center md:text-left">
-            <h3 className="text-2xl font-semibold text-gray-800">Kisnes Huges</h3>
-            <p className="text-gray-600">Correo: usuario@email.com</p>
+            <h3 className="text-4xl font-semibold text-gray-800">Kisnes Huges</h3>
+            <p className="text-gray-600">Se unio el: 04/07/2003</p>
           </div>
         </div>
 
+        <label
+          htmlFor="fileInput"
+          className="cursor-pointer bg-gray-300 hover:bg-htc-lightblue font-bold py-2 text-center w-1/4 rounded-md transition duration-300"
+        >
+          Cambiar foto de Perfil
+        </label>
+
         <div className="flex flex-col gap-4">
+          <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
+            <span className="text-gray-600 font-medium">Correo Electronico:</span>
+            <input
+              type="text"
+              name="email"
+              value={form.email}
+              placeholder="No especificado"
+              onChange={handleChange}
+              className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
+            />
+          </div>
+
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Contraseña:</span>
             <div className="text-gray-800 w-64">
-              <p>passwords</p>
+              <p className='cursor-default'>{'*'.repeat(form.constraseña.length)}</p>
             </div>
           </div>
 
@@ -140,15 +164,16 @@ const Profile = () => {
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">País:</span>
-            {countriesName && 
+            {countriesName &&
               <Select
-              name="genero"
-              value={{ value: form.pais, label: form.pais }} // Vincula el valor seleccionado directamente desde el estado
-              onChange={(selectedOption) => setForm({ ...form, pais: selectedOption.value })} // Actualiza el estado
-              options={countriesName.map((country) => ({ value: country, label: country }))} // Mapea las opciones al vuelo
-              className="w-64"
-              styles={style}
-            />
+                name="pais"
+                value={countriesName.find(country => country === form.pais) ? { value: form.pais, label: form.pais } : null}
+                onChange={(selectedOption) => setForm({ ...form, pais: selectedOption.value })}
+                options={countriesName.map((country) => ({ value: country, label: country }))}
+                className="w-64"
+                placeholder="No especificado"
+                styles={style}
+              />
             }
           </div>
 
@@ -157,11 +182,10 @@ const Profile = () => {
             <input
               type="text"
               name="numero"
-              value={form.numero || '78340433'}
-              onFocus={() => handleFocus('phone')}
-              onBlur={() => handleBlur('phone')}
+              value={form.numero}
               onChange={handleChange}
-              className={`text-gray-800 w-64 ${isFocused.phone ? 'border-b-2 border-htc-blue' : ''} focus:outline-none`}
+              placeholder="No especificado"
+              className='w-64 border-htc-blue border-2 rounded-sm px-2 h-8 focus:outline-none focus:none py-4'
             />
           </div>
 
@@ -173,6 +197,7 @@ const Profile = () => {
               onChange={(selectedOption) => setForm({ ...form, genero: selectedOption.value })}
               options={genderOptions}
               className='w-64'
+              placeholder="No especificado"
               styles={style}
             />
           </div>
@@ -186,12 +211,12 @@ const Profile = () => {
           </button>
           <div className="flex gap-2">
             <button
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white"
-              onClick={() => { setisEditOpen(true) }} >
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white transition duration-300"
+              onClick={sendData} >
               Editar Perfil
             </button>
             <button
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white"
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-htc-blue hover:text-white transition duration-300"
               onClick={() => { setIsPasswordOpen(true) }} >
               Cambiar Contraseña
             </button>
@@ -207,6 +232,7 @@ const Profile = () => {
         <EditProfile setOpen={setisEditOpen} />
       )}
     </div>
+
   )
 }
 
