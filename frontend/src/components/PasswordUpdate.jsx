@@ -1,18 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { usePutUpdatePasswordWithPassword } from '../hooks/useUsers'
+import authStore from '../store/authStore'
+
 
 const PasswordUpdate = ({ setOpen }) => {
+  const { mutate: updatePassword, error, isSuccess, isPending } = usePutUpdatePasswordWithPassword()
+  const { user } = authStore()
+  const [errorState, setErrorState] = useState({})
   const [data, setData] = useState({
-    currentPassword:"",
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   })
+  useEffect(() => {
+    setErrorState(error ? error : {})
+  }, [error])
+
+  useEffect(() => {
+    if(isSuccess)setOpen(false)
+  }, [isSuccess])
 
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
     confirm: false,
   })
-
   const handleChange = (e) => {
     const { name, value } = e.target
     setData((prevData) => ({
@@ -30,6 +42,13 @@ const PasswordUpdate = ({ setOpen }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    if (data.newPassword === data.confirmPassword) {
+      updatePassword({
+        email: user.email,
+        password: data.currentPassword,
+        newPassword: data.confirmPassword
+      })
+    }
   }
 
 
@@ -85,6 +104,9 @@ const PasswordUpdate = ({ setOpen }) => {
                 <i className={`bi bi-eye${showPassword.new ? '-slash' : ''}-fill`}></i>
               </button>
             </div>
+            {errorState && errorState.status === 400 && (
+              <small className='text-red-600'>{error.response.data.message}</small>
+            )}
           </div>
           <div className="relative mb-4">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
@@ -110,6 +132,15 @@ const PasswordUpdate = ({ setOpen }) => {
               </button>
             </div>
           </div>
+          {errorState && errorState.status === 401 && (
+              <small className='text-red-600'>{error.response.data.message}</small>
+            )}
+          {data.newPassword !== data.confirmPassword && (
+            <small className='text-red-600'>La contraseña no coincide</small>
+          )}
+          {!isSuccess && (
+            <small className='text-red-600'>Ha ocurrido un problema</small>
+          )}
           <div className="flex justify-end gap-2">
             <button
               type="button"

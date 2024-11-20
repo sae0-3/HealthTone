@@ -8,25 +8,23 @@ import authStore from '../store/authStore'
 import { useUpdateProfile } from '../hooks/useUsers'
 
 const Profile = () => {
-  const [card, setCard] = useState()
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [isEditOpen, setisEditOpen] = useState(false)
-  const [date, setDate] = useState( new Date(null))
   const { data } = useGetCountries()
   const [countriesName, setCountriesName] = useState([])
   const [imageUrl, setImageUrl] = useState('')
-  const {user} = authStore()
+  const { user, updateUser } = authStore()
   const [form, setForm] = useState({
+    id: user.id,
     email: user.email, 
     nacimiento: user.nacimiento?new Date(user.nacimiento):null, 
     pais: user.pais, 
-    telefono: user.number, 
+    number: user.number, 
     genero: user.genero, 
     se_unio: new Date(user.se_unio)
   })
   console.log('user', user)
   const { mutate: updateProfile, error, isPending, isSuccess } = useUpdateProfile()
-  
 
   useEffect(() => {
     if (data) {
@@ -37,9 +35,13 @@ const Profile = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if(isSuccess) updateUser(form)
+  }, [isSuccess])
+  
+
 
   const sendData = () => {
-    console.log(form)
     updateProfile(form)
   }
 
@@ -201,8 +203,8 @@ const Profile = () => {
             <span className="text-gray-600 font-medium">Número de teléfono:</span>
             <input
               type="text"
-              name="telefono"
-              value={form.telefono || ''}
+              name="number"
+              value={form.number || ''}
               onChange={(e) => {
                 const { value } = e.target;
                 if (/^\d*$/.test(value) && value.length <= 8) {
