@@ -30,7 +30,6 @@ const PasswordUpdate = ({ setOpen }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log('Datos enviados:', data)
   }
 
 

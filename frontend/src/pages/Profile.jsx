@@ -5,15 +5,25 @@ import { Link } from 'react-router-dom'
 import PasswordUpdate from '../components/PasswordUpdate'
 import Select from 'react-select'
 import { useGetCountries } from '../hooks/useCountries'
+import authStore from '../store/authStore'
 
 const Profile = () => {
   const [card, setCard] = useState()
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const [isEditOpen, setisEditOpen] = useState(false)
-  const [date, setDate] = useState(Date())
+  const [date, setDate] = useState( new Date(null))
   const { data } = useGetCountries()
   const [countriesName, setCountriesName] = useState([])
   const [imageUrl, setImageUrl] = useState('')
+  const {user} = authStore()
+  const [form, setForm] = useState({
+    email: user.email, 
+    nacimiento: user.nacimiento?new Date(user.nacimiento):null, 
+    pais: user.pais, 
+    telefono: user.telefono, 
+    genero: user.genero, 
+    se_unio: new Date(user.se_unio)
+  })
 
   useEffect(() => {
     if (data) {
@@ -24,14 +34,6 @@ const Profile = () => {
     }
   }, [data])
 
-  const [form, setForm] = useState({
-    email: "jhojanrios.12@gmail.com",
-    constraseña: "1234567",
-    fechaNacimiento: "04/07/2003",
-    pais: "",
-    numero: "",
-    genero: "",
-  })
 
   const sendData = () => {
     console.log(form)
@@ -39,10 +41,16 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    if (name === 'numero' && !/^\d*$/.test(value) || value.length>7) return
     setForm((prevForm) => ({
       ...prevForm,
       [name]: value,
+    }))
+  }
+
+  const handleDateChange = (date) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      ['nacimiento']: date,
     }))
   }
 
@@ -88,6 +96,17 @@ const Profile = () => {
     })
   }
 
+  const inputStyles = {
+    border: '2px solid #3e5c76', 
+    borderRadius: '4px', 
+    padding: '6px 12px', 
+    fontSize: '16px', 
+    color: '#333', 
+    backgroundColor: '#f9f9f9', 
+    width: '255px',
+    outline: 'none',
+  };
+
 
   const genderOptions = [
     { value: "Hombre", label: "Hombre" },
@@ -121,7 +140,7 @@ const Profile = () => {
           </div>
           <div className="text-center md:text-left">
             <h3 className="text-4xl font-semibold text-gray-800">Kisnes Huges</h3>
-            <p className="text-gray-600">Se unio el: 04/07/2003</p>
+            <p className="text-gray-600">Se unio el: {`${form.se_unio.getFullYear()}/${form.se_unio.getMonth()+1}/${form.se_unio.getDate()}`}</p>
           </div>
         </div>
 
@@ -146,18 +165,14 @@ const Profile = () => {
           </div>
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
-            <span className="text-gray-600 font-medium">Contraseña:</span>
-            <div className="text-gray-800 w-64">
-              <p className='cursor-default'>{'*'.repeat(form.constraseña.length)}</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Fecha de Nacimiento:</span>
             <div className="contenedor w-64">
               <DatePicker
-                selected={date}
-                onChange={(fecha) => setDate(fecha)}
+                name='nacimiento'
+                {...(form.nacimiento ? { selected: form.nacimiento } : {})}
+                onChange={handleDateChange}
+                placeholderText="Escriba su fecha de nacimiento"
+                customInput={<input style={inputStyles} />} 
               />
             </div>
           </div>
@@ -181,9 +196,14 @@ const Profile = () => {
             <span className="text-gray-600 font-medium">Número de teléfono:</span>
             <input
               type="text"
-              name="numero"
-              value={form.numero}
-              onChange={handleChange}
+              name="telefono"
+              value={form.telefono || ''}
+              onChange={(e) => {
+                const { value } = e.target;
+                if (/^\d*$/.test(value) && value.length <= 8) {
+                  handleChange(e)
+                }
+              }}
               placeholder="No especificado"
               className='w-64 border-htc-blue border-2 rounded-sm px-2 h-8 focus:outline-none focus:none py-4'
             />

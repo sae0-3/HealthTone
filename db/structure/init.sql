@@ -12,6 +12,9 @@ CREATE TABLE USUARIO (
     clave VARCHAR(255) NOT NULL,
     perfil TEXT,
     nacimiento DATE,
+    pais VARCHAR(100),
+    telefono VARCHAR(15),
+    genero VARCHAR(20),
     se_unio TIMESTAMP DEFAULT NOW()
 );
 

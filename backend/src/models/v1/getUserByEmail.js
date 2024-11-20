@@ -10,7 +10,12 @@ export const getUserByEmail = async (email) => {
       nombre as name,
       apellidos as lastname,
       email,
-      clave as password
+      clave as password,
+      nacimiento,
+      pais,
+      telefono,
+      genero,
+      se_unio
     FROM USUARIO
     WHERE email = $1
   `
