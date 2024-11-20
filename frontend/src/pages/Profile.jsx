@@ -6,6 +6,7 @@ import Select from 'react-select'
 import { useGetCountries } from '../hooks/useCountries'
 import authStore from '../store/authStore'
 import { useUpdateProfile } from '../hooks/useUsers'
+import { Modal } from '@/components/Modal'
 
 const Profile = () => {
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
@@ -16,14 +17,16 @@ const Profile = () => {
   const { user, updateUser } = authStore()
   const [form, setForm] = useState({
     id: user.id,
-    email: user.email, 
-    nacimiento: user.nacimiento?new Date(user.nacimiento):null, 
-    pais: user.pais, 
-    number: user.number, 
-    genero: user.genero, 
+    email: user.email,
+    nacimiento: user.nacimiento ? new Date(user.nacimiento) : null,
+    pais: user.pais,
+    number: user.number,
+    genero: user.genero,
     se_unio: new Date(user.se_unio)
   })
-  console.log('user', user)
+  const [viewConditions, setViewConditions] = useState(false)
+  const openModal = () => setViewConditions(true)
+  const closeModal = () => setViewConditions(false)
   const { mutate: updateProfile, error, isPending, isSuccess } = useUpdateProfile()
 
   useEffect(() => {
@@ -36,9 +39,9 @@ const Profile = () => {
   }, [data])
 
   useEffect(() => {
-    if(isSuccess) updateUser(form)
+    if (isSuccess) updateUser(form)
   }, [isSuccess])
-  
+
 
 
   const sendData = () => {
@@ -90,7 +93,7 @@ const Profile = () => {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#d9e2ec': 'white',
+      backgroundColor: state.isSelected ? '#d9e2ec' : 'white',
       color: 'black',
       '&:hover': {
         backgroundColor: '#9ca3af',
@@ -104,12 +107,12 @@ const Profile = () => {
   }
 
   const inputStyles = {
-    border: '2px solid #3e5c76', 
-    borderRadius: '4px', 
-    padding: '6px 12px', 
-    fontSize: '16px', 
-    color: '#333', 
-    backgroundColor: '#f9f9f9', 
+    border: '2px solid #3e5c76',
+    borderRadius: '4px',
+    padding: '6px 12px',
+    fontSize: '16px',
+    color: '#333',
+    backgroundColor: '#f9f9f9',
     width: '255px',
     outline: 'none',
   };
@@ -147,7 +150,7 @@ const Profile = () => {
           </div>
           <div className="text-center md:text-left">
             <h3 className="text-4xl font-semibold text-gray-800">Kisnes Huges</h3>
-            <p className="text-gray-600">Se unio el: {`${form.se_unio.getFullYear()}/${form.se_unio.getMonth()+1}/${form.se_unio.getDate()}`}</p>
+            <p className="text-gray-600">Se unio el: {`${form.se_unio.getFullYear()}/${form.se_unio.getMonth() + 1}/${form.se_unio.getDate()}`}</p>
           </div>
         </div>
 
@@ -179,7 +182,7 @@ const Profile = () => {
                 {...(form.nacimiento ? { selected: form.nacimiento } : {})}
                 onChange={handleDateChange}
                 placeholderText="Escriba su fecha de nacimiento"
-                customInput={<input style={inputStyles} />} 
+                customInput={<input style={inputStyles} />}
               />
             </div>
           </div>
@@ -231,7 +234,9 @@ const Profile = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-between">
-          <button className="text-left my-auto font-medium text-htc-lightblue hover:text-htc-blue">
+          <button 
+            className="text-left my-auto font-medium text-htc-lightblue hover:text-htc-blue"
+            onClick={openModal}>
             <span className="border-b border-htc-blue hover:border-htc-blue">
               Nuestros términos y condiciones
             </span>
@@ -255,8 +260,42 @@ const Profile = () => {
         <PasswordUpdate setOpen={setIsPasswordOpen} />
       )}
 
-      {isEditOpen && (
-        <EditProfile setOpen={setisEditOpen} />
+
+      {viewConditions && (
+        <Modal onClose={closeModal} title='Términos y Condiciones'>
+          <ul className='max-w-md space-y-1 list-disc list-inside'>
+            <li>
+              <span className='font-semibold'>Propósito del Servicio: </span>Este sistema ofrece acceso a audiolibros enfocados en la prevención, cuidado e información sobre salud y bienestar. Su propósito es brindar información educativa y de concienciación.
+            </li>
+            <li>
+              <span className='font-semibold'>Uso Personal y No Comercial: </span>Los usuarios reciben una licencia limitada, personal y no transferible para acceder al contenido. No está permitido distribuir, reproducir o vender los audiolibros, ni utilizarlos con fines comerciales sin autorización previa.
+            </li>
+            <li>
+              <span className='font-semibold'>No Sustitución de Consejos Médicos: </span>El contenido proporcionado es solo para fines informativos y no reemplaza el asesoramiento, diagnóstico o tratamiento profesional. Consulte a un médico o profesional de la salud para cualquier consulta médica.
+            </li>
+            <li>
+              <span className='font-semibold'>Responsabilidad del Usuario: </span>Es responsabilidad del usuario consultar a un profesional de la salud antes de implementar cualquier práctica o recomendación mencionada en los audiolibros. El sistema no se hace responsable de decisiones tomadas en base a su contenido.
+            </li>
+            {/* <li>
+              <span className='font-semibold'>Privacidad y Protección de Datos: </span>La privacidad de nuestros usuarios es prioritaria. La información personal recopilada se maneja conforme a normativas vigentes como el GDPR o la CCPA, especialmente en caso de datos sensibles. Para más detalles, consulte nuestra Política de Privacidad.
+            </li> */}
+            <li>
+              <span className='font-semibold'>Propiedad Intelectual: </span>Todo el contenido, incluidos los audiolibros y material visual, es propiedad exclusiva de la plataforma o sus creadores. Está prohibida cualquier reproducción, distribución o uso sin el permiso correspondiente.
+            </li>
+            <li>
+              <span className='font-semibold'>Modificaciones en el Servicio: </span>Nos reservamos el derecho de modificar los términos, funcionalidades o características del servicio. Cualquier cambio significativo se notificará a los usuarios de forma oportuna.
+            </li>
+            <li>
+              <span className='font-semibold'>Limitación de Responsabilidad: </span>La plataforma no se hace responsable de daños indirectos o consecuencias del uso indebido del contenido. Los usuarios son responsables de seguir las recomendaciones de salud oficiales y de sus propias decisiones.
+            </li>
+            <li>
+              <span className='font-semibold'>Suspensión de Cuenta: </span>Cualquier uso indebido o violación de estos términos, como la reproducción no autorizada del contenido, puede resultar en la suspensión o cancelación de la cuenta del usuario.
+            </li>
+            {/* <li>
+              <span className='font-semibold'>Política de Cancelación y Reembolsos: </span>En caso de una suscripción, el usuario puede cancelar en cualquier momento según los términos de cancelación. Las solicitudes de reembolso serán evaluadas conforme a las políticas vigentes en el momento de la solicitud.
+            </li> */}
+          </ul>
+        </Modal>
       )}
     </div>
 
