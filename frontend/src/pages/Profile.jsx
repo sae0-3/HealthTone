@@ -20,10 +20,11 @@ const Profile = () => {
     email: user.email, 
     nacimiento: user.nacimiento?new Date(user.nacimiento):null, 
     pais: user.pais, 
-    telefono: user.telefono, 
+    telefono: user.number, 
     genero: user.genero, 
     se_unio: new Date(user.se_unio)
   })
+  console.log('user', user)
   const { mutate: updateProfile, error, isPending, isSuccess } = useUpdateProfile()
   
 
@@ -87,11 +88,12 @@ const Profile = () => {
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isSelected || state.isFocused ? '#d9e2ec' : 'white',
-      color: state.isSelected ? 'black' : 'black',
+      backgroundColor: state.isSelected ? '#d9e2ec': 'white',
+      color: 'black',
       '&:hover': {
-        backgroundColor: '#d9e2ec',
+        backgroundColor: '#9ca3af',
       },
+      cursor: 'pointer',
     }),
     placeholder: (provided) => ({
       ...provided,
