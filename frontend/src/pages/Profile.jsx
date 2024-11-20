@@ -156,7 +156,7 @@ const Profile = () => {
 
         <label
           htmlFor="fileInput"
-          className="cursor-pointer bg-gray-300 hover:bg-htc-lightblue font-bold py-2 text-center w-1/4 rounded-md transition duration-300"
+          className="cursor-pointer bg-gray-300 hover:bg-htc-lightblue font-bold py-2 text-center w-[200px] rounded-md transition duration-300"
         >
           Cambiar foto de Perfil
         </label>
