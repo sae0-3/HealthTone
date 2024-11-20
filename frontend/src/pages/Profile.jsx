@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { Link } from 'react-router-dom'
 import PasswordUpdate from '../components/PasswordUpdate'
 import Select from 'react-select'
 import { useGetCountries } from '../hooks/useCountries'
 import authStore from '../store/authStore'
+import { useUpdateProfile } from '../hooks/useUsers'
 
 const Profile = () => {
   const [card, setCard] = useState()
@@ -24,6 +24,8 @@ const Profile = () => {
     genero: user.genero, 
     se_unio: new Date(user.se_unio)
   })
+  const { mutate: updateProfile, error, isPending, isSuccess } = useUpdateProfile()
+  
 
   useEffect(() => {
     if (data) {
@@ -37,6 +39,7 @@ const Profile = () => {
 
   const sendData = () => {
     console.log(form)
+    updateProfile(form)
   }
 
   const handleChange = (e) => {
