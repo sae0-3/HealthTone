@@ -45,8 +45,9 @@ const Profile = () => {
 
 
   const sendData = () => {
-    updateProfile(form)
-  }
+    const { email, genero, nacimiento, pais, se_unio, number } = form;
+    updateProfile({ email, genero, nacimiento, pais, se_unio, number });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target
