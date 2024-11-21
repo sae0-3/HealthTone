@@ -148,6 +148,12 @@ class InvalidPasswordError extends CustomError {
   }
 }
 
+class UserNameExistsError extends CustomError {
+  constructor(message = 'El nombre de usuario que elegiste ya está en uso.') {
+    super(message, 402)
+  }
+}
+
 
 
 export {
@@ -174,5 +180,6 @@ export {
   UndefinedFunctionError,
   UniqueViolationError,
   UserNotFoundError,
-  ValidationPageError
+  ValidationPageError,
+  UserNameExistsError
 }

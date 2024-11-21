@@ -1,18 +1,18 @@
 import bcrypt from 'bcryptjs'
-import { postUser as createUser, getUserByEmail } from '../../models/v1/index.js'
+import { postUser as createUser, getUserByEmail, getUserByUserName } from '../../models/v1/index.js'
 import {
   EmailExistsError,
   InvalidPasswordError,
   MissingCredentialsError,
+  UserNameExistsError,
 } from '../../utils/CustomError.js'
 import { isValidPassword } from '../../utils/validatePassword.js'
 
 
 export const postUser = async (req, res) => {
-  const { name, lastname, email, password, username } = req.body
-
+  const { name, lastname, email, userName, profile, password } = req.body
   try {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !userName) {
       throw new MissingCredentialsError()
     }
 
@@ -20,17 +20,17 @@ export const postUser = async (req, res) => {
     if (user) {
       throw new EmailExistsError()
     }
+    const userNameExists =  await getUserByUserName(userName)
+    if (userNameExists) {
+      throw new UserNameExistsError()
+    }
 
     if (!isValidPassword(password)) {
       throw new InvalidPasswordError()
     }
 
-    const finalUsername = username
-      ? username
-      : `${name}${email.substring(0, 5)}${parseInt(Math.random() * 100000)}`
-
     const hashedPassword = await bcrypt.hash(password, 7)
-    const result = await createUser({ name, lastname, email, password: hashedPassword, username: finalUsername })
+    const result = await createUser({ name, lastname, email, userName, profile, password: hashedPassword })
     res.status(201).json({
       user: result,
     })

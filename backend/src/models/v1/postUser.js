@@ -4,22 +4,23 @@ import pgErrors from '../../utils/pgErrors.js'
 
 
 export const postUser = async (user) => {
-  const { name, lastname, email, password, username } = user
+  const { name, lastname, email, userName, profile, password } = user
   const query = `
     INSERT INTO USUARIO
-      (nombre, apellidos, email, clave, username)
-    VALUES ($1, $2, $3, $4, $5)
+      (nombre, apellidos, email, userName, perfil, clave)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING
       id,
       nombre as name,
       apellidos as lastname,
       email,
-      clave as password,
-      username
+      username,
+      perfil as profile,
+      clave as password
   `
 
   try {
-    const result = await pool.query(query, [name, lastname, email, password, username])
+    const result = await pool.query(query, [name, lastname, email, userName, profile, password])
     return result.rows[0]
   } catch (err) {
     console.error('MODEL postUser', err)
