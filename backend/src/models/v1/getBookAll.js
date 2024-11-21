@@ -22,7 +22,15 @@ export const getBookAll = async (page, pageSize, search) => {
           )
         ) FILTER (WHERE ca.id IS NOT NULL),
         '[]'
-      ) AS categories
+      ) AS categories,
+      COALESCE(
+        (
+          SELECT ROUND(AVG(calif.calificacion)::numeric, 1)
+          FROM CALIFICACION calif
+          WHERE calif.id_contenido = co.id
+        ),
+        0
+    ) AS rating
     FROM CONTENIDO co
       LEFT JOIN R_CONTENIDO_CATEGORIA r on r.id_contenido = co.id
       LEFT JOIN CATEGORIA ca on ca.id = r.id_categoria

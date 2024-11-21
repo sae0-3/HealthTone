@@ -4,11 +4,11 @@ import pg from 'pg'
 const { Pool } = pg
 
 export const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  port: process.env.DB_PORT,
+  user: process.env.DB_USER || "healthtone",
+  password: process.env.DB_PASSWORD || "1234",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_DATABASE || "db_healthtone",
+  port: process.env.DB_PORT || "5432",
 })
 
 async function conectarDB(reintentos = 5, espera = 2000) {

@@ -3,7 +3,7 @@ import { InternalServerError } from '../../utils/CustomError.js'
 import pgErrors from '../../utils/pgErrors.js'
 
 
-export const getBookAllNew = async (page, pageSize) => {
+export const getBooksByCategorie = async (page, pageSize, categorie) => {
   const offset = (page - 1) * pageSize
   const query = `
     SELECT
@@ -14,15 +14,6 @@ export const getBookAllNew = async (page, pageSize) => {
       url_portada as cover_path,
       url_audio as audio_path,
       COALESCE(
-        json_agg(
-          json_build_object(
-            'id',ca.id,
-            'name',ca.nombre
-          )
-        ) FILTER (WHERE ca.id IS NOT NULL),
-        '[]'
-      ) AS categories,
-      COALESCE(
         (
           SELECT ROUND(AVG(calif.calificacion)::numeric, 1)
           FROM CALIFICACION calif
@@ -30,31 +21,31 @@ export const getBookAllNew = async (page, pageSize) => {
         ),
         0
     ) AS rating
-    FROM CONTENIDO co
-      LEFT JOIN R_CONTENIDO_CATEGORIA r on r.id_contenido = co.id
-      LEFT JOIN CATEGORIA ca on ca.id = r.id_categoria
+    FROM R_CONTENIDO_CATEGORIA rca
+      JOIN CONTENIDO co on rca.id_contenido = co.id
+      JOIN CATEGORIA ca on rca.id_categoria = ca.id
+    WHERE rca.id_categoria = $3
     GROUP BY co.id, co.nombre, autor, url_texto, url_portada, url_audio
-    ORDER BY fecha_subida DESC
     LIMIT $1 OFFSET $2
   `
 
   try {
-    const result = await pool.query(query, [pageSize, offset])
+    const result = await pool.query(query, [pageSize, offset, categorie])
     return result.rows
   } catch (err) {
-    console.error('MODEL getBookAllNew:', err)
+    console.error('MODEL getBooksByCategorie:', err)
     throw pgErrors[err.code] || new InternalServerError()
   }
 }
 
-export const getBookAllNewCount = async () => {
-  const query = 'SELECT 1 FROM CONTENIDO'
+export const getBooksByCategorieCount = async (categorie) => {
+  const query = 'SELECT 1 FROM R_CONTENIDO_CATEGORIA WHERE id_categoria = $1'
 
   try {
-    const result = await pool.query(query)
+    const result = await pool.query(query, [categorie])
     return result.rowCount
   } catch (err) {
-    console.error('MODEL getBookAllNewCount:', err)
+    console.error('MODEL getBooksByCategorieCount:', err)
     throw pgErrors[err.code] || new InternalServerError()
   }
 }
