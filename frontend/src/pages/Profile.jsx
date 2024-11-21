@@ -20,7 +20,7 @@ const Profile = () => {
     email: user.email,
     nacimiento: user.nacimiento ? new Date(user.nacimiento) : null,
     pais: user.pais,
-    number: user.number,
+    telefono: user.telefono,
     genero: user.genero,
     se_unio: new Date(user.se_unio)
   })
@@ -45,8 +45,8 @@ const Profile = () => {
 
 
   const sendData = () => {
-    const { email, genero, nacimiento, pais, se_unio, number } = form;
-    updateProfile({ email, genero, nacimiento, pais, se_unio, number });
+    const { email, genero, nacimiento, pais, se_unio, telefono } = form;
+    updateProfile({ email, genero, nacimiento, pais, se_unio, telefono });
   };
 
   const handleChange = (e) => {
@@ -207,8 +207,8 @@ const Profile = () => {
             <span className="text-gray-600 font-medium">Número de teléfono:</span>
             <input
               type="text"
-              name="number"
-              value={form.number || ''}
+              name="telefono"
+              value={form.telefono || ''}
               onChange={(e) => {
                 const { value } = e.target;
                 if (/^\d*$/.test(value) && value.length <= 8) {
