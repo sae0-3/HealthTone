@@ -1,3 +1,5 @@
+import { putUserProfile } from './putUserProfile.js'
+
 export { deleteFavorite } from './deleteFavorite.js'
 export { getBookAll, getBookAllCount } from './getBookAll.js'
 export { getBookAllNew, getBookAllNewCount } from './getBookAllNew.js'
@@ -19,3 +21,4 @@ export { postProgress } from './postProgress.js'
 export { postQualification } from './postQualification.js'
 export { postUser } from './postUser.js'
 export { putUserPassword } from './putUserPassword.js'
+export { putUserProfile } from './putUserProfile.js'

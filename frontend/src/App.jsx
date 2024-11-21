@@ -15,6 +15,7 @@ import authStore from '@/store/authStore'
 import { useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import 'bootstrap-icons/font/bootstrap-icons.min.css'
+import Profile from './pages/Profile'
 
 
 export const App = () => {
@@ -39,6 +40,7 @@ export const App = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/favorites' element={<Favorites />} />
           <Route path='/book/:id' element={<ContentBook />} />
+          <Route path='/user' element={<Profile />} />
         </Route>
 
         <Route path='*' element={<NotFound />} />
