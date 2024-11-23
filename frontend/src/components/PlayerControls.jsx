@@ -27,6 +27,7 @@ export const PlayerControls = () => {
     if (!currentAudio.id || !isPlaying) return;
 
     const handleSaveProgress = () => {
+      console.log('Guardando progreso despues de 15 seg');
       saveProgress({
         id_usuario: currentAudio.userId,
         id_contenido: currentAudio.id,

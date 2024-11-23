@@ -5,14 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65643fb7-a565-4a7d-8671-27737a3a3fdd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5494af5f-9a0b-4fc5-99f0-6908f266f9d5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5494af5f-9a0b-4fc5-99f0-6908f266f9d5.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5494af5f-9a0b-4fc5-99f0-6908f266f9d5/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5494af5f-9a0b-4fc5-99f0-6908f266f9d5/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/5494af5f-9a0b-4fc5-99f0-6908f266f9d5/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/controllers/progressController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/progressController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/routes/progressRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/progressRoutes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Player.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Player.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/PlayerControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PlayerControls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/store/audioStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/audioStore.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/store/authStore.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/authStore.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,16 +25,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2oXCiQC1E7qMws9iIxLWdHJMNze" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenDatabaseViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "CargaYGuadrdado",
-    "last_opened_file_path": "C:/Users/danie",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/danie/Documents/GitHub/HealthTone",
     "node.js.selected.package.tslint": "(autodetect)"
   },
   "keyToStringList": {
