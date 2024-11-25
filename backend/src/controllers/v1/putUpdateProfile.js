@@ -9,7 +9,7 @@ export const putUpdateProfile = async (req, res) => {
       throw new MissingCredentialsError()
     }
     
-    const user = await getUserByEmail(actualEmail)
+    const user = await getUserByEmail(email)
     if (user && actualEmail !== email) {
       throw new EmailExistsError()
     }
