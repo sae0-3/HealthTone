@@ -27,12 +27,14 @@ const Profile = () => {
     genero: user.genero,
     se_unio: new Date(user.se_unio)
   })
-  const [errorEmail, setErrorEmail] = useState('')
-  console.log(user)
   const [viewConditions, setViewConditions] = useState(false)
   const openModal = () => setViewConditions(true)
   const closeModal = () => setViewConditions(false)
   const { mutate: updateProfile, error, isPending, isSuccess } = useUpdateProfile()
+  const [errors, setErrors] = useState({})
+  const [errorState, setErrorState] = useState({})
+
+
 
   useEffect(() => {
     if (data) {
@@ -48,25 +50,17 @@ const Profile = () => {
   }, [isSuccess])
 
   useEffect(() => {
-    if (error) setErrorEmail(error)
-    if(!error) setErrorEmail('')
+    setErrorState(error ? error : {})
   }, [error])
 
 
 
   const sendData = () => {
-    setErrorEmail('')
-    const actualEmail = user.email
-    const { email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero } = form
-    updateProfile({ actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }))
+    if (!errors.name && !errors.lastname && !errors.email && !errors.userName) {
+      const actualEmail = user.email
+      const { email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero } = form
+      updateProfile({ actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
+    }
   }
 
   const handleDateChange = (date) => {
@@ -74,6 +68,44 @@ const Profile = () => {
       ...prevForm,
       ['nacimiento']: date,
     }))
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setForm({ ...form, [name]: value })
+    setErrorState({})
+
+    if (name === 'nombre' || name === 'apellidos') {
+      const nameRegex = /^[a-zA-Z\s]+$/
+      setErrors({
+        ...errors,
+        [name]: nameRegex.test(value) ? '' : 'Solo se permiten letras y espacios',
+      })
+    } else if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const allowedDomains = ['hotmail.com', 'gmail.com', 'yahoo.com', 'outlook.com'];
+      const domain = value.split('@')[1];
+
+      if (!emailRegex.test(value)) {
+        setErrors({
+          ...errors,
+          email: 'Formato de correo inválido',
+        });
+      } else if (!allowedDomains.includes(domain)) {
+        setErrors({
+          ...errors,
+          email: 'Dominio de correo no permitido',
+        });
+      } else {
+        setErrors({
+          ...errors,
+          email: '',
+        });
+      }
+
+    } else {
+      setErrors({})
+    }
   }
 
   const handleFileChange = (e) => {
@@ -186,9 +218,10 @@ const Profile = () => {
               className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
             />
           </div>
-          {errorEmail && errorEmail.status === 409 && (
-            <small className='text-red-600'>{errorEmail.response.data.message}</small>
-          )}
+            {errors.email && <small className='text-red-600'>{errors.email}</small>}
+            {errorState && errorState.status === 409 && (
+              <small className='text-red-600'>{errorState.response.data.message}</small>
+            )}
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Nombre(s):</span>
@@ -201,6 +234,7 @@ const Profile = () => {
               className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
             />
           </div>
+            {errors.nombre && <small className='text-red-600'>{errors.nombre}</small>}
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Apellido(s):</span>
@@ -213,6 +247,7 @@ const Profile = () => {
               className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
             />
           </div>
+            {errors.apellidos && <small className='text-red-600'>{errors.apellidos}</small>}
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Fecha de Nacimiento:</span>
