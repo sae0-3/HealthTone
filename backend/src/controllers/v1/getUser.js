@@ -9,9 +9,8 @@ export const getUser = async (req, res) => {
     if (!req.user) {
       throw new UserNotFoundError()
     }
-
-    const { id, name, lastname, email, clave, nacimiento, pais, telefono, genero, se_unio } = req.user
-    res.status(200).json({ token, user: { id, name, lastname, email, clave, nacimiento, pais, telefono, genero, se_unio } })
+    const { id, nombre, apellidos,username, email, perfil, clave, nacimiento, pais, telefono, genero, se_unio } = req.user
+    res.status(200).json({ token, user: { id, nombre, apellidos,username, email, perfil, clave, nacimiento, pais, telefono, genero, se_unio } })
   } catch (err) {
     console.error('CONTROLLER getUser:', err)
     res.status(err.statusCode || 500).json({
