@@ -27,6 +27,7 @@ const Profile = () => {
     genero: user.genero,
     se_unio: new Date(user.se_unio)
   })
+  const [errorEmail, setErrorEmail] = useState('')
   console.log(user)
   const [viewConditions, setViewConditions] = useState(false)
   const openModal = () => setViewConditions(true)
@@ -46,11 +47,18 @@ const Profile = () => {
     if (isSuccess) updateUser(form)
   }, [isSuccess])
 
+  useEffect(() => {
+    if (error) setErrorEmail(error)
+    if(!error) setErrorEmail('')
+  }, [error])
+
 
 
   const sendData = () => {
+    setErrorEmail('')
+    const actualEmail = user.email
     const { email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero } = form
-    updateProfile({ email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
+    updateProfile({ actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
   }
 
   const handleChange = (e) => {
@@ -154,7 +162,7 @@ const Profile = () => {
             />
           </div>
           <div className="text-center md:text-left">
-            <h3 className="text-4xl font-semibold text-gray-800">Kisnes Huges</h3>
+            <h3 className="text-4xl font-semibold text-gray-800">{user.username}</h3>
             <p className="text-gray-600">Se unio el: {`${form.se_unio.getFullYear()}/${form.se_unio.getMonth() + 1}/${form.se_unio.getDate()}`}</p>
           </div>
         </div>
@@ -178,6 +186,9 @@ const Profile = () => {
               className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
             />
           </div>
+          {errorEmail && errorEmail.status === 409 && (
+            <small className='text-red-600'>{errorEmail.response.data.message}</small>
+          )}
 
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
             <span className="text-gray-600 font-medium">Nombre(s):</span>
@@ -263,7 +274,7 @@ const Profile = () => {
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-between">
-          <button 
+          <button
             className="text-left my-auto font-medium text-htc-lightblue hover:text-htc-blue"
             onClick={openModal}>
             <span className="border-b border-htc-blue hover:border-htc-blue">
