@@ -10,7 +10,6 @@ import { Modal } from '@/components/Modal'
 
 const Profile = () => {
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
-  const [isEditOpen, setisEditOpen] = useState(false)
   const { data } = useGetCountries()
   const [countriesName, setCountriesName] = useState([])
   const [imageUrl, setImageUrl] = useState('')
@@ -19,11 +18,16 @@ const Profile = () => {
     id: user.id,
     email: user.email,
     nacimiento: user.nacimiento ? new Date(user.nacimiento) : null,
+    nombre: user.nombre,
+    apellidos: user.apellidos,
+    perfil: user.perfil,
+    username: user.username,
     pais: user.pais,
     telefono: user.telefono,
     genero: user.genero,
     se_unio: new Date(user.se_unio)
   })
+  console.log(user)
   const [viewConditions, setViewConditions] = useState(false)
   const openModal = () => setViewConditions(true)
   const closeModal = () => setViewConditions(false)
@@ -45,9 +49,9 @@ const Profile = () => {
 
 
   const sendData = () => {
-    const { email, genero, nacimiento, pais, se_unio, telefono } = form;
-    updateProfile({ email, genero, nacimiento, pais, se_unio, telefono });
-  };
+    const { email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero } = form
+    updateProfile({ email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -116,7 +120,7 @@ const Profile = () => {
     backgroundColor: '#f9f9f9',
     width: '255px',
     outline: 'none',
-  };
+  }
 
 
   const genderOptions = [
@@ -169,6 +173,30 @@ const Profile = () => {
               type="text"
               name="email"
               value={form.email}
+              placeholder="No especificado"
+              onChange={handleChange}
+              className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
+            <span className="text-gray-600 font-medium">Nombre(s):</span>
+            <input
+              type="text"
+              name="nombre"
+              value={form.nombre}
+              placeholder="No especificado"
+              onChange={handleChange}
+              className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between md:items-center gap-2">
+            <span className="text-gray-600 font-medium">Apellido(s):</span>
+            <input
+              type="text"
+              name="apellidos"
+              value={form.apellidos}
               placeholder="No especificado"
               onChange={handleChange}
               className='text-gray-800 w-64 border-htc-blue border-2 rounded-sm h-8 px-2 focus:outline-none py-4'
