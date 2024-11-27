@@ -48,6 +48,7 @@ export const Sidebar = ({ toggleSidebar }) => {
 
       <Link 
         className="flex items-center justify-center gap-4 fixed bottom-20 mb-5 w-full lg:w-52 hover:cursor-pointer"
+        onClick={() => {toggleSidebar()}}
         to={'/user'}>
         <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-htc-blue">
           <img
