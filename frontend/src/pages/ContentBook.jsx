@@ -31,7 +31,7 @@ export const ContentBook = () => {
         author: book.author,
         cover: book.cover_path,
         url: book.audio_path
-      }.dataProgress)
+      },dataProgress)
     }
   }, [book])
 

@@ -28,7 +28,7 @@ export const PlayerControls = () => {
         id_content: currentAudio.id,
         progress: playbackRef.current,
       })
-    }, 10000)
+    }, 5000)
 
     return () => clearInterval(interval)
   }, [isPlaying, currentAudio?.id, howl])
