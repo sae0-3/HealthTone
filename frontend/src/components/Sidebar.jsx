@@ -12,6 +12,7 @@ export const Sidebar = ({ toggleSidebar }) => {
     { label: 'Explorar', icon: 'search-heart', to: '/explore' },
     { label: 'Favoritos', icon: 'heart', to: '/favorites' },
     { label: 'Categorias', icon: 'tags', to: '/categories' },
+    { label: 'Historial', icon: 'archive', to: '/historial' },
   ]
 
   const handleLogout = async () => {
