@@ -7,32 +7,40 @@ import { useEffect } from 'react';
 import { useGetProgress } from '@/hooks/useGetProgress';
 
 export const Player = () => {
-  const { setCurrentAudio, currentAudio, setPosition, howl } = audioStore();
+  const { setCurrentAudio, currentAudio, howl, setPosition } = audioStore();
   const { user } = authStore();
-
-  const { data: progreso, isSuccess } = useGetProgress(user?.userId, currentAudio?.id);
+  
+  const { data: progreso, isSuccess } = useGetProgress(
+    user?.userId,
+    currentAudio?.id
+  );
 
   useEffect(() => {
-    const initialAudio = {
-      id: null,
-      title: 'Unknow Title',
-      author: 'Unknow Author',
-      cover: null,
-      url: null,
-      userId: user?.userId || null,
-    };
+    if (user) {
+      const initialAudio = {
+        id: null,
+        title: 'Unknown Title',
+        author: 'Unknown Author',
+        cover: null,
+        url: null,
+        userId: user.userId,
+      };
 
-    setCurrentAudio(initialAudio);
+      setCurrentAudio(initialAudio);
+    }
   }, [setCurrentAudio, user]);
 
   useEffect(() => {
     if (isSuccess && progreso !== undefined && howl) {
-      howl.seek(progreso);
-      setPosition(progreso);
+      howl.seek(progreso); // Mueve la posición del audio al progreso guardado
+      setPosition(progreso); // Actualiza el estado del progreso
     }
   }, [isSuccess, progreso, howl, setPosition]);
+    
 
-  if (!currentAudio) {
+
+  // No renderizar el Player si no hay usuario o audio actual
+  if (!user || !currentAudio) {
     return null;
   }
 
