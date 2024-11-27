@@ -12,7 +12,7 @@ const audioStore = create((set) => ({
   duration: 0,
   isOpenDescription: false,
 
-  setCurrentAudio: (audio) => set((state) => {
+  setCurrentAudio: (audio, progress=0) => set((state) => {
     state.howl?.unload()
 
     const newHowl = new Howl({
@@ -22,7 +22,7 @@ const audioStore = create((set) => ({
         const audioDuration = newHowl.duration()
         set({ duration: audioDuration })
       },
-      onend: () => set({ isPlaying: false, playbackPosition: 0 }),
+      onend: () => set({ isPlaying: false, playbackPosition: progress }),
     })
 
     return { currentAudio: audio, howl: newHowl, playbackPosition: 0 }

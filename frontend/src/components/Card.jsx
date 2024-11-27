@@ -43,7 +43,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
 
     if (!isPlaying) setPlaying(true)
 
-    setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
+    setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio },data?data.data.progress:0)
     startAudio(data?data.data.progress:0)
   }
 
