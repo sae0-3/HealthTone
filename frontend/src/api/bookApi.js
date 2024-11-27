@@ -21,6 +21,8 @@ export const getBooksFavoritesBySearch = (query) => axiosInstance.get(`/books/fa
 
 export const getProgress = () => axiosInstance.get('/books/progress')
 
+export const getProgressAll = () => axiosInstance.get('/books/progressAll')
+
 export const getProgressByContentId = (id_contenido) => axiosInstance.get(`/books/progress/${id_contenido}`)
 
 export const postProgress = (id_content, progress) => axiosInstance.post('/books/progress', { id_content, progress })

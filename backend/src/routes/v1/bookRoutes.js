@@ -16,6 +16,7 @@ import {
   postProgress,
   postQualification,
   getProgressByContentId,
+  getProgressAll,
 } from '../../controllers/v1/index.js'
 
 
@@ -32,6 +33,7 @@ bookRoutes.post('/favorites/:id', passport.authenticate('jwt', { session: false 
 bookRoutes.delete('/favorites/:id', passport.authenticate('jwt', { session: false }), deleteFavorite)
 bookRoutes.get('/progress', passport.authenticate('jwt', { session: false }), getProgress)
 bookRoutes.get('/progress/:id_content', passport.authenticate('jwt', { session: false }), getProgressByContentId)
+bookRoutes.get('/progressAll', passport.authenticate('jwt', { session: false }), getProgressAll)
 bookRoutes.post('/progress', passport.authenticate('jwt', { session: false }), postProgress)
 bookRoutes.post('/qualification', passport.authenticate('jwt', { session: false }), postQualification)
 bookRoutes.post('/:id', passport.authenticate('jwt', { session: false }), postBookView)

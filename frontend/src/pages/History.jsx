@@ -1,9 +1,8 @@
-import React from 'react'
+import { LayoutContent } from '@/layouts/LayoutContent'
+import { useGetAllProgress } from '../hooks/useProgress'
 
-const History = () => {
-  return (
-    <div>History</div>
-  )
+
+export const History = () => {
+  const data = useGetAllProgress()
+  return <LayoutContent title='Historial' content={data} />
 }
-
-export default History
