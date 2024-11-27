@@ -30,10 +30,11 @@ const audioStore = create((set) => ({
 
   setPlaying: (value) => set({ isPlaying: value }),
 
-  togglePlay: () => set((state) => {
+  togglePlay: (progress = 0) => set((state) => {
     if (state.isPlaying) {
       state.howl?.pause()
     } else {
+      if (progress > 0)state.howl?.seek(progress)
       state.howl?.play()
     }
     return { isPlaying: !state.isPlaying }
@@ -57,10 +58,11 @@ const audioStore = create((set) => ({
     return { muted: isMuted }
   }),
 
-  startAudio: () => set((state) => {
+  startAudio: (progress = 0) => set((state) => {
+    if (progress > 0)state.howl?.seek(progress)
     state.howl?.play()
     state.howl?.mute(state.muted)
-    return { isPlaying: true, playbackPosition: 0 }
+    return { isPlaying: true }
   }),
 
   logoutAudio: () => set((state) => {
@@ -74,3 +76,4 @@ const audioStore = create((set) => ({
 }))
 
 export default audioStore
+

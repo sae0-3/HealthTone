@@ -4,16 +4,18 @@ import { useDeleteBookFavorites, usePostBookFavorites } from '@/hooks/useBooks'
 import audioStore from '@/store/audioStore'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useGetProgressByContentId } from '../hooks/useProgress'
 
 
 export const Card = ({ id, title, author, url_cover, url_audio, categories, disabled, isFav, isContent, rating }) => {
-  const { setPlaying, setCurrentAudio, startAudio, currentAudio, setIsOpenDescription } = audioStore()
+  const { setPlaying, setCurrentAudio, startAudio, currentAudio,togglePlay, setIsOpenDescription } = audioStore()
   const [iconHeart, setIconHeart] = useState(isFav)
   const { mutate: saveFavorite, isPending: isPendingPost } = usePostBookFavorites(id)
   const { mutate: deleteFavorite, isPending: isPendingDelete } = useDeleteBookFavorites(id)
   const [showNotification, setShowNotification] = useState(false)
   const isPlaying = currentAudio?.id === id
   const [duration, setDuration] = useState('00:00')
+  const {data} = useGetProgressByContentId(id, id!==null)
 
   useEffect(() => {
     const audio = new Audio(url_audio)
@@ -42,7 +44,7 @@ export const Card = ({ id, title, author, url_cover, url_audio, categories, disa
     if (!isPlaying) setPlaying(true)
 
     setCurrentAudio({ id, title, author, cover: url_cover, url: url_audio })
-    startAudio()
+    startAudio(data?data.data.progress:0)
   }
 
   const handleFavorite = (e) => {

@@ -1,7 +1,7 @@
 import { ProgressBar } from '@/components/ProgressBar'
 import audioStore from '@/store/audioStore'
-import { useEffect, useRef } from 'react'
-
+import { useState, useEffect, useRef } from 'react'
+import { usePostProgress, useGetProgressByContentId} from '../hooks/useProgress'
 
 export const PlayerControls = () => {
   const {
@@ -14,9 +14,25 @@ export const PlayerControls = () => {
     setPosition
   } = audioStore()
 
+  const {data} = useGetProgressByContentId(currentAudio.id, currentAudio.id!==null)
+  
+  const { mutate: postProgress, isLoading, isError, isSuccess, error } = usePostProgress()
+  
   const animationRef = useRef(null)
   const playbackRef = useRef(playbackPosition)
 
+  useEffect(() => {
+    if (!isPlaying || !currentAudio?.id) return
+    const interval = setInterval(() => {
+      postProgress({
+        id_content: currentAudio.id,
+        progress: playbackRef.current,
+      })
+    }, 10000)
+
+    return () => clearInterval(interval)
+  }, [isPlaying, currentAudio?.id, howl])
+  
   useEffect(() => {
     playbackRef.current = playbackPosition
   }, [playbackPosition])
@@ -27,7 +43,6 @@ export const PlayerControls = () => {
     const updatePosition = () => {
       const currentPos = howl.seek() || 0
       playbackRef.current = currentPos
-
       if (Math.abs(currentPos - playbackPosition) > 0.5) {
         setPosition(currentPos)
       }
@@ -66,7 +81,7 @@ export const PlayerControls = () => {
           <i className='bi bi-skip-backward'></i>
         </button>
         <button className='disabled:opacity-50'
-          onClick={() => { togglePlay() }} disabled={!currentAudio.id}
+          onClick={() => { togglePlay(data.data.progress) }} disabled={!currentAudio.id}
         >
           <i className={`bi bi-${isPlaying ? 'pause' : 'play'}-fill`}></i>
         </button>

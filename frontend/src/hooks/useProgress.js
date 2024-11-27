@@ -1,4 +1,4 @@
-import { getProgress, postProgress } from '@/api/bookApi'
+import { getProgress, postProgress, getProgressByContentId } from '@/api/bookApi'
 import authStore from '@/store/authStore'
 import queryClient from '@/utils/queryClient'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -10,6 +10,16 @@ export const useGetProgress = () => {
   return useQuery({
     queryKey: ['books', 'progress', id],
     queryFn: getProgress,
+  })
+}
+
+export const useGetProgressByContentId = (id_contenido, enabled) => {
+  const { user: { id } } = authStore()
+
+  return useQuery({
+    queryKey: ['books', 'progress', id, id_contenido],
+    queryFn: () => getProgressByContentId(id_contenido),
+    enabled: enabled
   })
 }
 

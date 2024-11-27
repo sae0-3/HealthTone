@@ -80,7 +80,7 @@ CREATE TABLE VISUALIZACION (
 CREATE TABLE PROGRESO (
     id_usuario INT NOT NULL,
     id_contenido INT NOT NULL,
-    progreso INT NOT NULL,
+    progreso NUMERIC NOT NULL,
     fecha TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY (id_usuario, id_contenido),
     FOREIGN KEY (id_usuario) REFERENCES USUARIO(id),
