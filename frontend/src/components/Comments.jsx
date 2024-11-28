@@ -40,6 +40,8 @@ export const Comments = ({ id_content }) => {
           {isAscending ? 'Más recientes' : 'Más antiguos'}
         </button>
       </div>
+      <br></br>
+      <br></br>
 
       <CommentInput id={id_content} />
 
