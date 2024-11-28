@@ -9,7 +9,7 @@ export const CommentInput = ({ id }) => {
   const handleSubmit = () => {
     if (!comment.trim()) {
       setNotification({ type: 'error', message: 'El comentario no puede estar vacío.' })
-      setTimeout(() => setNotification(null), 3000) 
+      setTimeout(() => setNotification(null), 3000)
       return
     }
 
@@ -25,6 +25,10 @@ export const CommentInput = ({ id }) => {
       setComment('')
       setTimeout(() => setNotification(null), 3000)
     }
+  }
+
+  const handleCancel = () => {
+    setComment('')
   }
 
   return (
@@ -58,6 +62,13 @@ export const CommentInput = ({ id }) => {
             disabled={isPending}
           >
             <i className='bi bi-send-fill text-lg'></i>
+          </button>
+          <button
+            onClick={handleCancel}
+            className='ml-3 p-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition focus:outline-none'
+            disabled={isPending}
+          >
+            Cancelar
           </button>
         </div>
       </div>
