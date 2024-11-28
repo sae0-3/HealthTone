@@ -7,19 +7,24 @@ export const CommentInput = ({ id }) => {
   const { mutate: post, isPending } = usePostComment(id)
 
   const handleSubmit = () => {
-    if (comment.trim()) {
-      try {
-        post({
-          message: comment,
-        })
-        setNotification({ type: 'success', message: 'Comentario publicado correctamente.' })
-      } catch (err) {
-        console.error(err)
-        setNotification({ type: 'error', message: 'Error al publicar el comentario.' })
-      } finally {
-        setComment('')
-        setTimeout(() => setNotification(null), 3000) // Oculta la notificación después de 3 segundos
-      }
+    if (!comment.trim()) {
+      // Si el comentario está vacío o solo contiene espacios
+      setNotification({ type: 'error', message: 'El comentario no puede estar vacío.' })
+      setTimeout(() => setNotification(null), 3000) // Oculta la notificación después de 3 segundos
+      return
+    }
+
+    try {
+      post({
+        message: comment.trim(),
+      })
+      setNotification({ type: 'success', message: 'Comentario publicado correctamente.' })
+    } catch (err) {
+      console.error(err)
+      setNotification({ type: 'error', message: 'Error al publicar el comentario.' })
+    } finally {
+      setComment('') // Limpia el campo de comentario
+      setTimeout(() => setNotification(null), 3000) // Oculta la notificación después de 3 segundos
     }
   }
 
@@ -29,9 +34,7 @@ export const CommentInput = ({ id }) => {
       {notification && (
         <div
           className={`p-3 text-white rounded-md ${
-            notification.type === 'success'
-              ? 'bg-green-500'
-              : 'bg-red-500'
+            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
           }`}
         >
           {notification.message}
