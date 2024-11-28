@@ -23,7 +23,15 @@ export const getFavorites = async (page, pageSize, id_user, search) => {
           )
         ) FILTER (WHERE ca.id IS NOT NULL),
         '[]'
-      ) AS categories
+      ) AS categories,
+      COALESCE(
+        (
+          SELECT ROUND(AVG(ca.calificacion)::numeric, 1)
+          FROM CALIFICACION ca
+          WHERE ca.id_contenido = co.id
+        ),
+        0
+    ) AS rating
     FROM FAVORITO fa
       JOIN CONTENIDO co ON fa.id_contenido = co.id
       LEFT JOIN R_CONTENIDO_CATEGORIA r ON co.id = r.id_contenido
