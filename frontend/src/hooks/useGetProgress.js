@@ -8,3 +8,4 @@ export const useGetProgress = (id_usuario, id_contenido) => {
     enabled: !!id_usuario && !!id_contenido,
   });
 };
+  

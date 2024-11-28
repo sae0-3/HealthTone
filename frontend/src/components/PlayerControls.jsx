@@ -35,25 +35,13 @@ export const PlayerControls = () => {
       });
     };
 
-    const interval = setInterval(handleSaveProgress, 15000);
+    const interval = setInterval(handleSaveProgress, 8000);
 
     return () => clearInterval(interval);
   }, [isPlaying, currentAudio, saveProgress]);
 
   const handlePause = () => {
     togglePlay();
-    if (!isPlaying && currentAudio.id) {
-      console.log('Guardando progreso al pausar:');
-      console.log('ID de usuario:', currentAudio.userId);
-      console.log('ID de contenido:', currentAudio.id);
-      console.log('Progreso:', Math.floor(playbackRef.current));
-
-      saveProgress({
-        id_usuario: currentAudio.userId,
-        id_contenido: currentAudio.id,
-        progreso: Math.floor(playbackRef.current),
-      });
-    }
   };
 
   useEffect(() => {
