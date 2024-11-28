@@ -3,8 +3,8 @@ import { usePostQualification } from '@/hooks/useBooks'
 import { useState } from 'react'
 
 export const Qualification = ({ id, initValue = 0, setView }) => {
-  const [value, setValue] = useState(initValue) // Valor de la calificación seleccionada
-  const [hoverIndex, setHoverIndex] = useState(0) // Índice de la estrella bajo el mouse
+  const [value, setValue] = useState(initValue)
+  const [hoverIndex, setHoverIndex] = useState(0)
   const { mutate: post, isPending } = usePostQualification(id)
 
   const handleCloseCalif = () => {
@@ -29,14 +29,14 @@ export const Qualification = ({ id, initValue = 0, setView }) => {
     <Modal title='Califica el contenido' onClose={handleCloseCalif}>
       <div className='flex justify-around text-2xl text-yellow-500'>
         {Array.from({ length: 5 }, (_, index) => {
-          const isHovered = hoverIndex > index // Determina si la estrella está "hovered"
-          const isSelected = value > index // Determina si la estrella está seleccionada
+          const isHovered = hoverIndex > index
+          const isSelected = value > index
           return (
             <button
               key={index}
-              onClick={() => setValue(index + 1)} // Actualiza el valor de calificación al hacer clic
-              onMouseEnter={() => setHoverIndex(index + 1)} // Cambia el índice de hover
-              onMouseLeave={() => setHoverIndex(0)} // Resetea el índice de hover al salir
+              onClick={() => setValue(index + 1)}
+              onMouseEnter={() => setHoverIndex(index + 1)}
+              onMouseLeave={() => setHoverIndex(0)}
               className='transition duration-200 cursor-pointer'
             >
               <i

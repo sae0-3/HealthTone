@@ -4,16 +4,45 @@ import { Loading } from '@/components/Loading'
 import { useGetComments } from '@/hooks/useBooks'
 import { useState } from 'react'
 
+const TruncatedComment = ({ author, message, date }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const shouldTruncate = message.length > 150
+  const truncatedMessage = shouldTruncate && !isExpanded
+    ? `${message.slice(0, 150)}...`
+    : message
+
+  return (
+    <Comment
+      author={author}
+      date={date}
+      message={
+        <>
+          {truncatedMessage}
+          {shouldTruncate && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className='ml-2 text-htc-lightblue hover:text-black transition focus:outline-none underline'
+            >
+              {isExpanded ? 'Mostrar menos' : 'Mostrar más'}
+            </button>
+          )}
+        </>
+      }
+    />
+  )
+}
+
 export const Comments = ({ id_content }) => {
   const { data: dataComments, isLoading } = useGetComments(id_content)
-  const [isAscending, setIsAscending] = useState(true) // Estado para el orden
+  const [isAscending, setIsAscending] = useState(true)
   const comments = dataComments?.data.comments || []
 
   if (isLoading) {
     return <Loading />
   }
 
-  // Ordenar comentarios según el estado
+
   const sortedComments = [...comments].sort((a, b) => {
     const dateA = new Date(a.date)
     const dateB = new Date(b.date)
@@ -40,14 +69,14 @@ export const Comments = ({ id_content }) => {
           {isAscending ? 'Más recientes' : 'Más antiguos'}
         </button>
       </div>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
 
       <CommentInput id={id_content} />
 
       <div className='flex flex-col w-full mt-5'>
         {sortedComments.map(({ id, author, message, date }, idx) => (
-          <Comment
+          <TruncatedComment
             key={`${id}-${idx}`}
             author={author}
             message={message}
