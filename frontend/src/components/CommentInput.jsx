@@ -3,14 +3,13 @@ import { usePostComment } from '@/hooks/useBooks'
 
 export const CommentInput = ({ id }) => {
   const [comment, setComment] = useState('')
-  const [notification, setNotification] = useState(null) // Estado para la notificación
+  const [notification, setNotification] = useState(null)
   const { mutate: post, isPending } = usePostComment(id)
 
   const handleSubmit = () => {
     if (!comment.trim()) {
-      // Si el comentario está vacío o solo contiene espacios
       setNotification({ type: 'error', message: 'El comentario no puede estar vacío.' })
-      setTimeout(() => setNotification(null), 3000) // Oculta la notificación después de 3 segundos
+      setTimeout(() => setNotification(null), 3000) 
       return
     }
 
@@ -23,8 +22,8 @@ export const CommentInput = ({ id }) => {
       console.error(err)
       setNotification({ type: 'error', message: 'Error al publicar el comentario.' })
     } finally {
-      setComment('') // Limpia el campo de comentario
-      setTimeout(() => setNotification(null), 3000) // Oculta la notificación después de 3 segundos
+      setComment('')
+      setTimeout(() => setNotification(null), 3000)
     }
   }
 
