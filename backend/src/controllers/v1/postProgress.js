@@ -35,7 +35,7 @@ export const postProgress = async (req, res) => {
     console.error('CONTROLLER postProgress:', err)
     res.status(err.statusCode || 500).json({
       statusCode: err.statusCode || 500,
-      message: err.message || 'Error al guardar el favorito.',
+      message: err.message || 'Error al guardar el progreso.',
     })
   }
 }
