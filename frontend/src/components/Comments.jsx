@@ -54,7 +54,7 @@ export const Comments = ({ id_content }) => {
   }
 
   return (
-    <div className='w-full pt-6 border-t border-gray-300 flex flex-col items-center lg:px-20 relative'>
+    <div className='w-full pt-6 border-t border-gray-300 flex flex-col lg:px-20 relative'>
       <div className='absolute top-0 left-0 mt-2 mr-4 flex items-center gap-4'>
         <span className='text-gray-600 text-sm'>
           {comments.length} {comments.length === 1 ? 'Comentario' : 'Comentarios'}
