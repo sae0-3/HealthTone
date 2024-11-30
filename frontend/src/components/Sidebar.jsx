@@ -18,7 +18,6 @@ export const Sidebar = ({ toggleSidebar }) => {
     { label: 'Categorias', icon: 'tags', to: '/categories' },
     { label: 'Historial', icon: 'archive', to: '/historial' },
   ]
-  console.log(data)
 
   // useEffect(() => {
   //   if(data) setImage(data.data.user.perfil)
