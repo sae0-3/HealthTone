@@ -5,15 +5,19 @@ import PasswordUpdate from '../components/PasswordUpdate'
 import Select from 'react-select'
 import { useGetCountries } from '../hooks/useCountries'
 import authStore from '../store/authStore'
-import { useUpdateProfile } from '../hooks/useUsers'
+import { useUpdateProfile, useGetInfoUser } from '../hooks/useUsers'
 import { Modal } from '@/components/Modal'
+import { uploadFile } from '@/firebase/config'
 
+ 
 const Profile = () => {
   const [isPasswordOpen, setIsPasswordOpen] = useState(false)
   const { data } = useGetCountries()
   const [countriesName, setCountriesName] = useState([])
-  const [imageUrl, setImageUrl] = useState('')
+  const [image, setImage] = useState(null)
   const { user, updateUser } = authStore()
+  const [profileImage, setProfileImage] = useState(user.perfil)
+  const {refetch} = useGetInfoUser()
   const [form, setForm] = useState({
     id: user.id,
     email: user.email,
@@ -34,8 +38,6 @@ const Profile = () => {
   const [errors, setErrors] = useState({})
   const [errorState, setErrorState] = useState({})
 
-
-
   useEffect(() => {
     if (data) {
       setCountriesName((prevCountries) => [
@@ -43,25 +45,40 @@ const Profile = () => {
         ...data.map((data) => data.translations.spa.common)
       ])
     }
-  }, [data])
-
-  useEffect(() => {
-    if (isSuccess) updateUser(form)
-  }, [isSuccess])
+  }, [data]) 
 
   useEffect(() => {
     setErrorState(error ? error : {})
   }, [error])
 
-
-
-  const sendData = () => {
-    if (!errors.name && !errors.lastname && !errors.email && !errors.userName) {
+  useEffect(() => {
+    console.log(form)
       const actualEmail = user.email
-      const { email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero } = form
+      const { email, nacimiento, nombre, apellidos, username, pais, perfil, telefono, genero } = form
       updateProfile({ actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
+      updateUser(form)
+  }, [form.perfil])
+  
+  
+
+
+  const sendData = async () => {
+    if (!errors.name && !errors.lastname && !errors.email && !errors.userName) {
+      let perfil; // Declarar perfil fuera del bloque condicional
+      if (image) {
+        console.log(image);
+        perfil = await uploadFile(image); // Asignar el perfil con la imagen subida
+      } else {
+        perfil = user.perfil; // Asignar null si no hay imagen
+      }
+  
+      setForm((prevForm) => ({
+        ...prevForm,
+        perfil: perfil, // Establecer el valor de perfil en el estado
+      }));
     }
   }
+  
 
   const handleDateChange = (date) => {
     setForm((prevForm) => ({
@@ -111,8 +128,9 @@ const Profile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     if (file) {
-      const showUrl = URL.createObjectURL(file)
-      setImageUrl(showUrl)
+      const objectFile = URL.createObjectURL(file)
+      setProfileImage(objectFile)
+      setImage(file)
     }
   }
 
@@ -180,11 +198,12 @@ const Profile = () => {
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl mx-auto flex flex-col gap-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-6">
           <div className="md:text-left w-28 h-28 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-htc-blue">
-            <img
-              src={imageUrl ? imageUrl : '/src/assets/med.jpg'}
+            {profileImage && <img
+              src={profileImage ? profileImage : 
+                'https://firebasestorage.googleapis.com/v0/b/healthtone-39885.appspot.com/o/2a73ef8a-9679-4b23-b0fc-565aedb5f526?alt=media&token=e8956f06-864f-4731-a194-f66683111cb8'}
               alt="User Avatar"
               className="w-full h-full object-cover"
-            />
+            />}
             <input
               id="fileInput"
               type="file"

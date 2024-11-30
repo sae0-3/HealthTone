@@ -1,11 +1,15 @@
 import audioStore from '@/store/audioStore'
 import authStore from '@/store/authStore'
 import { Link, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useGetInfoUser } from '@/hooks/useUsers'
 
 
 export const Sidebar = ({ toggleSidebar }) => {
   const { pathname, search } = useLocation()
   const { logout, user } = authStore()
+  // const [image, setImage] = useState(null)
+  const {data, isLoading } = useGetInfoUser()
   const { logoutAudio, setIsOpenDescription } = audioStore()
   const options = [
     { label: 'Inicio', icon: 'house', to: '/' },
@@ -14,6 +18,12 @@ export const Sidebar = ({ toggleSidebar }) => {
     { label: 'Categorias', icon: 'tags', to: '/categories' },
     { label: 'Historial', icon: 'archive', to: '/historial' },
   ]
+  console.log(data)
+
+  // useEffect(() => {
+  //   if(data) setImage(data.data.user.perfil)
+  // }, [data])
+  
 
   const handleLogout = async () => {
     setIsOpenDescription(false)
@@ -21,6 +31,7 @@ export const Sidebar = ({ toggleSidebar }) => {
     logout()
   }
 
+  if(isLoading) return null
   return (
     <aside className='bg-htc-white h-screen w-full lg:w-52'>
       <div className='h-20 flex justify-between items-center px-3 lg:justify-center'>
@@ -50,12 +61,12 @@ export const Sidebar = ({ toggleSidebar }) => {
         className="flex items-center gap-4 fixed bottom-20 mb-5 w-full lg:w-52 hover:cursor-pointer px-5"
         onClick={() => { toggleSidebar() }}
         to={'/user'}>
-        <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-htc-blue flex-shrink-0">
-          <img
-            src="src/assets/med.jpg"
+        <div className="w-11 h-11 rounded-full bg-gray-300 overflow-hidden border-2 border-htc-blue flex-shrink-0">
+          {user.perfil && <img
+            src={user.perfil}
             alt="User Avatar"
             className="w-full h-full object-cover"
-          />
+          />}
         </div>
         <div className="flex-1 overflow-hidden">
           <p className="text-lg truncate">

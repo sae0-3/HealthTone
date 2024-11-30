@@ -5,3 +5,5 @@ export const putUpdatePassword = (email, password) => axiosInstance.put('/users/
 export const updateProfile = (actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero) => axiosInstance.put('/users/updateProfile',  {actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero})
 
 export const putUpdatePasswordWithPassword = (email, password, newPassword) => axiosInstance.put('/users/update-password-withPassword', {email, password, newPassword})
+
+export const getInfoUser = () => axiosInstance.get('/users/profile')

@@ -37,6 +37,7 @@ export const Comments = ({ id_content }) => {
   const { data: dataComments, isLoading } = useGetComments(id_content)
   const [isAscending, setIsAscending] = useState(true)
   const comments = dataComments?.data.comments || []
+  console.log(comments)
 
   if (isLoading) {
     return <Loading />
