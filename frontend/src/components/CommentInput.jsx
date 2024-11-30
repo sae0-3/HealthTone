@@ -6,7 +6,7 @@ export const CommentInput = ({ id }) => {
   const [comment, setComment] = useState('')
   const [notification, setNotification] = useState(null)
   const { mutate: post, isPending } = usePostComment(id)
-  const {user} = authStore()
+  const { user } = authStore()
 
   const handleSubmit = () => {
     if (!comment.trim()) {
@@ -38,22 +38,21 @@ export const CommentInput = ({ id }) => {
       {/* Notificación */}
       {notification && (
         <div
-          className={`p-3 text-white rounded-md ${
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-          }`}
+          className={`p-3 text-white rounded-md ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`}
         >
           {notification.message}
         </div>
       )}
 
       <div className='flex items-center gap-4 bg-white w-full'>
-      <div className='w-10 h-10 bg-gray-300 rounded-full overflow-hidden'>
-  <img 
-    src={user.perfil ? user.perfil : 'https://firebasestorage.googleapis.com/v0/b/healthtone-39885.appspot.com/o/2a73ef8a-9679-4b23-b0fc-565aedb5f526?alt=media&token=e8956f06-864f-4731-a194-f66683111cb8'}
-    alt="perfil"
-    className="w-full h-full object-cover"
-  />
-</div>
+        <div className='w-10 h-10 bg-gray-300 rounded-full overflow-hidden'>
+          {user.perfil && <img
+            src={user.perfil}
+            alt="perfil"
+            className="w-full h-full object-cover"
+          />}
+        </div>
 
 
         <div className='flex-1 flex items-center'>

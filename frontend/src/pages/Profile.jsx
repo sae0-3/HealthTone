@@ -52,7 +52,6 @@ const Profile = () => {
   }, [error])
 
   useEffect(() => {
-    console.log(form)
       const actualEmail = user.email
       const { email, nacimiento, nombre, apellidos, username, pais, perfil, telefono, genero } = form
       updateProfile({ actualEmail, email, nacimiento, nombre, apellidos, perfil, username, pais, telefono, genero })
@@ -64,17 +63,15 @@ const Profile = () => {
 
   const sendData = async () => {
     if (!errors.name && !errors.lastname && !errors.email && !errors.userName) {
-      let perfil; // Declarar perfil fuera del bloque condicional
+      let perfil
       if (image) {
-        console.log(image);
-        perfil = await uploadFile(image); // Asignar el perfil con la imagen subida
+        perfil = await uploadFile(image)
       } else {
-        perfil = user.perfil; // Asignar null si no hay imagen
+        perfil = user.perfil
       }
-  
       setForm((prevForm) => ({
         ...prevForm,
-        perfil: perfil, // Establecer el valor de perfil en el estado
+        perfil: perfil,
       }));
     }
   }
